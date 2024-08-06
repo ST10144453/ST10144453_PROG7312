@@ -1,0 +1,49 @@
+﻿<UserControl
+    x:Class="ST10144453_PROG7312.MVVM.View.HomeView"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    d:DesignHeight="1080"
+    d:DesignWidth="1910"
+    Background="White"
+    mc:Ignorable="d">
+
+    <Grid>
+        <Canvas Panel.ZIndex="1">
+            <Image
+                x:Name="MenuBackground"
+                Opacity="0.5"
+                Source="pack://application:,,,/Resources/Images/HomePage/menuBackground.png" />
+            <TextBlock
+                x:Name="welcomeMsg"
+                Canvas.Left="239"
+                Canvas.Top="204"
+                FontFamily="Inter Display Thin"
+                Text="Welcome to" />
+        </Canvas>
+        <!--  Background with animated blobs  -->
+        <Canvas>
+            <Image
+                x:Name="BlobImage1"
+                Width="2000"
+                Height="2000"
+                Source="pack://application:,,,/Resources/Images/Blobs/redBlob.png" />
+            <Image
+                x:Name="BlobImage2"
+                Width="2000"
+                Height="2000"
+                Source="pack://application:,,,/Resources/Images/Blobs/blueBlob.png" />
+            <Image
+                x:Name="BlobImage3"
+                Width="2000"
+                Height="2000"
+                Source="pack://application:,,,/Resources/Images/Blobs/greenBlob.png" />
+            <Image
+                x:Name="BlobImage4"
+                Width="2000"
+                Height="2000"
+                Source="pack://application:,,,/Resources/Images/Blobs/yellowBlob.png" />
+        </Canvas>
+    </Grid>
+</UserControl>
