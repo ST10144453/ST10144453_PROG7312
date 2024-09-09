@@ -99,6 +99,7 @@
       <Generator>SettingsSingleFileGenerator</Generator>
       <LastGenOutput>Settings.Designer.cs</LastGenOutput>
     </None>
+    <None Include="Resources\Animation_Files\celebrateAnim.json" />
     <Resource Include="Resources\Fonts\Inter\Inter-VariableFont_opsz,wght.ttf" />
     <Resource Include="Resources\Fonts\Inter\Inter.ttc" />
     <Resource Include="Resources\Fonts\Roboto\Roboto-Black.ttf" />
@@ -132,6 +133,11 @@
   </ItemGroup>
   <ItemGroup>
     <Resource Include="Resources\Images\HomePage\test.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Resources\Icons\confetti_Icon.svg" />
+    <Content Include="Resources\Icons\report_Icon.svg" />
+    <Content Include="Resources\Icons\status_Icon.svg" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

@@ -10,18 +10,57 @@
     mc:Ignorable="d">
 
     <Grid>
-        <Canvas Panel.ZIndex="1">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="*" />
+        </Grid.RowDefinitions>
+
+        <Canvas Grid.Row="0" Panel.ZIndex="1">
             <Image
                 x:Name="MenuBackground"
                 Opacity="0.5"
                 Source="pack://application:,,,/Resources/Images/HomePage/menuBackground.png" />
             <TextBlock
                 x:Name="welcomeMsg"
-                Canvas.Left="239"
-                Canvas.Top="204"
-                FontFamily="Inter Display Thin"
+                FontFamily="Roboto"
+                FontSize="48"
                 Text="Welcome to" />
+            <TextBlock
+                x:Name="manageMsg"
+                FontFamily="Inter"
+                FontSize="64"
+                FontWeight="Bold"
+                Text="Manage Mzansi" />
         </Canvas>
+
+        <!--  Buttons Section  -->
+        <StackPanel
+            x:Name="ButtonStackPanel"
+            Grid.Row="1"
+            Margin="0,20,0,0"
+            HorizontalAlignment="Center"
+            VerticalAlignment="Top">
+            <Button
+                Width="607"
+                Height="100"
+                Margin="0,10"
+                Background="White"
+                Content="Button 1" />
+            <Button
+                Width="607"
+                Height="100"
+                Margin="0,10"
+                Background="White"
+                Content="Button 2" />
+            <Button
+                Width="607"
+                Height="100"
+                Margin="0,10"
+                Background="White"
+                Content="Button 3" />
+        </StackPanel>
+
+
         <!--  Background with animated blobs  -->
         <Canvas>
             <Image
