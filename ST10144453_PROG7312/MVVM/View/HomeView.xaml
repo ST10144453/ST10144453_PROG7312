@@ -4,72 +4,127 @@
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:viewModel="clr-namespace:ST10144453_PROG7312.MVVM.View_Model"
     d:DesignHeight="1080"
     d:DesignWidth="1910"
     Background="White"
     mc:Ignorable="d">
 
+    <UserControl.DataContext>
+        <viewModel:HomeViewModel />
+    </UserControl.DataContext>
+
+    <UserControl.Resources>
+        <!--  Base Button Style  -->
+        <Style x:Key="ImageButtonStyle" TargetType="Button">
+            <!--  Default Button Properties  -->
+            <Setter Property="Background">
+                <Setter.Value>
+                    <ImageBrush ImageSource="pack://application:,,,/Resources/Images/HomePage/Buttons/BigBtn/bigBtnDefault.png" Stretch="Uniform" />
+                </Setter.Value>
+            </Setter>
+            <Setter Property="Foreground" Value="Black" />
+            <Setter Property="BorderBrush" Value="Transparent" />
+            <Setter Property="BorderThickness" Value="0" />
+            <!--  Adjust Padding for space inside the button  -->
+            <Setter Property="Padding" Value="10,5" />
+            <Setter Property="FontWeight" Value="Bold" />
+            <Setter Property="HorizontalContentAlignment" Value="Center" />
+            <Setter Property="VerticalContentAlignment" Value="Center" />
+            <!--  Button Size (Adjust accordingly)  -->
+            <Setter Property="Height" Value="80" />
+            <Setter Property="Width" Value="607" />
+            <!--  Remove the Viewbox to prevent content scaling issues  -->
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="Button">
+                        <Border
+                            Background="{TemplateBinding Background}"
+                            BorderBrush="{TemplateBinding BorderBrush}"
+                            BorderThickness="{TemplateBinding BorderThickness}">
+                            <ContentPresenter
+                                HorizontalAlignment="Center"
+                                VerticalAlignment="Center"
+                                TextElement.FontSize="24" />
+                        </Border>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+
+            <!--  Hover and Pressed State Triggers  -->
+            <Style.Triggers>
+                <Trigger Property="IsMouseOver" Value="True">
+                    <Setter Property="Background">
+                        <Setter.Value>
+                            <ImageBrush ImageSource="pack://application:,,,/Resources/Images/HomePage/Buttons/BigBtn/bigBtnHover.png" Stretch="Uniform" />
+                        </Setter.Value>
+                    </Setter>
+                </Trigger>
+
+                <Trigger Property="IsPressed" Value="True">
+                    <Setter Property="Background">
+                        <Setter.Value>
+                            <ImageBrush ImageSource="pack://application:,,,/Resources/Images/HomePage/Buttons/BigBtn/bigBtnClick.png" Stretch="Uniform" />
+                        </Setter.Value>
+                    </Setter>
+                </Trigger>
+            </Style.Triggers>
+        </Style>
+
+
+
+        <!--  Style for Button 4 (Different Design and Slimmer)  -->
+        <!--  Style for Button 4 (Different Design and Slimmer)  -->
+        <Style
+            x:Key="Button4Style"
+            BasedOn="{StaticResource ImageButtonStyle}"
+            TargetType="Button">
+            <!--  Override the Default Background  -->
+            <Setter Property="Background">
+                <Setter.Value>
+                    <ImageBrush ImageSource="pack://application:,,,/Resources/Images/HomePage/Buttons/QuitBtn/quitBrnDefault.png" Stretch="Uniform" />
+                </Setter.Value>
+            </Setter>
+            <!--  Override the Foreground to make the text white  -->
+            <Setter Property="Foreground" Value="White" />
+            <!--  Override the Hover Background  -->
+            <Style.Triggers>
+                <Trigger Property="IsMouseOver" Value="True">
+                    <Setter Property="Background">
+                        <Setter.Value>
+                            <ImageBrush ImageSource="pack://application:,,,/Resources/Images/HomePage/Buttons/QuitBtn/quitBtnHover.png" Stretch="Uniform" />
+                        </Setter.Value>
+                    </Setter>
+                </Trigger>
+
+                <!--  Override the Pressed Background  -->
+                <Trigger Property="IsPressed" Value="True">
+                    <Setter Property="Background">
+                        <Setter.Value>
+                            <ImageBrush ImageSource="pack://application:,,,/Resources/Images/HomePage/Buttons/QuitBtn/quitBtnClick.png" Stretch="Uniform" />
+                        </Setter.Value>
+                    </Setter>
+                </Trigger>
+            </Style.Triggers>
+        </Style>
+
+    </UserControl.Resources>
+
     <Grid>
-        <Grid.RowDefinitions>
-            <RowDefinition Height="Auto" />
-            <RowDefinition Height="*" />
-        </Grid.RowDefinitions>
-
-        <Canvas Grid.Row="0" Panel.ZIndex="1">
-            <Image
-                x:Name="MenuBackground"
-                Opacity="0.5"
-                Source="pack://application:,,,/Resources/Images/HomePage/menuBackground.png" />
-            <TextBlock
-                x:Name="welcomeMsg"
-                FontFamily="Roboto"
-                FontSize="48"
-                Text="Welcome to" />
-            <TextBlock
-                x:Name="manageMsg"
-                FontFamily="Inter"
-                FontSize="64"
-                FontWeight="Bold"
-                Text="Manage Mzansi" />
-        </Canvas>
-
-        <!--  Buttons Section  -->
-        <StackPanel
-            x:Name="ButtonStackPanel"
-            Grid.Row="1"
-            Margin="0,20,0,0"
-            HorizontalAlignment="Center"
-            VerticalAlignment="Top">
-            <Button
-                Width="607"
-                Height="100"
-                Margin="0,10"
-                Background="White"
-                Content="Button 1" />
-            <Button
-                Width="607"
-                Height="100"
-                Margin="0,10"
-                Background="White"
-                Content="Button 2" />
-            <Button
-                Width="607"
-                Height="100"
-                Margin="0,10"
-                Background="White"
-                Content="Button 3" />
-        </StackPanel>
-
-
-        <!--  Background with animated blobs  -->
-        <Canvas>
+        <Canvas Panel.ZIndex="0">
             <Image
                 x:Name="BlobImage1"
+                Canvas.Left="544"
+                Canvas.Top="-672"
                 Width="2000"
                 Height="2000"
+                HorizontalAlignment="Center"
+                VerticalAlignment="Top"
                 Source="pack://application:,,,/Resources/Images/Blobs/redBlob.png" />
             <Image
                 x:Name="BlobImage2"
+                Canvas.Left="-804"
+                Canvas.Top="-1075"
                 Width="2000"
                 Height="2000"
                 Source="pack://application:,,,/Resources/Images/Blobs/blueBlob.png" />
@@ -80,9 +135,125 @@
                 Source="pack://application:,,,/Resources/Images/Blobs/greenBlob.png" />
             <Image
                 x:Name="BlobImage4"
+                Canvas.Left="-719"
+                Canvas.Top="-358"
                 Width="2000"
                 Height="2000"
+                HorizontalAlignment="Center"
+                VerticalAlignment="Center"
                 Source="pack://application:,,,/Resources/Images/Blobs/yellowBlob.png" />
         </Canvas>
+
+
+
+        <Viewbox
+            Panel.ZIndex="5"
+            Stretch="Uniform"
+            StretchDirection="DownOnly">
+            <Grid Width="1910" Height="1080">
+                <!--  Menu Background with Padding  -->
+                <Border
+                    x:Name="MenuBackgroundBorder"
+                    Width="866"
+                    Height="892"
+                    HorizontalAlignment="Center"
+                    VerticalAlignment="Center"
+                    Panel.ZIndex="1"
+                    Background="Transparent">
+                    <Image
+                        x:Name="MenuBackground"
+                        Opacity="0.5"
+                        Source="pack://application:,,,/Resources/Images/HomePage/menuBackground.png"
+                        Stretch="Fill" />
+                </Border>
+
+                <!--  Content  -->
+                <StackPanel
+                    x:Name="ContentPanel"
+                    Width="766"
+                    Height="792"
+                    Margin="0,50,0,0"
+                    HorizontalAlignment="Center"
+                    VerticalAlignment="Center"
+                    Panel.ZIndex="2">
+                    <TextBlock
+                        x:Name="welcomeMsg"
+                        HorizontalAlignment="Center"
+                        FontFamily="Roboto"
+                        FontSize="48"
+                        Text="Welcome to" />
+                    <TextBlock
+                        x:Name="manageMsg"
+                        HorizontalAlignment="Center"
+                        FontFamily="Inter"
+                        FontSize="64"
+                        FontWeight="Bold"
+                        Text="Manage Mzansi" />
+
+                    <StackPanel x:Name="ButtonStack" Margin="0,20,0,0">
+                        <Button
+                            Height="80"
+                            Margin="0,10"
+                            FontSize="24"
+                            Style="{StaticResource ImageButtonStyle}">
+                            <StackPanel HorizontalAlignment="Left" Orientation="Horizontal">
+                                <!--  Icon Image  -->
+                                <Image
+                                    Width="20"
+                                    Height="20"
+                                    Margin="5,0,10,0"
+                                    Source="pack://application:,,,/Resources/Icons/request_Icon.png" />
+
+                                <!--  Text Block  -->
+                                <TextBlock VerticalAlignment="Center" Text="Report an Issue" />
+                            </StackPanel>
+                        </Button>
+                        <Button
+                            Height="80"
+                            Margin="0,10"
+                            Command="{Binding ShowUnderDevelopmentPopupCommand}"
+                            FontSize="24"
+                            Style="{StaticResource ImageButtonStyle}">
+                            <StackPanel HorizontalAlignment="Left" Orientation="Horizontal">
+                                <!--  Icon Image  -->
+                                <Image
+                                    Width="20"
+                                    Height="20"
+                                    Margin="5,0,10,0"
+                                    Source="pack://application:,,,/Resources/Icons/event_Icon.png" />
+
+                                <!--  Text Block  -->
+                                <TextBlock VerticalAlignment="Center" Text="Events &amp; Announcements" />
+                            </StackPanel>
+                        </Button>
+                        <Button
+                            Height="80"
+                            Margin="0,10"
+                            Command="{Binding ShowUnderDevelopmentPopupCommand}"
+                            FontSize="24"
+                            Style="{StaticResource ImageButtonStyle}">
+                            <StackPanel HorizontalAlignment="Left" Orientation="Horizontal">
+                                <!--  Icon Image  -->
+                                <Image
+                                    Width="20"
+                                    Height="20"
+                                    Margin="5,0,10,0"
+                                    Source="pack://application:,,,/Resources/Icons/request_Icon.png" />
+
+                                <!--  Text Block  -->
+                                <TextBlock VerticalAlignment="Center" Text="Service Request Status" />
+                            </StackPanel>
+                        </Button>
+                        <Button
+                            Height="80"
+                            Margin="0,10"
+                            Content="Quit"
+                            FontSize="24"
+                            Style="{StaticResource Button4Style}" />
+                    </StackPanel>
+                </StackPanel>
+            </Grid>
+        </Viewbox>
+
     </Grid>
 </UserControl>

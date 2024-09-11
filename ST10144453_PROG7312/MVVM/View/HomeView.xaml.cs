@@ -1,26 +1,22 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
-using System.Windows.Input;
-using System.Windows.Media;
 using System.Windows.Media.Animation;
-using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
-using System.Windows.Shapes;
 
 namespace ST10144453_PROG7312.MVVM.View
 {
-    //============== Class: AnimatedBackgroundView ==============//
     public partial class HomeView : UserControl
     {
-        private double _canvasWidth;
-        private double _canvasHeight;
+        private const double OriginalWidth = 1910;
+        private const double OriginalHeight = 1080;
+        private const double ContentWidth = 766;
+        private const double ContentHeight = 792;
+        private const double BackgroundWidth = 866;
+        private const double BackgroundHeight = 892;
+        private const int BlobCount = 4; // Number of blobs
+        private const double OverlapThreshold = 0.3; // Allowable overlap percentage
+        private const double BlobSize = 2000; // Adjust size as needed
+        private const double Margin = 300; // Increase margin to reduce overlap
 
         public HomeView()
         {
@@ -31,176 +27,102 @@ namespace ST10144453_PROG7312.MVVM.View
 
         private void OnLoaded(object sender, RoutedEventArgs e)
         {
-            UpdateCanvasDimensions();
-            UpdateMenuBackgroundSizeAndPosition();
-            UpdateWelcomeMessagePosition();
-            UpdateManageMessagePosition();
+            UpdateLayout();
             StartAnimation();
         }
 
         private void OnSizeChanged(object sender, SizeChangedEventArgs e)
         {
-            UpdateCanvasDimensions();
-            UpdateMenuBackgroundSizeAndPosition();
-            UpdateWelcomeMessagePosition();
-            UpdateManageMessagePosition();
-            UpdateButtonSizes();
+            UpdateLayout();
+            StartAnimation();
         }
+
+        private void UpdateLayout()
+        {
+            double scaleX = ActualWidth / OriginalWidth;
+            double scaleY = ActualHeight / OriginalHeight;
+            double scale = Math.Min(scaleX, scaleY);
+
+            const double MinScale = 0.5; // Set your desired minimum scale (e.g., 50% of original size)
+            scale = Math.Max(scale, MinScale);
+
+            // Update ContentPanel size
+            ContentPanel.Width = ContentWidth * scale;
+            ContentPanel.Height = ContentHeight * scale;
+
+            // Update MenuBackgroundBorder size
+            MenuBackgroundBorder.Width = BackgroundWidth * scale;
+            MenuBackgroundBorder.Height = BackgroundHeight * scale;
+
+            // Update button sizes
+            foreach (var button in ButtonStack.Children)
+            {
+                if (button is Button btn)
+                {
+                    btn.Height = 100 * scale;
+                    btn.Width = 705 * scale;
+                    btn.FontSize = 24 * scale;
+                }
+            }
+
+            // Update welcome message font sizes
+            welcomeMsg.FontSize = 48 * scale;
+            manageMsg.FontSize = 64 * scale;
+        }
+
+
+        private void SetInitialBlobPositions()
+        {
+            double windowWidth = ActualWidth;
+            double windowHeight = ActualHeight;
+
+            // Ensure blobs start within the visible window area with margins
+            Canvas.SetLeft(BlobImage1, Margin);
+            Canvas.SetTop(BlobImage1, Margin);
+
+            Canvas.SetLeft(BlobImage2, Margin);
+            Canvas.SetTop(BlobImage2, Margin);
+
+            Canvas.SetLeft(BlobImage3, Margin);
+            Canvas.SetTop(BlobImage3, Margin);
+
+            Canvas.SetLeft(BlobImage4, Margin);
+            Canvas.SetTop(BlobImage4, Margin);
+        }
+
+
 
         private void StartAnimation()
         {
-            UpdateCanvasDimensions();
+            double windowWidth = ActualWidth;
+            double windowHeight = ActualHeight;
 
-            var animation1 = new DoubleAnimation
+            AnimateBlob(BlobImage1, Canvas.LeftProperty, -BlobSize + Margin, windowWidth - Margin, 10);
+            AnimateBlob(BlobImage1, Canvas.TopProperty, -BlobSize + Margin, windowHeight - Margin, 10);
+
+            AnimateBlob(BlobImage2, Canvas.LeftProperty, -BlobSize + Margin, windowWidth - Margin, 10);
+            AnimateBlob(BlobImage2, Canvas.BottomProperty, -BlobSize + Margin, windowHeight - Margin, 10);
+
+            AnimateBlob(BlobImage3, Canvas.RightProperty, -BlobSize + Margin, windowWidth - Margin, 10);
+            AnimateBlob(BlobImage3, Canvas.TopProperty, -BlobSize + Margin, windowHeight - Margin, 10);
+
+            AnimateBlob(BlobImage4, Canvas.RightProperty, -BlobSize + Margin, windowWidth - Margin, 10);
+            AnimateBlob(BlobImage4, Canvas.BottomProperty, -BlobSize + Margin, windowHeight - Margin, 10);
+        }
+
+
+        private void AnimateBlob(UIElement element, DependencyProperty property, double from, double to, double durationInSeconds)
+        {
+            var animation = new DoubleAnimation
             {
-                From = -BlobImage1.ActualWidth,
-                To = _canvasWidth,
-                Duration = new Duration(TimeSpan.FromSeconds(10)),
+                From = from,
+                To = to,
+                Duration = new Duration(TimeSpan.FromSeconds(durationInSeconds)),
                 RepeatBehavior = RepeatBehavior.Forever,
                 EasingFunction = new SineEase { EasingMode = EasingMode.EaseInOut }
             };
 
-            BlobImage1.BeginAnimation(Canvas.LeftProperty, animation1);
-
-            var animation2 = new DoubleAnimation
-            {
-                From = -BlobImage2.ActualHeight,
-                To = _canvasHeight,
-                Duration = new Duration(TimeSpan.FromSeconds(12)),
-                RepeatBehavior = RepeatBehavior.Forever,
-                EasingFunction = new SineEase { EasingMode = EasingMode.EaseInOut }
-            };
-
-            BlobImage2.BeginAnimation(Canvas.TopProperty, animation2);
-
-            var animation3X = new DoubleAnimation
-            {
-                From = -BlobImage3.ActualWidth,
-                To = _canvasWidth,
-                Duration = new Duration(TimeSpan.FromSeconds(15)),
-                RepeatBehavior = RepeatBehavior.Forever,
-                EasingFunction = new SineEase { EasingMode = EasingMode.EaseInOut }
-            };
-
-            var animation3Y = new DoubleAnimation
-            {
-                From = -BlobImage3.ActualHeight,
-                To = _canvasHeight,
-                Duration = new Duration(TimeSpan.FromSeconds(15)),
-                RepeatBehavior = RepeatBehavior.Forever,
-                EasingFunction = new SineEase { EasingMode = EasingMode.EaseInOut }
-            };
-
-            BlobImage3.BeginAnimation(Canvas.LeftProperty, animation3X);
-            BlobImage3.BeginAnimation(Canvas.TopProperty, animation3Y);
-
-            var animation4X = new DoubleAnimation
-            {
-                From = -BlobImage4.ActualWidth,
-                To = _canvasWidth,
-                Duration = new Duration(TimeSpan.FromSeconds(20)),
-                RepeatBehavior = RepeatBehavior.Forever,
-                EasingFunction = new SineEase { EasingMode = EasingMode.EaseInOut }
-            };
-
-            BlobImage4.BeginAnimation(Canvas.LeftProperty, animation4X);
+            element.BeginAnimation(property, animation);
         }
-
-        private void UpdateCanvasDimensions()
-        {
-            _canvasWidth = ActualWidth;
-            _canvasHeight = ActualHeight;
-        }
-
-        private void UpdateMenuBackgroundSizeAndPosition()
-        {
-            double originalWidth = 766;
-            double originalHeight = 792;
-
-            double widthRatio = _canvasWidth / 1910;
-            double heightRatio = _canvasHeight / 1080;
-            double scale = Math.Min(widthRatio, heightRatio);
-
-            double newWidth = originalWidth * scale;
-            double newHeight = originalHeight * scale;
-
-            MenuBackground.Width = newWidth;
-            MenuBackground.Height = newHeight;
-            Canvas.SetLeft(MenuBackground, (_canvasWidth - newWidth) / 2);
-            Canvas.SetTop(MenuBackground, (_canvasHeight - newHeight) / 2);
-        }
-
-        private void UpdateWelcomeMessagePosition()
-        {
-            double originalLeftOffset = 127;
-            double originalTopOffset = 70;
-            double originalFontSize = 48;
-
-            double widthRatio = _canvasWidth / 1910;
-            double heightRatio = _canvasHeight / 1080;
-            double scale = Math.Min(widthRatio, heightRatio);
-
-            double newLeftOffset = originalLeftOffset * scale;
-            double newTopOffset = originalTopOffset * scale;
-            double newFontSize = originalFontSize * scale;
-
-            double menuBackgroundLeft = Canvas.GetLeft(MenuBackground);
-            double menuBackgroundTop = Canvas.GetTop(MenuBackground);
-
-            Canvas.SetLeft(welcomeMsg, menuBackgroundLeft + newLeftOffset);
-            Canvas.SetTop(welcomeMsg, menuBackgroundTop + newTopOffset);
-            welcomeMsg.FontSize = newFontSize;
-
-            // Debugging information
-            Console.WriteLine($"Menu Background Left: {menuBackgroundLeft}, Top: {menuBackgroundTop}");
-            Console.WriteLine($"New Left Offset: {newLeftOffset}, New Top Offset: {newTopOffset}, New Font Size: {newFontSize}");
-        }
-
-        private void UpdateManageMessagePosition()
-        {
-            double originalLeftOffset = 127;
-            double originalTopOffset = 110;
-            double originalFontSize = 64;
-
-            double widthRatio = _canvasWidth / 1910;
-            double heightRatio = _canvasHeight / 1080;
-            double scale = Math.Min(widthRatio, heightRatio);
-
-            double newLeftOffset = originalLeftOffset * scale;
-            double newTopOffset = originalTopOffset * scale;
-            double newFontSize = originalFontSize * scale;
-
-            double menuBackgroundLeft = Canvas.GetLeft(MenuBackground);
-            double menuBackgroundTop = Canvas.GetTop(MenuBackground);
-
-            Canvas.SetLeft(manageMsg, menuBackgroundLeft + newLeftOffset);
-            Canvas.SetTop(manageMsg, menuBackgroundTop + newTopOffset);
-            manageMsg.FontSize = newFontSize;
-        }
-
-        private void UpdateButtonSizes()
-        {
-            double originalWidth = 607;
-            double originalHeight = 100;
-
-            double widthRatio = _canvasWidth / 1910;
-            double heightRatio = _canvasHeight / 1080;
-            double scale = Math.Min(widthRatio, heightRatio);
-
-            double newWidth = originalWidth * scale;
-            double newHeight = originalHeight * scale;
-
-            StackPanel stackPanel = LogicalTreeHelper.FindLogicalNode(this, "ButtonStackPanel") as StackPanel;
-            if (stackPanel != null)
-            {
-                foreach (var child in stackPanel.Children.OfType<Button>())
-                {
-                    child.Width = newWidth;
-                    child.Height = newHeight;
-                }
-            }
-        }
-
     }
-
 }

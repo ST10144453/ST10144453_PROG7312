@@ -55,6 +55,11 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Compile Include="Core\RelayCommand.cs" />
+    <Compile Include="FrontendLogic\ScaleConverter.cs" />
+    <Compile Include="MVVM\View\UnderDevelopmentPopup.xaml.cs">
+      <DependentUpon>UnderDevelopmentPopup.xaml</DependentUpon>
+    </Compile>
     <Compile Include="ViewModelLocator.cs" />
     <Page Include="MainWindow.xaml">
       <Generator>MSBuild:Compile</Generator>
@@ -69,6 +74,10 @@
       <SubType>Code</SubType>
     </Compile>
     <Page Include="MVVM\View\HomeView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="MVVM\View\UnderDevelopmentPopup.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -119,7 +128,6 @@
     <None Include="App.config" />
   </ItemGroup>
   <ItemGroup>
-    <Folder Include="Frontend-Logic\" />
     <Folder Include="MVVM\Model\" />
   </ItemGroup>
   <ItemGroup>
@@ -135,9 +143,19 @@
     <Resource Include="Resources\Images\HomePage\test.png" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="Resources\Icons\confetti_Icon.svg" />
-    <Content Include="Resources\Icons\report_Icon.svg" />
-    <Content Include="Resources\Icons\status_Icon.svg" />
+    <Resource Include="Resources\Icons\exitIcon.png" />
+    <Resource Include="Resources\Images\HomePage\developmentPop.png" />
+    <Resource Include="Resources\Images\HomePage\Buttons\QuitBtn\quitBrnDefault.png" />
+    <Resource Include="Resources\Images\HomePage\Buttons\QuitBtn\quitBtnClick.png" />
+    <Resource Include="Resources\Images\HomePage\Buttons\QuitBtn\quitBtnHover.png" />
+    <Resource Include="Resources\Images\HomePage\Buttons\BigBtn\bigBtnClick.png" />
+    <Resource Include="Resources\Images\HomePage\Buttons\BigBtn\bigBtnDefault.png" />
+    <Resource Include="Resources\Images\HomePage\Buttons\BigBtn\bigBtnHover.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\Icons\event_Icon.png" />
+    <Resource Include="Resources\Icons\report_Icon.png" />
+    <Resource Include="Resources\Icons\request_Icon.png" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>
