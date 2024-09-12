@@ -56,6 +56,12 @@
       <SubType>Designer</SubType>
     </ApplicationDefinition>
     <Compile Include="Core\RelayCommand.cs" />
+    <Compile Include="FrontendLogic\Base64ToImageSourceConverter.cs" />
+    <Compile Include="FrontendLogic\Base64ToTextConverter.cs" />
+    <Compile Include="FrontendLogic\BoolToVisibilityConverter.cs" />
+    <Compile Include="FrontendLogic\FileToContentConverter.cs" />
+    <Compile Include="FrontendLogic\FileTypeToVisibilityConverter.cs" />
+    <Compile Include="FrontendLogic\InverseBoolToVisibilityConverter.cs" />
     <Compile Include="FrontendLogic\ScaleConverter.cs" />
     <Compile Include="MVVM\Model\ReportModel.cs" />
     <Compile Include="MVVM\View-Model\ReportViewModel.cs" />
@@ -151,6 +157,7 @@
     <None Include="App.config" />
   </ItemGroup>
   <ItemGroup>
+    <Folder Include="Files\" />
     <Folder Include="ResourceDictionaries\" />
   </ItemGroup>
   <ItemGroup>

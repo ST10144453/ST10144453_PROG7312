@@ -1,0 +1,34 @@
+﻿using System;
+using System.Globalization;
+using System.IO;
+using System.Windows.Data;
+using System.Windows.Media.Imaging;
+
+namespace ST10144453_PROG7312.FrontendLogic
+{
+    public class Base64ToImageSourceConverter : IValueConverter
+    {
+        public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
+        {
+            if (value is string base64String)
+            {
+                byte[] imageBytes = System.Convert.FromBase64String(base64String);
+                using (MemoryStream ms = new MemoryStream(imageBytes))
+                {
+                    BitmapImage bitmap = new BitmapImage();
+                    bitmap.BeginInit();
+                    bitmap.StreamSource = ms;
+                    bitmap.CacheOption = BitmapCacheOption.OnLoad;
+                    bitmap.EndInit();
+                    return bitmap;
+                }
+            }
+            return null;
+        }
+
+        public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
+        {
+            throw new NotImplementedException();
+        }
+    }
+}

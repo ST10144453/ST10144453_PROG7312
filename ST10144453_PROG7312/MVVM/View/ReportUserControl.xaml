@@ -2,6 +2,7 @@
     x:Class="ST10144453_PROG7312.MVVM.View.ReportUserControl"
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:converter="clr-namespace:ST10144453_PROG7312.FrontendLogic"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:viewModel="clr-namespace:ST10144453_PROG7312.MVVM.View_Model"
@@ -13,6 +14,14 @@
     <UserControl.DataContext>
         <viewModel:ReportViewModel />
     </UserControl.DataContext>
+
+    <UserControl.Resources>
+        <converter:Base64ToImageSourceConverter x:Key="Base64ToImageSourceConverter" />
+        <converter:Base64ToTextConverter x:Key="Base64ToTextConverter" />
+        <converter:BoolToVisibilityConverter x:Key="BoolToVisibilityConverter" />
+        <converter:InverseBoolToVisibilityConverter x:Key="InverseBoolToVisibilityConverter" />
+    </UserControl.Resources>
+
 
     <Grid>
         <!--  Progress Bar  -->
@@ -122,6 +131,33 @@
                 </Style>
             </Button.Style>
         </Button>
+
+        <!--  ListView to show saved media after submission  -->
+        <ListView
+            Width="400"
+            Height="200"
+            Margin="10,220,0,0"
+            ItemsSource="{Binding SavedMediaBase64Strings}">
+            <ListView.ItemTemplate>
+                <DataTemplate>
+                    <StackPanel Orientation="Horizontal">
+                        <Image
+                            Width="100"
+                            Height="100"
+                            Margin="5"
+                            Source="{Binding Converter={StaticResource Base64ToImageSourceConverter}}"
+                            Visibility="{Binding IsImage, Converter={StaticResource BoolToVisibilityConverter}}" />
+                        <TextBlock
+                            Margin="5"
+                            VerticalAlignment="Center"
+                            Text="{Binding Converter={StaticResource Base64ToTextConverter}}"
+                            Visibility="{Binding IsImage, Converter={StaticResource InverseBoolToVisibilityConverter}}" />
+                    </StackPanel>
+                </DataTemplate>
+            </ListView.ItemTemplate>
+        </ListView>
+
+
 
         <!--  Submit Button  -->
         <Button
