@@ -12,15 +12,23 @@ namespace ST10144453_PROG7312.FrontendLogic
         {
             if (value is string base64String)
             {
-                byte[] imageBytes = System.Convert.FromBase64String(base64String);
-                using (MemoryStream ms = new MemoryStream(imageBytes))
+                try
                 {
-                    BitmapImage bitmap = new BitmapImage();
-                    bitmap.BeginInit();
-                    bitmap.StreamSource = ms;
-                    bitmap.CacheOption = BitmapCacheOption.OnLoad;
-                    bitmap.EndInit();
-                    return bitmap;
+                    byte[] imageBytes = System.Convert.FromBase64String(base64String);
+                    using (MemoryStream ms = new MemoryStream(imageBytes))
+                    {
+                        BitmapImage bitmap = new BitmapImage();
+                        bitmap.BeginInit();
+                        bitmap.StreamSource = ms;
+                        bitmap.CacheOption = BitmapCacheOption.OnLoad;
+                        bitmap.EndInit();
+                        return bitmap;
+                    }
+                }
+                catch (Exception ex)
+                {
+                    // Log the exception or handle it as necessary
+                    Console.WriteLine($"Error converting Base64 string to ImageSource: {ex.Message}");
                 }
             }
             return null;

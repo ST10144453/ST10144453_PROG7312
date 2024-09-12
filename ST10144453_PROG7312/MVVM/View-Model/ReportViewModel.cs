@@ -9,7 +9,9 @@ using System.ComponentModel;
 using System.IO;
 using System.Linq;
 using System.Runtime.CompilerServices;
+using System.Text;
 using System.Windows;
+using System.Windows.Data;
 using System.Windows.Input;
 
 namespace ST10144453_PROG7312.MVVM.View_Model
@@ -19,6 +21,7 @@ namespace ST10144453_PROG7312.MVVM.View_Model
         public string Base64String { get; set; }
         public bool IsImage { get; set; }
     }
+
     public class ReportViewModel : INotifyPropertyChanged
     {
         private string _issueName;
@@ -179,6 +182,23 @@ namespace ST10144453_PROG7312.MVVM.View_Model
             NavigateToHomeCommand = new RelayCommand(NavigateToHome);
             MediaItems = new ObservableCollection<MediaItem>();
 
+            Reports.Add(new ReportModel
+            {
+                reportName = "Issue 1",
+                reportLocation = "Location 1",
+                reportDescription = "Description 1",
+                reportCategory = "Category 1",
+                Media = new List<string> { "Media 1", "Media 2" }
+            });
+
+            Reports.Add(new ReportModel
+            {
+                reportName = "Issue 2",
+                reportLocation = "Location 2",
+                reportDescription = "Description 2",
+                reportCategory = "Category 2",
+                Media = new List<string> { "Media 3", "Media 4" }
+            });
         }
 
         private void NavigateToHome()
@@ -192,14 +212,53 @@ namespace ST10144453_PROG7312.MVVM.View_Model
 
         private string EncodeFileToBase64(string filePath)
         {
-            byte[] fileBytes = File.ReadAllBytes(filePath);
+            if (IsImageFile(filePath))
+            {
+                byte[] fileBytes = File.ReadAllBytes(filePath);
+                return Convert.ToBase64String(fileBytes);
+            }
+            else if (IsTextFile(filePath))
+            {
+                return EncodeTextFileToBase64(filePath);
+            }
+            else
+            {
+                throw new NotSupportedException("Unsupported file type.");
+            }
+        }
+
+        private string EncodeTextFileToBase64(string filePath)
+        {
+            string fileContent = File.ReadAllText(filePath);
+            byte[] fileBytes = Encoding.UTF8.GetBytes(fileContent);
             return Convert.ToBase64String(fileBytes);
         }
 
-        private void DecodeBase64ToFile(string base64String, string outputFilePath)
+        private string DecodeBase64ToFile(string base64String, string outputFilePath)
         {
             byte[] fileBytes = Convert.FromBase64String(base64String);
             File.WriteAllBytes(outputFilePath, fileBytes);
+            return outputFilePath; // Return the file path
+        }
+
+        private string DecodeBase64ToTextFile(string base64String, string outputFilePath)
+        {
+            byte[] fileBytes = Convert.FromBase64String(base64String);
+            string fileContent = Encoding.UTF8.GetString(fileBytes);
+            File.WriteAllText(outputFilePath, fileContent);
+            return fileContent; // Return the content of the text file
+        }
+
+        private bool IsImageFile(string filename)
+        {
+            string[] imageExtensions = { ".png", ".jpg", ".jpeg", ".bmp", ".gif" };
+            return imageExtensions.Contains(Path.GetExtension(filename).ToLower());
+        }
+
+        private bool IsTextFile(string filename)
+        {
+            string[] textExtensions = { ".txt", ".csv", ".log" };
+            return textExtensions.Contains(Path.GetExtension(filename).ToLower());
         }
 
         private void AttachMedia()
@@ -216,15 +275,18 @@ namespace ST10144453_PROG7312.MVVM.View_Model
                 {
                     string base64String = EncodeFileToBase64(filename);
                     bool isImage = IsImageFile(filename);
-                    MediaItems.Add(new MediaItem { Base64String = base64String, IsImage = isImage });
+                    bool isText = IsTextFile(filename);
+
+                    if (isImage || isText)
+                    {
+                        MediaItems.Add(new MediaItem { Base64String = base64String, IsImage = isImage });
+                    }
+                    else
+                    {
+                        MessageBox.Show("Unsupported file type: " + filename, "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+                    }
                 }
             }
-        }
-
-        private bool IsImageFile(string filename)
-        {
-            string[] imageExtensions = { ".png", ".jpg", ".jpeg", ".bmp", ".gif" };
-            return imageExtensions.Contains(Path.GetExtension(filename).ToLower());
         }
 
         private void Submit()
@@ -242,25 +304,38 @@ namespace ST10144453_PROG7312.MVVM.View_Model
             string reportFolder = Path.Combine("Files", reportGuid);
             Directory.CreateDirectory(reportFolder);
 
-            foreach (var base64String in MediaBase64Strings)
+            foreach (var mediaItem in MediaItems)
             {
                 string fileName = Guid.NewGuid().ToString();
                 string destinationPath = Path.Combine(reportFolder, fileName);
-                DecodeBase64ToFile(base64String, destinationPath);
-                newReport.Media.Add(destinationPath);
-                SavedMediaBase64Strings.Add(base64String);
+
+                if (mediaItem.IsImage)
+                {
+                    string filePath = DecodeBase64ToFile(mediaItem.Base64String, destinationPath);
+                    newReport.Media.Add(filePath);
+                }
+                else
+                {
+                    string textContent = DecodeBase64ToTextFile(mediaItem.Base64String, destinationPath);
+                    newReport.Media.Add(destinationPath);
+                }
             }
 
             Reports.Add(newReport);
 
+            // Ensure the UI updates
+            CollectionViewSource.GetDefaultView(Reports).Refresh();
+            OnPropertyChanged(nameof(Reports));
+
+            // Clear inputs
             IssueName = string.Empty;
             Location = string.Empty;
             Description = string.Empty;
-            SelectedCategory = null;
-            MediaBase64Strings.Clear();
-
-            Console.WriteLine("User input has been saved.");
+            SelectedCategory = string.Empty;
+            MediaItems.Clear();
         }
+
+
 
         public event PropertyChangedEventHandler PropertyChanged;
 

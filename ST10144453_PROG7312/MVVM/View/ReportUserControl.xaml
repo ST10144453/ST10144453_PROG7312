@@ -133,31 +133,7 @@
         </Button>
 
         <!--  ListView to show saved media after submission  -->
-        <ListView
-            Width="400"
-            Height="200"
-            Margin="10,220,0,0"
-            ItemsSource="{Binding SavedMediaBase64Strings}">
-            <ListView.ItemTemplate>
-                <DataTemplate>
-                    <StackPanel Orientation="Horizontal">
-                        <Image
-                            Width="100"
-                            Height="100"
-                            Margin="5"
-                            Source="{Binding Converter={StaticResource Base64ToImageSourceConverter}}"
-                            Visibility="{Binding IsImage, Converter={StaticResource BoolToVisibilityConverter}}" />
-                        <TextBlock
-                            Margin="5"
-                            VerticalAlignment="Center"
-                            Text="{Binding Converter={StaticResource Base64ToTextConverter}}"
-                            Visibility="{Binding IsImage, Converter={StaticResource InverseBoolToVisibilityConverter}}" />
-                    </StackPanel>
-                </DataTemplate>
-            </ListView.ItemTemplate>
-        </ListView>
-
-
+      
 
         <!--  Submit Button  -->
         <Button
