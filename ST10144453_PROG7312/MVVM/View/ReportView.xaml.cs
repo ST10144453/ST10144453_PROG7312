@@ -11,34 +11,84 @@ using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Animation;
 using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
 using System.Windows.Shapes;
 
-namespace ST10144453_PROG7312
+namespace ST10144453_PROG7312.MVVM.View
 {
     /// <summary>
-    /// Interaction logic for MainWindow.xaml
+    /// Interaction logic for ReportView.xaml
     /// </summary>
-    public partial class MainWindow : Window
+    public partial class ReportView : Window
     {
         private const double BlobSize = 2000; // Adjust size as needed
         private const double Margin = 300; // Increase margin to reduce overlap
+        private const double OriginalWidth = 1910;
+        private const double OriginalHeight = 1080;
+        private const double ContentWidth = 766;
+        private const double ContentHeight = 792;
+        private const double BackgroundWidth = 866;
+        private const double BackgroundHeight = 892;
+        private const double ButtonWidth = 280;
+        private const double ButtonFontSize = 30;
+        private ReportUserControl _reportIssueView;
+        private ForumUserControl _pastReportsView;
 
-        public MainWindow()
+        public ReportView()
         {
             InitializeComponent();
             Loaded += OnLoaded;
             SizeChanged += OnSizeChanged;
+
+            _reportIssueView = new ReportUserControl();
+            _pastReportsView = new ForumUserControl();
+
+            MainContentControl.Content = _reportIssueView;
+        }
+
+        private void NavigateToReportIssue_Click(object sender, RoutedEventArgs e)
+        {
+            MainContentControl.Content = _reportIssueView;
+        }
+
+        // Event handler for Past Reports button
+        private void NavigateToPastReports_Click(object sender, RoutedEventArgs e)
+        {
+            MainContentControl.Content = _pastReportsView;
         }
 
         private void OnLoaded(object sender, RoutedEventArgs e)
         {
             StartAnimation();
+            UpdateLayout();
         }
 
         private void OnSizeChanged(object sender, SizeChangedEventArgs e)
         {
             StartAnimation();
+            UpdateLayout();
+        }
+
+        private void UpdateLayout()
+        {
+            double scaleX = ActualWidth / OriginalWidth;
+            double scaleY = ActualHeight / OriginalHeight;
+            double scale = Math.Min(scaleX, scaleY);
+
+            const double MinScale = 0.5;
+            scale = Math.Max(scale, MinScale);
+
+            ContentPanel.Width = ContentWidth * scale;
+            ContentPanel.Height = ContentHeight * scale;
+
+            foreach (var button in ButtonStack.Children)
+            {
+                if (button is Button btn)
+                {
+                    btn.Width = ButtonWidth * scale;
+                    btn.FontSize = ButtonFontSize * scale;
+                    btn.Margin = new Thickness(0, 5 * scale, 0, 5 * scale);
+                }
+            }
         }
 
         private void SetInitialBlobPositions()

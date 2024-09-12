@@ -57,6 +57,17 @@
     </ApplicationDefinition>
     <Compile Include="Core\RelayCommand.cs" />
     <Compile Include="FrontendLogic\ScaleConverter.cs" />
+    <Compile Include="MVVM\Model\ReportModel.cs" />
+    <Compile Include="MVVM\View-Model\ReportViewModel.cs" />
+    <Compile Include="MVVM\View\ForumUserControl.xaml.cs">
+      <DependentUpon>ForumUserControl.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="MVVM\View\ReportUserControl.xaml.cs">
+      <DependentUpon>ReportUserControl.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="MVVM\View\ReportView.xaml.cs">
+      <DependentUpon>ReportView.xaml</DependentUpon>
+    </Compile>
     <Compile Include="MVVM\View\UnderDevelopmentPopup.xaml.cs">
       <DependentUpon>UnderDevelopmentPopup.xaml</DependentUpon>
     </Compile>
@@ -73,7 +84,19 @@
       <DependentUpon>MainWindow.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
+    <Page Include="MVVM\View\ForumUserControl.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="MVVM\View\HomeView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="MVVM\View\ReportUserControl.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="MVVM\View\ReportView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -128,7 +151,7 @@
     <None Include="App.config" />
   </ItemGroup>
   <ItemGroup>
-    <Folder Include="MVVM\Model\" />
+    <Folder Include="ResourceDictionaries\" />
   </ItemGroup>
   <ItemGroup>
     <Resource Include="Resources\Images\Blobs\blueBlob.png" />
@@ -156,6 +179,23 @@
     <Resource Include="Resources\Icons\event_Icon.png" />
     <Resource Include="Resources\Icons\report_Icon.png" />
     <Resource Include="Resources\Icons\request_Icon.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\Images\Report\reportBtn.png" />
+    <Resource Include="Resources\Images\Report\reportBtnClcik.png" />
+    <Resource Include="Resources\Images\Report\reportBtnHover.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\Icons\forumIcon.png" />
+    <Resource Include="Resources\Icons\menuIcon.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\Images\Report\quitReportClickBtn.png" />
+    <Resource Include="Resources\Images\Report\quitReportDefautBtn.png" />
+    <Resource Include="Resources\Images\Report\quitReportHoverBtn.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\Images\Report\reportBackground.png" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

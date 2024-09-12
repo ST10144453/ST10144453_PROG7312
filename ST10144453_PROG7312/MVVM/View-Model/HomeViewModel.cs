@@ -13,16 +13,16 @@ namespace ST10144453_PROG7312.MVVM.View_Model
         public event PropertyChangedEventHandler PropertyChanged;
 
         public ICommand ShowUnderDevelopmentPopupCommand { get; private set; }
+        public ICommand NavigateReportCommand { get; private set; }
+
 
         public HomeViewModel()
         {
             // Initialize the command in the constructor
             ShowUnderDevelopmentPopupCommand = new RelayCommand(ShowUnderDevelopmentPopup);
-        }
 
-        protected void OnPropertyChanged([CallerMemberName] string propertyName = null)
-        {
-            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
+            NavigateReportCommand = new RelayCommand(OpenReport);
+
         }
 
         private void ShowUnderDevelopmentPopup()
@@ -33,5 +33,30 @@ namespace ST10144453_PROG7312.MVVM.View_Model
             };
             popup.ShowDialog();
         }
+
+        private void OpenReport()
+        {
+            // Get the main window (Home or Main Menu window)
+            var mainWindow = Application.Current.MainWindow;
+
+            // Create the new ReportView window
+            var reportWindow = new ReportView
+            {
+                Owner = mainWindow
+            };
+
+            // Hide the main window before showing the new window
+            mainWindow.Visibility = Visibility.Collapsed;
+
+            // Show the report window
+            reportWindow.Closed += (s, e) =>
+            {
+                // Re-show the main window when the report window closes
+                mainWindow.Visibility = Visibility.Visible;
+            };
+            reportWindow.ShowDialog(); // Or use Show() if you don't want modal behavior
+        }
+
+
     }
 }

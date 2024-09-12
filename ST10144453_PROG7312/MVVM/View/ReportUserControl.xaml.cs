@@ -10,24 +10,19 @@ using System.Windows.Documents;
 using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
+using System.Windows.Navigation;
 using System.Windows.Shapes;
 
 namespace ST10144453_PROG7312.MVVM.View
 {
     /// <summary>
-    /// Interaction logic for UnderDevelopmentPopup.xaml
+    /// Interaction logic for ReportUserControl.xaml
     /// </summary>
-    public partial class UnderDevelopmentPopup : Window
+    public partial class ReportUserControl : UserControl
     {
-        public UnderDevelopmentPopup()
+        public ReportUserControl()
         {
             InitializeComponent();
         }
-
-        private void CloseButton_Click(object sender, RoutedEventArgs e)
-        {
-            this.Close();
-        }
-
     }
 }

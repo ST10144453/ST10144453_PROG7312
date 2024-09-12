@@ -13,10 +13,6 @@ namespace ST10144453_PROG7312.MVVM.View
         private const double ContentHeight = 792;
         private const double BackgroundWidth = 866;
         private const double BackgroundHeight = 892;
-        private const int BlobCount = 4; // Number of blobs
-        private const double OverlapThreshold = 0.3; // Allowable overlap percentage
-        private const double BlobSize = 2000; // Adjust size as needed
-        private const double Margin = 300; // Increase margin to reduce overlap
 
         public HomeView()
         {
@@ -28,13 +24,11 @@ namespace ST10144453_PROG7312.MVVM.View
         private void OnLoaded(object sender, RoutedEventArgs e)
         {
             UpdateLayout();
-            StartAnimation();
         }
 
         private void OnSizeChanged(object sender, SizeChangedEventArgs e)
         {
             UpdateLayout();
-            StartAnimation();
         }
 
         private void UpdateLayout()
@@ -71,58 +65,6 @@ namespace ST10144453_PROG7312.MVVM.View
         }
 
 
-        private void SetInitialBlobPositions()
-        {
-            double windowWidth = ActualWidth;
-            double windowHeight = ActualHeight;
-
-            // Ensure blobs start within the visible window area with margins
-            Canvas.SetLeft(BlobImage1, Margin);
-            Canvas.SetTop(BlobImage1, Margin);
-
-            Canvas.SetLeft(BlobImage2, Margin);
-            Canvas.SetTop(BlobImage2, Margin);
-
-            Canvas.SetLeft(BlobImage3, Margin);
-            Canvas.SetTop(BlobImage3, Margin);
-
-            Canvas.SetLeft(BlobImage4, Margin);
-            Canvas.SetTop(BlobImage4, Margin);
-        }
-
-
-
-        private void StartAnimation()
-        {
-            double windowWidth = ActualWidth;
-            double windowHeight = ActualHeight;
-
-            AnimateBlob(BlobImage1, Canvas.LeftProperty, -BlobSize + Margin, windowWidth - Margin, 10);
-            AnimateBlob(BlobImage1, Canvas.TopProperty, -BlobSize + Margin, windowHeight - Margin, 10);
-
-            AnimateBlob(BlobImage2, Canvas.LeftProperty, -BlobSize + Margin, windowWidth - Margin, 10);
-            AnimateBlob(BlobImage2, Canvas.BottomProperty, -BlobSize + Margin, windowHeight - Margin, 10);
-
-            AnimateBlob(BlobImage3, Canvas.RightProperty, -BlobSize + Margin, windowWidth - Margin, 10);
-            AnimateBlob(BlobImage3, Canvas.TopProperty, -BlobSize + Margin, windowHeight - Margin, 10);
-
-            AnimateBlob(BlobImage4, Canvas.RightProperty, -BlobSize + Margin, windowWidth - Margin, 10);
-            AnimateBlob(BlobImage4, Canvas.BottomProperty, -BlobSize + Margin, windowHeight - Margin, 10);
-        }
-
-
-        private void AnimateBlob(UIElement element, DependencyProperty property, double from, double to, double durationInSeconds)
-        {
-            var animation = new DoubleAnimation
-            {
-                From = from,
-                To = to,
-                Duration = new Duration(TimeSpan.FromSeconds(durationInSeconds)),
-                RepeatBehavior = RepeatBehavior.Forever,
-                EasingFunction = new SineEase { EasingMode = EasingMode.EaseInOut }
-            };
-
-            element.BeginAnimation(property, animation);
-        }
+        
     }
 }

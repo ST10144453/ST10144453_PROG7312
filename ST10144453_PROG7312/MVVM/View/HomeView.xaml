@@ -7,7 +7,7 @@
     xmlns:viewModel="clr-namespace:ST10144453_PROG7312.MVVM.View_Model"
     d:DesignHeight="1080"
     d:DesignWidth="1910"
-    Background="White"
+    Background="Transparent"
     mc:Ignorable="d">
 
     <UserControl.DataContext>
@@ -111,41 +111,7 @@
     </UserControl.Resources>
 
     <Grid>
-        <Canvas Panel.ZIndex="0">
-            <Image
-                x:Name="BlobImage1"
-                Canvas.Left="544"
-                Canvas.Top="-672"
-                Width="2000"
-                Height="2000"
-                HorizontalAlignment="Center"
-                VerticalAlignment="Top"
-                Source="pack://application:,,,/Resources/Images/Blobs/redBlob.png" />
-            <Image
-                x:Name="BlobImage2"
-                Canvas.Left="-804"
-                Canvas.Top="-1075"
-                Width="2000"
-                Height="2000"
-                Source="pack://application:,,,/Resources/Images/Blobs/blueBlob.png" />
-            <Image
-                x:Name="BlobImage3"
-                Width="2000"
-                Height="2000"
-                Source="pack://application:,,,/Resources/Images/Blobs/greenBlob.png" />
-            <Image
-                x:Name="BlobImage4"
-                Canvas.Left="-719"
-                Canvas.Top="-358"
-                Width="2000"
-                Height="2000"
-                HorizontalAlignment="Center"
-                VerticalAlignment="Center"
-                Source="pack://application:,,,/Resources/Images/Blobs/yellowBlob.png" />
-        </Canvas>
-
-
-
+       
         <Viewbox
             Panel.ZIndex="5"
             Stretch="Uniform"
@@ -195,7 +161,8 @@
                             Height="80"
                             Margin="0,10"
                             FontSize="24"
-                            Style="{StaticResource ImageButtonStyle}">
+                            Style="{StaticResource ImageButtonStyle}"
+                            Command="{Binding NavigateReportCommand}">
                             <StackPanel HorizontalAlignment="Left" Orientation="Horizontal">
                                 <!--  Icon Image  -->
                                 <Image
