@@ -4,8 +4,6 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-using System.Collections.Generic;
-
 namespace ST10144453_PROG7312.MVVM.Model
 {
     public class ReportModel
@@ -17,7 +15,7 @@ namespace ST10144453_PROG7312.MVVM.Model
         /// <summary>
         /// Name of the submitted report
         /// </summary>
-       public String reportName {  get; set; }
+       public string reportName {  get; set; }
         /// <summary>
         /// Date of report submitted (Automatically generated)
         /// </summary>
@@ -25,30 +23,30 @@ namespace ST10144453_PROG7312.MVVM.Model
         /// <summary>
         /// Location of the issue reported. 
         /// </summary>
-        public String reportLocation { get; set; }
+        public string reportLocation { get; set; }
         /// <summary>
         /// Description of issue. 
         /// </summary>
-        public String reportDescription { get; set; }
+        public string reportDescription { get; set; }
         /// <summary>
         /// Selected category of report
         /// </summary>
-        public String reportCategory { get; set; }
+        public string reportCategory { get; set; }
         /// <summary>
         /// List of categories for report (Will be used for dropdown list)
         /// </summary>
-        public List<String> Categories { get; set; }
+        public List<string> Categories { get; set; }
         /// <summary>
         /// List of media files attached to report. The media files will be stored in a folder and the path will be stored here.
         /// </summary>
-        public List<String> Media { get; set; }
+        public List<MediaItem> Media { get; set; }
 
         public ReportModel()
         {
             reportID = Guid.NewGuid();
             reportDate = DateTime.Now;
             Categories = new List<string> { "Category 1", "Category 2", "Category 3" };
-            Media = new List<string>();
+            Media = new List<MediaItem>();
         }
 
     }

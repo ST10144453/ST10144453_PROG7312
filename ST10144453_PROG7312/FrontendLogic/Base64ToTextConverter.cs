@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Globalization;
 using System.IO;
+using System.Text;
 using System.Windows.Data;
 
 namespace ST10144453_PROG7312.FrontendLogic
@@ -9,12 +10,20 @@ namespace ST10144453_PROG7312.FrontendLogic
     {
         public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
         {
-            if (value is string base64String)
+            var base64String = value as string;
+            if (string.IsNullOrEmpty(base64String))
+                return string.Empty;
+
+            try
             {
-                byte[] textBytes = System.Convert.FromBase64String(base64String);
-                return System.Text.Encoding.UTF8.GetString(textBytes);
+                var fileBytes = System.Convert.FromBase64String(base64String);
+                return Encoding.UTF8.GetString(fileBytes);
             }
-            return null;
+            catch (Exception ex)
+            {
+                // Log or handle the exception
+                return string.Empty;
+            }
         }
 
         public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)

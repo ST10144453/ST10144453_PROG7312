@@ -1,19 +1,21 @@
 ﻿using System;
 using System.Globalization;
-using System.Windows;
+using System.IO;
 using System.Windows.Data;
+using System.Windows.Media;
+using System.Windows.Media.Imaging;
 
 namespace ST10144453_PROG7312.FrontendLogic
 {
-    public class InverseBoolToVisibilityConverter : IValueConverter
+    public class FilePathToImageSourceConverter : IValueConverter
     {
         public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
         {
-            if (value is bool booleanValue)
+            if (value is string filePath && File.Exists(filePath))
             {
-                return booleanValue ? Visibility.Collapsed : Visibility.Visible;
+                return new BitmapImage(new Uri(filePath, UriKind.RelativeOrAbsolute));
             }
-            return Visibility.Collapsed;
+            return null;
         }
 
         public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)

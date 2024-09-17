@@ -6,6 +6,7 @@ using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
+using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Runtime.CompilerServices;
@@ -16,23 +17,12 @@ using System.Windows.Input;
 
 namespace ST10144453_PROG7312.MVVM.View_Model
 {
-    public class MediaItem
-    {
-        public string Base64String { get; set; }
-        public bool IsImage { get; set; }
-    }
-
     public class ReportViewModel : INotifyPropertyChanged
     {
         private string _issueName;
         private string _location;
         private string _selectedCategory;
         private string _description;
-        private ObservableCollection<ReportModel> _reports;
-        private ObservableCollection<string> _mediaPaths;
-        private ObservableCollection<string> _savedMediaPaths;
-        private ObservableCollection<string> _mediaBase64Strings;
-        private ObservableCollection<string> _savedMediaBase64Strings;
 
         public string IssueName
         {
@@ -86,72 +76,10 @@ namespace ST10144453_PROG7312.MVVM.View_Model
             }
         }
 
-        public ObservableCollection<ReportModel> Reports
-        {
-            get => _reports;
-            set
-            {
-                if (_reports != value)
-                {
-                    _reports = value;
-                    OnPropertyChanged(nameof(Reports));
-                }
-            }
-        }
-
-        public ObservableCollection<string> MediaPaths
-        {
-            get => _mediaPaths;
-            set
-            {
-                if (_mediaPaths != value)
-                {
-                    _mediaPaths = value;
-                    OnPropertyChanged(nameof(MediaPaths));
-                }
-            }
-        }
-
-        public ObservableCollection<string> SavedMediaPaths
-        {
-            get => _savedMediaPaths;
-            set
-            {
-                if (_savedMediaPaths != value)
-                {
-                    _savedMediaPaths = value;
-                    OnPropertyChanged(nameof(SavedMediaPaths));
-                }
-            }
-        }
-
-        public ObservableCollection<string> MediaBase64Strings
-        {
-            get => _mediaBase64Strings;
-            set
-            {
-                if (_mediaBase64Strings != value)
-                {
-                    _mediaBase64Strings = value;
-                    OnPropertyChanged(nameof(MediaBase64Strings));
-                }
-            }
-        }
-
-        public ObservableCollection<string> SavedMediaBase64Strings
-        {
-            get => _savedMediaBase64Strings;
-            set
-            {
-                if (_savedMediaBase64Strings != value)
-                {
-                    _savedMediaBase64Strings = value;
-                    OnPropertyChanged(nameof(SavedMediaBase64Strings));
-                }
-            }
-        }
+        public ObservableCollection<ReportModel> Reports { get; set; }
 
         private ObservableCollection<MediaItem> _mediaItems;
+
         public ObservableCollection<MediaItem> MediaItems
         {
             get => _mediaItems;
@@ -165,40 +93,43 @@ namespace ST10144453_PROG7312.MVVM.View_Model
             }
         }
 
+        private object _currentView;
+
+        public object CurrentView
+        {
+            get { return _currentView; }
+            set
+            {
+                _currentView = value;
+                OnPropertyChanged(nameof(CurrentView));
+            }
+        }
+
+        private MediaItem _selectedMediaItem;
+        public MediaItem SelectedMediaItem
+        {
+            get => _selectedMediaItem;
+            set
+            {
+                if (_selectedMediaItem != value)
+                {
+                    _selectedMediaItem = value;
+                    OnPropertyChanged(nameof(SelectedMediaItem));
+                }
+            }
+        }
         public ICommand AttachMediaCommand { get; private set; }
         public ICommand SubmitCommand { get; private set; }
         public ICommand NavigateToHomeCommand { get; private set; }
 
         public ReportViewModel()
         {
-            Reports = new ObservableCollection<ReportModel>();
-            MediaPaths = new ObservableCollection<string>();
-            SavedMediaPaths = new ObservableCollection<string>();
-            MediaBase64Strings = new ObservableCollection<string>();
-            SavedMediaBase64Strings = new ObservableCollection<string>();
-
             AttachMediaCommand = new RelayCommand(AttachMedia);
             SubmitCommand = new RelayCommand(Submit);
             NavigateToHomeCommand = new RelayCommand(NavigateToHome);
             MediaItems = new ObservableCollection<MediaItem>();
 
-            Reports.Add(new ReportModel
-            {
-                reportName = "Issue 1",
-                reportLocation = "Location 1",
-                reportDescription = "Description 1",
-                reportCategory = "Category 1",
-                Media = new List<string> { "Media 1", "Media 2" }
-            });
-
-            Reports.Add(new ReportModel
-            {
-                reportName = "Issue 2",
-                reportLocation = "Location 2",
-                reportDescription = "Description 2",
-                reportCategory = "Category 2",
-                Media = new List<string> { "Media 3", "Media 4" }
-            });
+            Reports = ReportManager.Instance.Reports;
         }
 
         private void NavigateToHome()
@@ -212,19 +143,27 @@ namespace ST10144453_PROG7312.MVVM.View_Model
 
         private string EncodeFileToBase64(string filePath)
         {
-            if (IsImageFile(filePath))
+            // Check if the file exists
+            if (!File.Exists(filePath))
             {
-                byte[] fileBytes = File.ReadAllBytes(filePath);
-                return Convert.ToBase64String(fileBytes);
+                throw new FileNotFoundException("The specified file does not exist.", filePath);
             }
-            else if (IsTextFile(filePath))
-            {
-                return EncodeTextFileToBase64(filePath);
-            }
-            else
+
+            // Get the file extension
+            string extension = Path.GetExtension(filePath).ToLower();
+
+            // Supported file extensions
+            List<string> supportedExtensions = new List<string> { ".jpg", ".jpeg", ".png", ".pdf", ".txt", ".docx" };
+
+            // Check if the file extension is supported
+            if (!supportedExtensions.Contains(extension))
             {
                 throw new NotSupportedException("Unsupported file type.");
             }
+
+            // Read file content and convert to Base64
+            byte[] fileBytes = File.ReadAllBytes(filePath);
+            return Convert.ToBase64String(fileBytes);
         }
 
         private string EncodeTextFileToBase64(string filePath)
@@ -251,7 +190,7 @@ namespace ST10144453_PROG7312.MVVM.View_Model
 
         private bool IsImageFile(string filename)
         {
-            string[] imageExtensions = { ".png", ".jpg", ".jpeg", ".bmp", ".gif" };
+            string[] imageExtensions = { ".png", ".jpg", ".jpeg", };
             return imageExtensions.Contains(Path.GetExtension(filename).ToLower());
         }
 
@@ -259,6 +198,16 @@ namespace ST10144453_PROG7312.MVVM.View_Model
         {
             string[] textExtensions = { ".txt", ".csv", ".log" };
             return textExtensions.Contains(Path.GetExtension(filename).ToLower());
+        }
+        private bool IsPdfFile(string filename)
+        {
+            return Path.GetExtension(filename).ToLower() == ".pdf";
+        }
+
+        private bool IsWordFile(string filename)
+        {
+            string[] wordExtensions = { ".doc", ".docx" };
+            return wordExtensions.Contains(Path.GetExtension(filename).ToLower());
         }
 
         private void AttachMedia()
@@ -275,11 +224,20 @@ namespace ST10144453_PROG7312.MVVM.View_Model
                 {
                     string base64String = EncodeFileToBase64(filename);
                     bool isImage = IsImageFile(filename);
+                    bool isPdf = IsPdfFile(filename);
                     bool isText = IsTextFile(filename);
+                    bool isWord = IsWordFile(filename); // Check if it's a Word document
 
-                    if (isImage || isText)
+                    if (isImage || isPdf || isText || isWord)
                     {
-                        MediaItems.Add(new MediaItem { Base64String = base64String, IsImage = isImage });
+                        MediaItems.Add(new MediaItem
+                        {
+                            Base64String = base64String,
+                            IsImage = isImage,
+                            IsText = isText,
+                            IsPdf = isPdf,
+                            IsWord = isWord // Ensure this property is set
+                        });
                     }
                     else
                     {
@@ -289,6 +247,25 @@ namespace ST10144453_PROG7312.MVVM.View_Model
             }
         }
 
+        public void TryOpenFile(string base64String, string fileExtension)
+        {
+            try
+            {
+                byte[] fileBytes = Convert.FromBase64String(base64String);
+                string tempFilePath = Path.Combine(Path.GetTempPath(), Guid.NewGuid().ToString() + fileExtension);
+                File.WriteAllBytes(tempFilePath, fileBytes);
+
+                Process.Start(new ProcessStartInfo
+                {
+                    FileName = tempFilePath,
+                    UseShellExecute = true
+                });
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"An error occurred: {ex.Message}", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+            }
+        }
         private void Submit()
         {
             var newReport = new ReportModel
@@ -297,7 +274,8 @@ namespace ST10144453_PROG7312.MVVM.View_Model
                 reportLocation = Location,
                 reportDescription = Description,
                 reportCategory = SelectedCategory,
-                Media = new List<string>()
+                Media = new List<Model.MediaItem>(),
+                reportDate = DateTime.Now // Fix: Assign DateTime.Now directly without ToString()
             };
 
             string reportGuid = Guid.NewGuid().ToString();
@@ -312,20 +290,44 @@ namespace ST10144453_PROG7312.MVVM.View_Model
                 if (mediaItem.IsImage)
                 {
                     string filePath = DecodeBase64ToFile(mediaItem.Base64String, destinationPath);
-                    newReport.Media.Add(filePath);
+                    newReport.Media.Add(new Model.MediaItem { Base64String = mediaItem.Base64String, IsImage = true, IsPdf = false });
+                }
+                else if (mediaItem.IsPdf)
+                {
+                    string filePath = DecodeBase64ToFile(mediaItem.Base64String, destinationPath);
+                    newReport.Media.Add(new Model.MediaItem { Base64String = mediaItem.Base64String, IsPdf = true, IsImage = false, IsText = false });
+                }
+                else if (mediaItem.IsWord)
+                {
+                    string filePath = DecodeBase64ToFile(mediaItem.Base64String, destinationPath);
+                    newReport.Media.Add(new Model.MediaItem { Base64String = mediaItem.Base64String, IsPdf = false, IsImage = false, IsText = false, IsWord = true });
                 }
                 else
                 {
                     string textContent = DecodeBase64ToTextFile(mediaItem.Base64String, destinationPath);
-                    newReport.Media.Add(destinationPath);
+                    newReport.Media.Add(new Model.MediaItem { Base64String = mediaItem.Base64String, IsImage = false, IsText = true, IsPdf = false });
                 }
             }
 
-            Reports.Add(newReport);
+            ReportManager.Instance.AddReport(newReport);
 
-            // Ensure the UI updates
-            CollectionViewSource.GetDefaultView(Reports).Refresh();
             OnPropertyChanged(nameof(Reports));
+
+            // Debug output
+            Console.WriteLine("New report added:");
+            Console.WriteLine($"Name: {newReport.reportName}");
+            Console.WriteLine($"Location: {newReport.reportLocation}");
+            Console.WriteLine($"Category: {newReport.reportCategory}");
+            Console.WriteLine($"Description: {newReport.reportDescription}");
+            Console.WriteLine($"Media count: {newReport.Media.Count}");
+
+            foreach (var mediaItem in MediaItems)
+            {
+                Console.WriteLine($"Base64String length: {mediaItem.Base64String.Length}");
+                Console.WriteLine($"IsImage: {mediaItem.IsImage}");
+                Console.WriteLine($"IsText: {mediaItem.IsText}");
+                Console.WriteLine($"IsPdf: {mediaItem.IsPdf}");
+            }
 
             // Clear inputs
             IssueName = string.Empty;
@@ -334,7 +336,6 @@ namespace ST10144453_PROG7312.MVVM.View_Model
             SelectedCategory = string.Empty;
             MediaItems.Clear();
         }
-
 
 
         public event PropertyChangedEventHandler PropertyChanged;

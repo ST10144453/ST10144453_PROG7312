@@ -11,16 +11,7 @@
     Background="Transparent"
     mc:Ignorable="d">
 
-    <UserControl.DataContext>
-        <viewModel:ReportViewModel />
-    </UserControl.DataContext>
 
-    <UserControl.Resources>
-        <converter:Base64ToImageSourceConverter x:Key="Base64ToImageSourceConverter" />
-        <converter:Base64ToTextConverter x:Key="Base64ToTextConverter" />
-        <converter:BoolToVisibilityConverter x:Key="BoolToVisibilityConverter" />
-        <converter:InverseBoolToVisibilityConverter x:Key="InverseBoolToVisibilityConverter" />
-    </UserControl.Resources>
 
 
     <Grid>
@@ -133,7 +124,7 @@
         </Button>
 
         <!--  ListView to show saved media after submission  -->
-      
+
 
         <!--  Submit Button  -->
         <Button
