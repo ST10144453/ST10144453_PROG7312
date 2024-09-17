@@ -93,6 +93,9 @@ namespace ST10144453_PROG7312.MVVM.View_Model
             }
         }
 
+        public bool ContainsPdf => MediaItems.Any(m => m.IsPdf);
+        public bool ContainsWord => MediaItems.Any(m => m.IsWord);
+
         private object _currentView;
 
         public object CurrentView

@@ -76,6 +76,7 @@
       <SubType>Designer</SubType>
     </ApplicationDefinition>
     <Compile Include="Core\RelayCommand.cs" />
+    <Compile Include="FrontendLogic\AnyTrueInCollectionConverter.cs" />
     <Compile Include="FrontendLogic\Base64ToImageSourceConverter.cs" />
     <Compile Include="FrontendLogic\Base64ToPdfStreamConverter.cs" />
     <Compile Include="FrontendLogic\Base64ToTextConverter.cs" />

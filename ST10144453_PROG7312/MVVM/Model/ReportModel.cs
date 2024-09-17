@@ -41,6 +41,15 @@ namespace ST10144453_PROG7312.MVVM.Model
         /// </summary>
         public List<MediaItem> Media { get; set; }
 
+        public bool HasPdf
+        {
+            get { return Media != null && Media.Any(item => item.IsPdf); }
+        }
+
+        public bool HasWord
+        {
+            get { return Media != null && Media.Any(item => item.IsWord); }
+        }
         public ReportModel()
         {
             reportID = Guid.NewGuid();

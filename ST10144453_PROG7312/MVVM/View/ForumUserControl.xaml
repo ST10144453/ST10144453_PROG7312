@@ -18,7 +18,7 @@
     </UserControl.DataContext>
 
     <UserControl.Resources>
-        <BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter" />
+        <Convert:AnyTrueInCollectionConverter x:Key="AnyTrueInCollectionConverter" />
         <Convert:Base64ToTextConverter x:Key="Base64ToTextConverter" />
         <Convert:Base64ToImageSourceConverter x:Key="Base64ToImageSourceConverter" />
         <Convert:InverseBoolToVisibilityConverter x:Key="InverseBoolToVisibilityConverter" />
@@ -29,7 +29,11 @@
             <ItemsControl x:Name="ReportListBox" ItemsSource="{Binding Reports}">
                 <ItemsControl.ItemTemplate>
                     <DataTemplate>
-                        <Border Margin="5" Padding="10" BorderBrush="Gray" BorderThickness="1">
+                        <Border
+                            Margin="5"
+                            Padding="10"
+                            BorderBrush="Gray"
+                            BorderThickness="1">
                             <Grid>
                                 <Grid.RowDefinitions>
                                     <RowDefinition Height="Auto" />
@@ -45,17 +49,49 @@
                                     <ColumnDefinition Width="1*" />
                                 </Grid.ColumnDefinitions>
 
-                                <TextBlock Grid.Row="0" Grid.Column="0" HorizontalAlignment="Left" VerticalAlignment="Center" Text="{Binding reportDate}" />
-                                <TextBlock Grid.Row="0" Grid.Column="1" HorizontalAlignment="Right" VerticalAlignment="Center" Text="{Binding reportName}" />
-                                <TextBlock Grid.Row="1" Grid.Column="1" HorizontalAlignment="Center" VerticalAlignment="Center" Text="{Binding reportCategory}" />
-                                <TextBlock Grid.Row="2" Grid.Column="1" HorizontalAlignment="Center" VerticalAlignment="Center" Text="{Binding reportLocation}" />
-                                <TextBlock Grid.Row="3" Grid.Column="1" HorizontalAlignment="Center" VerticalAlignment="Center" Text="{Binding reportDescription}" />
+                                <TextBlock
+                                    Grid.Row="0"
+                                    Grid.Column="0"
+                                    HorizontalAlignment="Left"
+                                    VerticalAlignment="Center"
+                                    Text="{Binding reportDate}" />
+                                <TextBlock
+                                    Grid.Row="0"
+                                    Grid.Column="1"
+                                    HorizontalAlignment="Right"
+                                    VerticalAlignment="Center"
+                                    Text="{Binding reportName}" />
+                                <TextBlock
+                                    Grid.Row="1"
+                                    Grid.Column="1"
+                                    HorizontalAlignment="Center"
+                                    VerticalAlignment="Center"
+                                    Text="{Binding reportCategory}" />
+                                <TextBlock
+                                    Grid.Row="2"
+                                    Grid.Column="1"
+                                    HorizontalAlignment="Center"
+                                    VerticalAlignment="Center"
+                                    Text="{Binding reportLocation}" />
+                                <TextBlock
+                                    Grid.Row="3"
+                                    Grid.Column="1"
+                                    HorizontalAlignment="Center"
+                                    VerticalAlignment="Center"
+                                    Text="{Binding reportDescription}" />
 
                                 <!--  Media items display  -->
-                                <ItemsControl Grid.Row="4" Grid.Column="0" Grid.ColumnSpan="3" ItemsSource="{Binding Media}">
+                                <ItemsControl
+                                    Grid.Row="4"
+                                    Grid.Column="0"
+                                    Grid.ColumnSpan="3"
+                                    ItemsSource="{Binding Media}">
                                     <ItemsControl.ItemTemplate>
                                         <DataTemplate>
-                                            <Border Margin="5" BorderBrush="LightGray" BorderThickness="1">
+                                            <Border
+                                                Margin="5"
+                                                BorderBrush="LightGray"
+                                                BorderThickness="1">
                                                 <Grid>
                                                     <Grid.RowDefinitions>
                                                         <RowDefinition Height="Auto" />
@@ -63,10 +99,18 @@
                                                     </Grid.RowDefinitions>
 
                                                     <!--  Image display  -->
-                                                    <Image Grid.Row="0" MaxHeight="100" Source="{Binding Base64String, Converter={StaticResource Base64ToImageSourceConverter}}" Visibility="{Binding IsImage, Converter={StaticResource BooleanToVisibilityConverter}}" />
+                                                    <Image
+                                                        Grid.Row="0"
+                                                        MaxHeight="100"
+                                                        Source="{Binding Base64String, Converter={StaticResource Base64ToImageSourceConverter}}"
+                                                        Visibility="{Binding IsImage, Converter={StaticResource AnyTrueInCollectionConverter}}" />
 
                                                     <!--  Text display  -->
-                                                    <TextBlock Grid.Row="1" Text="{Binding Base64String, Converter={StaticResource Base64ToTextConverter}}" TextWrapping="Wrap" Visibility="{Binding IsImage, Converter={StaticResource InverseBoolToVisibilityConverter}}" />
+                                                    <TextBlock
+                                                        Grid.Row="1"
+                                                        Text="{Binding Base64String, Converter={StaticResource Base64ToTextConverter}}"
+                                                        TextWrapping="Wrap"
+                                                        Visibility="{Binding IsImage, Converter={StaticResource InverseBoolToVisibilityConverter}}" />
                                                 </Grid>
                                             </Border>
                                         </DataTemplate>
@@ -74,8 +118,44 @@
                                 </ItemsControl>
 
                                 <!--  View PDF Button  -->
-                                <Button Grid.Row="5" Grid.Column="1" HorizontalAlignment="Center" VerticalAlignment="Center" Click="ViewPdfButton_Click" Content="View PDF" />
-                                <Button Grid.Row="5" Grid.Column="2" HorizontalAlignment="Center" VerticalAlignment="Center" Click="ViewWordButton_Click" Content="View Word" />
+                                <Button
+                                    Grid.Row="5"
+                                    Grid.Column="1"
+                                    HorizontalAlignment="Center"
+                                    VerticalAlignment="Center"
+                                    Click="ViewPdfButton_Click"
+                                    Content="View PDF">
+                                    <Button.Style>
+                                        <Style TargetType="Button">
+                                            <Setter Property="Visibility" Value="Collapsed" />
+                                            <Style.Triggers>
+                                                <DataTrigger Binding="{Binding Media, Converter={StaticResource AnyTrueInCollectionConverter}}" Value="True">
+                                                    <Setter Property="Visibility" Value="Visible" />
+                                                </DataTrigger>
+                                            </Style.Triggers>
+                                        </Style>
+                                    </Button.Style>
+                                </Button>
+
+                                <!--  View Word Button  -->
+                                <Button
+                                    Grid.Row="5"
+                                    Grid.Column="2"
+                                    HorizontalAlignment="Center"
+                                    VerticalAlignment="Center"
+                                    Click="ViewWordButton_Click"
+                                    Content="View Word">
+                                    <Button.Style>
+                                        <Style TargetType="Button">
+                                            <Setter Property="Visibility" Value="Collapsed" />
+                                            <Style.Triggers>
+                                                <DataTrigger Binding="{Binding Media, Converter={StaticResource AnyTrueInCollectionConverter}}" Value="True">
+                                                    <Setter Property="Visibility" Value="Visible" />
+                                                </DataTrigger>
+                                            </Style.Triggers>
+                                        </Style>
+                                    </Button.Style>
+                                </Button>
 
                             </Grid>
                         </Border>

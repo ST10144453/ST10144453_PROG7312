@@ -116,9 +116,9 @@
         <!--  Define two columns: one for navigation and one for content  -->
         <Grid.ColumnDefinitions>
             <!--  Side Navigation Column  -->
-            <ColumnDefinition Width="300" />
-            <!--  Content Area Column  -->
             <ColumnDefinition Width="*" />
+            <!--  Content Area Column  -->
+            <ColumnDefinition Width="4*" />
         </Grid.ColumnDefinitions>
 
         <Canvas Panel.ZIndex="-1">
@@ -231,9 +231,6 @@
         <!--  Content Area  -->
         <ContentControl
             x:Name="MainContentControl"
-            Grid.Column="1"
-            HorizontalAlignment="Stretch"
-            VerticalAlignment="Stretch"
-            Content="{Binding CurrentView}" />
+            Content="{Binding CurrentView}" Grid.ColumnSpan="2" Margin="288,0,12,0" />
     </Grid>
 </Window>
