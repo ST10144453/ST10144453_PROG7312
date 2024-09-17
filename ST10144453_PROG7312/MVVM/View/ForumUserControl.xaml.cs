@@ -3,11 +3,10 @@ using System;
 using System.Linq;
 using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Shapes;
 using System.IO;
 using System.Diagnostics;
 using ST10144453_PROG7312.MVVM.Model;
+using System.Windows.Data;
 
 namespace ST10144453_PROG7312.MVVM.View
 {
@@ -18,118 +17,73 @@ namespace ST10144453_PROG7312.MVVM.View
             InitializeComponent();
         }
 
-        private void ViewPdfButton_Click(object sender, RoutedEventArgs e)
+        private void ViewMediaButton_Click(object sender, RoutedEventArgs e)
         {
-            // Retrieve the button that was clicked
             var button = sender as Button;
             if (button == null)
                 return;
 
-            // Get the DataContext of the button's parent, which should be the ReportModel
             var report = button.DataContext as ReportModel;
 
             if (report != null)
             {
-                var selectedPdfItem = report.Media.FirstOrDefault(item => item.IsPdf);
-
-                if (selectedPdfItem != null)
+                foreach (var mediaItem in report.Media)
                 {
-                    try
+                    if (mediaItem.IsPdf || mediaItem.IsWord || mediaItem.IsText || mediaItem.IsImage)
                     {
-                        // Decode Base64 to bytes
-                        byte[] pdfBytes = Convert.FromBase64String(selectedPdfItem.Base64String);
-                        string tempPdfPath = System.IO.Path.Combine(System.IO.Path.GetTempPath(), Guid.NewGuid().ToString() + ".pdf");
-                        File.WriteAllBytes(tempPdfPath, pdfBytes);
-
-                        // Open PDF file in default browser
-                        Process.Start(new ProcessStartInfo
+                        try
                         {
-                            FileName = tempPdfPath,
-                            UseShellExecute = true
-                        });
-                    }
-                    catch (Exception ex)
-                    {
-                        MessageBox.Show($"An error occurred: {ex.Message}", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+                            byte[] fileBytes = Convert.FromBase64String(mediaItem.Base64String);
+                            string tempFilePath = System.IO.Path.Combine(System.IO.Path.GetTempPath(), Guid.NewGuid().ToString());
+
+                            string fileExtension = string.Empty;
+
+                            if (mediaItem.IsPdf)
+                            {
+                                fileExtension = ".pdf";
+                            }
+                            else if (mediaItem.IsWord)
+                            {
+                                fileExtension = ".docx";
+                            }
+                            else if (mediaItem.IsText)
+                            {
+                                fileExtension = ".txt";
+                            }
+                            else if (mediaItem.IsImage)
+                            {
+                                fileExtension = ".png"; // or ".jpg", depending on the image format
+                            }
+
+                            tempFilePath += fileExtension;
+
+                            File.WriteAllBytes(tempFilePath, fileBytes);
+
+                            Process.Start(new ProcessStartInfo
+                            {
+                                FileName = tempFilePath,
+                                UseShellExecute = true
+                            });
+
+                            return;
+                        }
+                        catch (Exception ex)
+                        {
+                            MessageBox.Show($"An error occurred: {ex.Message}", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+                        }
                     }
                 }
-                
-                else
-                {
-                    MessageBox.Show("No PDF file available in MediaItems.", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
-                    // Log detailed error information
-                    Console.WriteLine("Detailed Error: No PDF file available in MediaItems.");
-                    Console.WriteLine($"Report Name: {report.reportName}");
-                    Console.WriteLine($"Media Count: {report.Media.Count}");
-                    foreach (var mediaItem in report.Media)
-                    {
-                        Console.WriteLine($"MediaItem - IsPdf: {mediaItem.IsPdf}, Base64String length: {mediaItem.Base64String.Length}");
-                    }
-                }
+
+                MessageBox.Show("No suitable media file available.", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
             }
             else
             {
                 MessageBox.Show("No report selected.", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
-                Console.WriteLine("Detailed Error: No report selected.");
             }
         }
 
-        private void ViewWordButton_Click(object sender, RoutedEventArgs e)
+        private void ForumUserControl_Loaded(object sender, RoutedEventArgs e)
         {
-            // Retrieve the button that was clicked
-            var button = sender as Button;
-            if (button == null)
-                return;
-
-            // Get the DataContext of the button's parent, which should be the ReportModel
-            var report = button.DataContext as ReportModel;
-
-            if (report != null)
-            {
-                var selectedWordItem = report.Media.FirstOrDefault(item => item.IsWord);
-
-                if (selectedWordItem != null)
-                {
-                    try
-                    {
-                        // Decode Base64 to bytes
-                        byte[] wordBytes = Convert.FromBase64String(selectedWordItem.Base64String);
-                        string tempWordPath = System.IO.Path.Combine(System.IO.Path.GetTempPath(), Guid.NewGuid().ToString() + ".docx");
-                        File.WriteAllBytes(tempWordPath, wordBytes);
-
-                        // Open Word file in default browser
-                        Process.Start(new ProcessStartInfo
-                        {
-                            FileName = tempWordPath,
-                            UseShellExecute = true
-                        });
-                    }
-                    catch (Exception ex)
-                    {
-                        MessageBox.Show($"An error occurred: {ex.Message}", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
-                    }
-                }
-                else
-                {
-                    MessageBox.Show("No Word file available in MediaItems.", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
-                    // Log detailed error information
-                    Console.WriteLine("Detailed Error: No Word file available in MediaItems.");
-                    Console.WriteLine($"Report Name: {report.reportName}");
-                    Console.WriteLine($"Media Count: {report.Media.Count}");
-                    foreach (var mediaItem in report.Media)
-                    {
-                        Console.WriteLine($"MediaItem - IsWord: {mediaItem.IsWord}, Base64String length: {mediaItem.Base64String.Length}");
-                    }
-                }
-
-            }
-        }
-
-        
-
-private void ForumUserControl_Loaded(object sender, RoutedEventArgs e)
-        {
-            // Refresh the Reports collection when the view is loaded
             var viewModel = DataContext as ReportViewModel;
             if (viewModel != null)
             {

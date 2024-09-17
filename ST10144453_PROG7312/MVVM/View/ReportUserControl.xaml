@@ -11,6 +11,51 @@
     Background="Transparent"
     mc:Ignorable="d">
 
+    <UserControl.DataContext>
+        <viewModel:ReportViewModel />
+    </UserControl.DataContext>
+    
+    <UserControl.Resources>
+        <ResourceDictionary>
+            <!--  Merging external resource dictionaries  -->
+            <ResourceDictionary.MergedDictionaries>
+                <ResourceDictionary Source="pack://application:,,,/ST10144453_PROG7312;component/ResourceDictionaries/ComboBoxStyles.xaml" />
+            </ResourceDictionary.MergedDictionaries>
+
+            <!--  Define a style for TextBox  -->
+            <Style TargetType="TextBox">
+                <Setter Property="Background" Value="White" />
+                <Setter Property="BorderBrush" Value="Transparent" />
+                <Setter Property="BorderThickness" Value="1" />
+                <Setter Property="Padding" Value="15" />
+                <Setter Property="FontFamily" Value="pack://application:,,,/ST10144453_PROG7312;component/Resources/Fonts/Roboto-Regular.ttf#Roboto" />
+                <Setter Property="Foreground" Value="#8B8B8B" />
+                <Setter Property="FontSize" Value="14" />
+                <Setter Property="Effect">
+                    <Setter.Value>
+                        <DropShadowEffect
+                            BlurRadius="4"
+                            Opacity="0.3"
+                            ShadowDepth="2" />
+                    </Setter.Value>
+                </Setter>
+                <Setter Property="Template">
+                    <Setter.Value>
+                        <ControlTemplate TargetType="TextBox">
+                            <Border
+                                Background="{TemplateBinding Background}"
+                                BorderBrush="{TemplateBinding BorderBrush}"
+                                BorderThickness="{TemplateBinding BorderThickness}"
+                                CornerRadius="20">
+                                <ScrollViewer x:Name="PART_ContentHost" />
+                            </Border>
+                        </ControlTemplate>
+                    </Setter.Value>
+                </Setter>
+            </Style>
+        </ResourceDictionary>
+    </UserControl.Resources>
+
     <Grid Margin="10">
         <!--  Define row and column definitions for layout  -->
         <Grid.RowDefinitions>
@@ -51,7 +96,8 @@
             Foreground="DodgerBlue"
             Maximum="100"
             Minimum="0"
-            Value="{Binding Progress, Mode=TwoWay}" />
+            Value="{Binding Progress, Mode=OneWay}" />
+
 
         <!--  Issue Name Label and TextBox  -->
         <Label Grid.Row="1" Content="Issue Name:" />
@@ -61,10 +107,8 @@
             MinWidth="200"
             MinHeight="30"
             Margin="0,5,0,10"
-            Padding="5"
-            BorderBrush="Gray"
-            BorderThickness="1"
-            Text="{Binding IssueName, Mode=TwoWay}" />
+            Text="{Binding IssueName, Mode=TwoWay}"
+            TextChanged="OnIssueNameTextChanged" />
 
         <!--  Location Label and TextBox  -->
         <Label Grid.Row="3" Content="Location:" />
@@ -74,10 +118,8 @@
             MinWidth="200"
             MinHeight="30"
             Margin="0,5,0,10"
-            Padding="5"
-            BorderBrush="Gray"
-            BorderThickness="1"
-            Text="{Binding Location, Mode=TwoWay}" />
+            Text="{Binding Location, Mode=TwoWay}"
+            TextChanged="OnLocationTextChanged" />
 
         <!--  Category Label and ComboBox  -->
         <Label Grid.Row="5" Content="Category:" />
@@ -87,20 +129,10 @@
             MinWidth="200"
             MinHeight="30"
             Margin="0,5,0,10"
-            SelectedItem="{Binding SelectedCategory, Mode=TwoWay}">
-            <ComboBoxItem Content="Roads and Traffic" />
-            <ComboBoxItem Content="Public Utilities" />
-            <ComboBoxItem Content="Waste Management" />
-            <ComboBoxItem Content="Parks and Recreation" />
-            <ComboBoxItem Content="Public Safety" />
-            <ComboBoxItem Content="Housing and Buildings" />
-            <ComboBoxItem Content="Environmental Concerns" />
-            <ComboBoxItem Content="Public Transportation" />
-            <ComboBoxItem Content="Health and Sanitation" />
-            <ComboBoxItem Content="Community Services" />
-            <ComboBoxItem Content="Economic Development" />
-            <ComboBoxItem Content="Education and Youth Services" />
-        </ComboBox>
+            ItemsSource="{Binding Categories}"
+            SelectedItem="{Binding SelectedCategory, Mode=TwoWay}"
+            SelectionChanged="OnCategorySelectionChanged" />
+
 
         <!--  Description Label and TextBox  -->
         <Label Grid.Row="7" Content="Description:" />
@@ -110,29 +142,64 @@
             MinWidth="200"
             MinHeight="100"
             Margin="0,5,0,10"
-            Padding="5"
             AcceptsReturn="True"
-            BorderBrush="Gray"
-            BorderThickness="1"
-            Text="{Binding Description, Mode=TwoWay}" />
+            Text="{Binding Description, Mode=TwoWay}"
+            TextChanged="OnDescriptionTextChanged" />
 
-        <!--  Media Attachment Button  -->
+        <!--  Attach Media Button  -->
         <Button
             x:Name="AttachMediaButton"
             Grid.Row="9"
+            Height="50"
             MinWidth="200"
-            MinHeight="30"
-            Margin="0,5,0,10"
+            Margin="300,5,300,10"
+            HorizontalAlignment="Stretch"
+            VerticalAlignment="Top"
             Command="{Binding AttachMediaCommand}"
-            Content="Attach Media">
+            Content="Attach Media"
+            FontSize="16"
+            FontWeight="Bold">
             <Button.Style>
                 <Style TargetType="Button">
-                    <Setter Property="Background" Value="LightGray" />
-                    <Setter Property="Foreground" Value="Black" />
-                    <Setter Property="BorderBrush" Value="Gray" />
+                    <!--  Base style  -->
+                    <Setter Property="Background" Value="#2C2F80" />
+                    <Setter Property="Foreground" Value="White" />
+                    <Setter Property="BorderBrush" Value="Transparent" />
                     <Setter Property="BorderThickness" Value="1" />
-                    <Setter Property="Padding" Value="5" />
+                    <Setter Property="Padding" Value="10,5" />
                     <Setter Property="FontSize" Value="16" />
+
+                    <!--  ControlTemplate  -->
+                    <Setter Property="Template">
+                        <Setter.Value>
+                            <ControlTemplate TargetType="Button">
+                                <Border
+                                    Background="{TemplateBinding Background}"
+                                    BorderBrush="{TemplateBinding BorderBrush}"
+                                    BorderThickness="{TemplateBinding BorderThickness}"
+                                    CornerRadius="20">
+                                    <!--  Apply CornerRadius directly here  -->
+                                    <ContentPresenter
+                                        Margin="{TemplateBinding Padding}"
+                                        HorizontalAlignment="Center"
+                                        VerticalAlignment="Center"
+                                        TextElement.FontSize="{TemplateBinding FontSize}" />
+                                </Border>
+                            </ControlTemplate>
+                        </Setter.Value>
+                    </Setter>
+
+                    <!--  Triggers for visual states  -->
+                    <Style.Triggers>
+                        <Trigger Property="IsMouseOver" Value="True">
+                            <Setter Property="Background" Value="#3a4d92" />
+                            <!--  Darker shade for hover  -->
+                        </Trigger>
+                        <Trigger Property="IsPressed" Value="True">
+                            <Setter Property="Background" Value="#1a2e6e" />
+                            <!--  Even darker shade for click  -->
+                        </Trigger>
+                    </Style.Triggers>
                 </Style>
             </Button.Style>
         </Button>
@@ -141,21 +208,59 @@
         <Button
             x:Name="SubmitButton"
             Grid.Row="10"
+            Height="50"
             MinWidth="200"
-            MinHeight="30"
-            Margin="0,5,0,10"
+            Margin="200,5,200,10"
             Command="{Binding SubmitCommand}"
-            Content="Submit">
+            Content="Submit"
+            FontSize="16"
+            FontWeight="Bold">
             <Button.Style>
                 <Style TargetType="Button">
-                    <Setter Property="Background" Value="DodgerBlue" />
+                    <!--  Base style  -->
+                    <Setter Property="Background" Value="#007646" />
                     <Setter Property="Foreground" Value="White" />
-                    <Setter Property="BorderBrush" Value="DarkBlue" />
+                    <Setter Property="BorderBrush" Value="Transparent" />
                     <Setter Property="BorderThickness" Value="1" />
-                    <Setter Property="Padding" Value="5" />
+                    <Setter Property="Padding" Value="10,5" />
                     <Setter Property="FontSize" Value="16" />
+
+                    <!--  ControlTemplate  -->
+                    <Setter Property="Template">
+                        <Setter.Value>
+                            <ControlTemplate TargetType="Button">
+                                <Border
+                                    Background="{TemplateBinding Background}"
+                                    BorderBrush="{TemplateBinding BorderBrush}"
+                                    BorderThickness="{TemplateBinding BorderThickness}"
+                                    CornerRadius="20">
+                                    <!--  Apply CornerRadius directly here  -->
+                                    <ContentPresenter
+                                        Margin="{TemplateBinding Padding}"
+                                        HorizontalAlignment="Center"
+                                        VerticalAlignment="Center"
+                                        TextElement.FontSize="{TemplateBinding FontSize}" />
+                                </Border>
+                            </ControlTemplate>
+                        </Setter.Value>
+                    </Setter>
+
+                    <!--  Triggers for visual states  -->
+                    <Style.Triggers>
+                        <Trigger Property="IsMouseOver" Value="True">
+                            <Setter Property="Background" Value="#009755" />
+                            <!--  Darker shade for hover  -->
+                        </Trigger>
+                        <Trigger Property="IsPressed" Value="True">
+                            <Setter Property="Background" Value="#005f3e" />
+                            <!--  Even darker shade for click  -->
+                        </Trigger>
+                    </Style.Triggers>
                 </Style>
             </Button.Style>
         </Button>
+
+
+
     </Grid>
 </UserControl>

@@ -17,9 +17,9 @@
     </Window.DataContext>
 
     <Window.Resources>
-        <!--  Base Button Style  -->
+        <!-- Base Button Style -->
         <Style x:Key="ImageButtonStyle" TargetType="Button">
-            <!--  Default Button Properties  -->
+            <!-- Default Button Properties -->
             <Setter Property="Background">
                 <Setter.Value>
                     <ImageBrush ImageSource="pack://application:,,,/Resources/Images/Report/reportBtn.png" Stretch="Fill" />
@@ -28,14 +28,14 @@
             <Setter Property="Foreground" Value="Black" />
             <Setter Property="BorderBrush" Value="Transparent" />
             <Setter Property="BorderThickness" Value="0" />
-            <!--  Adjust Padding for space inside the button  -->
+            <!-- Adjust Padding for space inside the button -->
             <Setter Property="Padding" Value="10,5" />
             <Setter Property="FontWeight" Value="Bold" />
             <Setter Property="HorizontalContentAlignment" Value="Center" />
             <Setter Property="VerticalContentAlignment" Value="Center" />
-            <!--  Button Size (Adjust accordingly)  -->
+            <!-- Button Size (Adjust accordingly) -->
             <Setter Property="Height" Value="136" />
-            <!--  Remove the Viewbox to prevent content scaling issues  -->
+            <!-- Remove the Viewbox to prevent content scaling issues -->
             <Setter Property="Template">
                 <Setter.Value>
                     <ControlTemplate TargetType="Button">
@@ -52,7 +52,7 @@
                 </Setter.Value>
             </Setter>
 
-            <!--  Hover and Pressed State Triggers  -->
+            <!-- Hover and Pressed State Triggers -->
             <Style.Triggers>
                 <Trigger Property="IsMouseOver" Value="True">
                     <Setter Property="Background">
@@ -65,30 +65,27 @@
                 <Trigger Property="IsPressed" Value="True">
                     <Setter Property="Background">
                         <Setter.Value>
-                            <ImageBrush ImageSource="pack://application:,,,/Resources/Images/Report/reportBtnClcik.png" Stretch="Fill" />
+                            <ImageBrush ImageSource="pack://application:,,,/Resources/Images/Report/reportBtnClcik.png" Stretch="UniformToFill" />
                         </Setter.Value>
                     </Setter>
                 </Trigger>
             </Style.Triggers>
         </Style>
 
-
-
-        <!--  Style for Button 4 (Different Design and Slimmer)  -->
-        <!--  Style for Button 4 (Different Design and Slimmer)  -->
+        <!-- Style for Button 4 (Different Design and Slimmer) -->
         <Style
             x:Key="Button4Style"
             BasedOn="{StaticResource ImageButtonStyle}"
             TargetType="Button">
-            <!--  Override the Default Background  -->
+            <!-- Override the Default Background -->
             <Setter Property="Background">
                 <Setter.Value>
                     <ImageBrush ImageSource="pack://application:,,,/Resources/Images/Report/quitReportDefautBtn.png" Stretch="Uniform" />
                 </Setter.Value>
             </Setter>
-            <!--  Override the Foreground to make the text white  -->
+            <!-- Override the Foreground to make the text white -->
             <Setter Property="Foreground" Value="White" />
-            <!--  Override the Hover Background  -->
+            <!-- Override the Hover Background -->
             <Style.Triggers>
                 <Trigger Property="IsMouseOver" Value="True">
                     <Setter Property="Background">
@@ -98,7 +95,7 @@
                     </Setter>
                 </Trigger>
 
-                <!--  Override the Pressed Background  -->
+                <!-- Override the Pressed Background -->
                 <Trigger Property="IsPressed" Value="True">
                     <Setter Property="Background">
                         <Setter.Value>
@@ -111,14 +108,14 @@
 
     </Window.Resources>
 
-    <!--  Main Grid for the Layout  -->
+    <!-- Main Grid for the Layout -->
     <Grid>
-        <!--  Define two columns: one for navigation and one for content  -->
+        <!-- Define two columns: one for navigation and one for content -->
         <Grid.ColumnDefinitions>
-            <!--  Side Navigation Column  -->
+            <!-- Side Navigation Column -->
+            <ColumnDefinition Width="300" />
+            <!-- Content Area Column -->
             <ColumnDefinition Width="*" />
-            <!--  Content Area Column  -->
-            <ColumnDefinition Width="4*" />
         </Grid.ColumnDefinitions>
 
         <Canvas Panel.ZIndex="-1">
@@ -156,15 +153,15 @@
                 Source="pack://application:,,,/Resources/Images/Blobs/yellowBlob.png" />
         </Canvas>
 
-
-
-        <!--  Side Navigation Bar  -->
-        <Border CornerRadius="0,15,15,0">
+        <!-- Side Navigation Bar -->
+        <Border
+            CornerRadius="0,15,15,0"
+            Grid.Column="0">
             <Border.Background>
                 <ImageBrush ImageSource="pack://application:,,,/Resources/Images/Report/reportBackground.png" Stretch="UniformToFill" />
             </Border.Background>
 
-            <!--  Content  -->
+            <!-- Content -->
             <StackPanel
                 x:Name="ContentPanel"
                 Width="300"
@@ -227,10 +224,11 @@
             </StackPanel>
         </Border>
 
-
-        <!--  Content Area  -->
+        <!-- Content Area -->
         <ContentControl
             x:Name="MainContentControl"
-            Content="{Binding CurrentView}" Grid.ColumnSpan="2" Margin="288,0,12,0" />
+            Grid.Column="1"
+            Margin="0,0,0,0"
+            Content="{Binding CurrentView}" />
     </Grid>
 </Window>

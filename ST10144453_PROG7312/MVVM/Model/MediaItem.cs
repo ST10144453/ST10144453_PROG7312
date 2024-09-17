@@ -15,6 +15,9 @@ namespace ST10144453_PROG7312.MVVM.Model
         public bool IsPdf { get; set; } // Add this property
         public bool IsWord { get; set; }
 
+        public string ImageFormat { get; set; } // e.g., "jpg", "jpeg", "png"
+
+
 
     }
 

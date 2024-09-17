@@ -30,132 +30,131 @@
                 <ItemsControl.ItemTemplate>
                     <DataTemplate>
                         <Border
-                            Margin="5"
-                            Padding="10"
-                            BorderBrush="Gray"
-                            BorderThickness="1">
-                            <Grid>
+                            Margin="10"
+                            Background="White"
+                            CornerRadius="10">
+                            <Border.Effect>
+                                <DropShadowEffect
+                                    BlurRadius="5"
+                                    Direction="270"
+                                    Opacity="0.3"
+                                    ShadowDepth="3"
+                                    Color="Black" />
+                            </Border.Effect>
+                            <Grid Margin="15">
                                 <Grid.RowDefinitions>
                                     <RowDefinition Height="Auto" />
                                     <RowDefinition Height="Auto" />
                                     <RowDefinition Height="Auto" />
                                     <RowDefinition Height="Auto" />
-                                    <RowDefinition Height="Auto" />
+                                    <RowDefinition Height="*" />
                                     <RowDefinition Height="Auto" />
                                 </Grid.RowDefinitions>
-                                <Grid.ColumnDefinitions>
-                                    <ColumnDefinition Width="1*" />
-                                    <ColumnDefinition Width="3*" />
-                                    <ColumnDefinition Width="1*" />
-                                </Grid.ColumnDefinitions>
 
+                                <!--  Date  -->
                                 <TextBlock
                                     Grid.Row="0"
-                                    Grid.Column="0"
-                                    HorizontalAlignment="Left"
-                                    VerticalAlignment="Center"
-                                    Text="{Binding reportDate}" />
-                                <TextBlock
-                                    Grid.Row="0"
-                                    Grid.Column="1"
+                                    Margin="0,10,10,0"
                                     HorizontalAlignment="Right"
-                                    VerticalAlignment="Center"
-                                    Text="{Binding reportName}" />
+                                    VerticalAlignment="Top"
+                                    FontSize="16"
+                                    FontWeight="Bold"
+                                    Text="{Binding reportDate}" />
+
+                                <!--  Report Name  -->
                                 <TextBlock
                                     Grid.Row="1"
-                                    Grid.Column="1"
-                                    HorizontalAlignment="Center"
-                                    VerticalAlignment="Center"
-                                    Text="{Binding reportCategory}" />
-                                <TextBlock
+                                    Margin="10,20,0,0"
+                                    HorizontalAlignment="Left"
+                                    VerticalAlignment="Top"
+                                    FontSize="24"
+                                    FontWeight="Bold"
+                                    Text="{Binding reportName}" />
+
+                                <!--  Location  -->
+                                <StackPanel
                                     Grid.Row="2"
-                                    Grid.Column="1"
-                                    HorizontalAlignment="Center"
-                                    VerticalAlignment="Center"
-                                    Text="{Binding reportLocation}" />
-                                <TextBlock
+                                    Margin="10,10,0,0"
+                                    Orientation="Horizontal">
+                                    <TextBlock FontWeight="Bold" Text="Location: " />
+                                    <TextBlock Text="{Binding reportLocation}" />
+                                </StackPanel>
+
+                                <!--  Category  -->
+                                <StackPanel
                                     Grid.Row="3"
-                                    Grid.Column="1"
-                                    HorizontalAlignment="Center"
-                                    VerticalAlignment="Center"
-                                    Text="{Binding reportDescription}" />
+                                    Margin="10,5,0,0"
+                                    Orientation="Horizontal">
+                                    <TextBlock FontWeight="Bold" Text="Category: " />
+                                    <TextBlock Text="{Binding reportCategory}" />
+                                </StackPanel>
 
-                                <!--  Media items display  -->
-                                <ItemsControl
-                                    Grid.Row="4"
-                                    Grid.Column="0"
-                                    Grid.ColumnSpan="3"
-                                    ItemsSource="{Binding Media}">
-                                    <ItemsControl.ItemTemplate>
-                                        <DataTemplate>
-                                            <Border
-                                                Margin="5"
-                                                BorderBrush="LightGray"
-                                                BorderThickness="1">
-                                                <Grid>
-                                                    <Grid.RowDefinitions>
-                                                        <RowDefinition Height="Auto" />
-                                                        <RowDefinition Height="*" />
-                                                    </Grid.RowDefinitions>
+                                <!--  Description  -->
+                                <StackPanel Grid.Row="4" Margin="10,10,10,10">
+                                    <TextBlock FontWeight="Bold" Text="Description:" />
+                                    <TextBlock Text="{Binding reportDescription}" TextWrapping="Wrap" />
+                                </StackPanel>
 
-                                                    <!--  Image display  -->
-                                                    <Image
-                                                        Grid.Row="0"
-                                                        MaxHeight="100"
-                                                        Source="{Binding Base64String, Converter={StaticResource Base64ToImageSourceConverter}}"
-                                                        Visibility="{Binding IsImage, Converter={StaticResource AnyTrueInCollectionConverter}}" />
-
-                                                    <!--  Text display  -->
-                                                    <TextBlock
-                                                        Grid.Row="1"
-                                                        Text="{Binding Base64String, Converter={StaticResource Base64ToTextConverter}}"
-                                                        TextWrapping="Wrap"
-                                                        Visibility="{Binding IsImage, Converter={StaticResource InverseBoolToVisibilityConverter}}" />
-                                                </Grid>
-                                            </Border>
-                                        </DataTemplate>
-                                    </ItemsControl.ItemTemplate>
-                                </ItemsControl>
-
-                                <!--  View PDF Button  -->
+                                <!--  View Media Button  -->
                                 <Button
-                                    Grid.Row="5"
+                                    Grid.Row="6"
                                     Grid.Column="1"
+                                    Padding="10,5"
                                     HorizontalAlignment="Center"
                                     VerticalAlignment="Center"
-                                    Click="ViewPdfButton_Click"
-                                    Content="View PDF">
+                                    Click="ViewMediaButton_Click"
+                                    Content="View Media"
+                                    FontSize="16"
+                                    FontWeight="Bold"
+                                    Foreground="White">
                                     <Button.Style>
                                         <Style TargetType="Button">
-                                            <Setter Property="Visibility" Value="Collapsed" />
+                                            <Setter Property="Background" Value="#007646" />
+                                            <Setter Property="BorderBrush" Value="Transparent" />
+                                            <Setter Property="BorderThickness" Value="1" />
+                                            <Setter Property="Padding" Value="10,5" />
+                                            <Setter Property="FontSize" Value="16" />
+                                            <Setter Property="FontWeight" Value="Bold" />
+                                            <Setter Property="Foreground" Value="White" />
+                                            <Setter Property="Template">
+                                                <Setter.Value>
+                                                    <ControlTemplate TargetType="Button">
+                                                        <Border
+                                                            Background="{TemplateBinding Background}"
+                                                            BorderBrush="{TemplateBinding BorderBrush}"
+                                                            BorderThickness="{TemplateBinding BorderThickness}"
+                                                            CornerRadius="20">
+                                                            <ContentPresenter
+                                                                Margin="{TemplateBinding Padding}"
+                                                                HorizontalAlignment="Center"
+                                                                VerticalAlignment="Center"
+                                                                Content="{TemplateBinding Content}"
+                                                                ContentTemplate="{TemplateBinding ContentTemplate}" />
+                                                        </Border>
+                                                    </ControlTemplate>
+                                                </Setter.Value>
+                                            </Setter>
                                             <Style.Triggers>
+                                                <Trigger Property="IsMouseOver" Value="True">
+                                                    <Setter Property="Background" Value="#005d39" />
+                                                    <!--  Darker background on hover  -->
+                                                </Trigger>
+                                                <Trigger Property="IsPressed" Value="True">
+                                                    <Setter Property="Background" Value="#004d2d" />
+                                                    <!--  Even darker background on click  -->
+                                                </Trigger>
                                                 <DataTrigger Binding="{Binding Media, Converter={StaticResource AnyTrueInCollectionConverter}}" Value="True">
                                                     <Setter Property="Visibility" Value="Visible" />
+                                                </DataTrigger>
+                                                <DataTrigger Binding="{Binding Media, Converter={StaticResource AnyTrueInCollectionConverter}}" Value="False">
+                                                    <Setter Property="Visibility" Value="Collapsed" />
                                                 </DataTrigger>
                                             </Style.Triggers>
                                         </Style>
                                     </Button.Style>
                                 </Button>
 
-                                <!--  View Word Button  -->
-                                <Button
-                                    Grid.Row="5"
-                                    Grid.Column="2"
-                                    HorizontalAlignment="Center"
-                                    VerticalAlignment="Center"
-                                    Click="ViewWordButton_Click"
-                                    Content="View Word">
-                                    <Button.Style>
-                                        <Style TargetType="Button">
-                                            <Setter Property="Visibility" Value="Collapsed" />
-                                            <Style.Triggers>
-                                                <DataTrigger Binding="{Binding Media, Converter={StaticResource AnyTrueInCollectionConverter}}" Value="True">
-                                                    <Setter Property="Visibility" Value="Visible" />
-                                                </DataTrigger>
-                                            </Style.Triggers>
-                                        </Style>
-                                    </Button.Style>
-                                </Button>
+
 
                             </Grid>
                         </Border>
