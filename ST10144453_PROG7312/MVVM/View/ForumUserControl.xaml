@@ -109,7 +109,7 @@
                                     Foreground="White">
                                     <Button.Style>
                                         <Style TargetType="Button">
-                                            <Setter Property="Background" Value="#007646" />
+                                            <Setter Property="Background" Value="#C9C9C9" />
                                             <Setter Property="BorderBrush" Value="Transparent" />
                                             <Setter Property="BorderThickness" Value="1" />
                                             <Setter Property="Padding" Value="10,5" />
@@ -136,11 +136,11 @@
                                             </Setter>
                                             <Style.Triggers>
                                                 <Trigger Property="IsMouseOver" Value="True">
-                                                    <Setter Property="Background" Value="#005d39" />
+                                                    <Setter Property="Background" Value="#9B9B9B" />
                                                     <!--  Darker background on hover  -->
                                                 </Trigger>
                                                 <Trigger Property="IsPressed" Value="True">
-                                                    <Setter Property="Background" Value="#004d2d" />
+                                                    <Setter Property="Background" Value="#5D5D5D" />
                                                     <!--  Even darker background on click  -->
                                                 </Trigger>
                                                 <DataTrigger Binding="{Binding Media, Converter={StaticResource AnyTrueInCollectionConverter}}" Value="True">

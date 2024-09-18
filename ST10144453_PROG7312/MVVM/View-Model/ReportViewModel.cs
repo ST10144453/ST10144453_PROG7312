@@ -15,6 +15,8 @@ using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
 using System.Windows.Media.Animation;
+using System.Windows.Threading;
+
 
 namespace ST10144453_PROG7312.MVVM.View_Model
 {
@@ -145,15 +147,33 @@ namespace ST10144453_PROG7312.MVVM.View_Model
         public double Progress
         {
             get => _progress;
-            private set
+            set
             {
                 if (_progress != value)
                 {
                     _progress = value;
                     OnPropertyChanged();
+                    AnimateProgressChange(value);
                 }
             }
         }
+
+        private void AnimateProgressChange(double toValue)
+        {
+            Application.Current.Dispatcher.Invoke(() =>
+            {
+                var progressBar = Application.Current.MainWindow.FindName("ProgressBar") as ProgressBar;
+                if (progressBar != null)
+                {
+                    Storyboard storyboard = (Storyboard)Application.Current.Resources["ProgressBarAnimation"];
+                    DoubleAnimation animation = (DoubleAnimation)storyboard.Children[0];
+                    animation.To = toValue;
+
+                    storyboard.Begin(progressBar, true);
+                }
+            });
+        }
+
 
         public ObservableCollection<string> Categories { get; set; }
 
@@ -365,7 +385,73 @@ namespace ST10144453_PROG7312.MVVM.View_Model
 
         private void Submit()
         {
-            // Implementation of the Submit logic
+            var newReport = new ReportModel
+            {
+                reportName = IssueName,
+                reportLocation = Location,
+                reportDescription = Description,
+                reportCategory = SelectedCategory,
+                Media = new List<Model.MediaItem>(),
+                reportDate = DateTime.Now // Fix: Assign DateTime.Now directly without ToString()
+            };
+
+            string reportGuid = Guid.NewGuid().ToString();
+            string reportFolder = Path.Combine("Files", reportGuid);
+            Directory.CreateDirectory(reportFolder);
+
+            foreach (var mediaItem in MediaItems)
+            {
+                string fileName = Guid.NewGuid().ToString();
+                string destinationPath = Path.Combine(reportFolder, fileName);
+
+                if (mediaItem.IsImage)
+                {
+                    string filePath = DecodeBase64ToFile(mediaItem.Base64String, destinationPath);
+                    newReport.Media.Add(new Model.MediaItem { Base64String = mediaItem.Base64String, IsImage = true, IsPdf = false });
+                }
+                else if (mediaItem.IsPdf)
+                {
+                    string filePath = DecodeBase64ToFile(mediaItem.Base64String, destinationPath);
+                    newReport.Media.Add(new Model.MediaItem { Base64String = mediaItem.Base64String, IsPdf = true, IsImage = false, IsText = false });
+                }
+                else if (mediaItem.IsWord)
+                {
+                    string filePath = DecodeBase64ToFile(mediaItem.Base64String, destinationPath);
+                    newReport.Media.Add(new Model.MediaItem { Base64String = mediaItem.Base64String, IsPdf = false, IsImage = false, IsText = false, IsWord = true });
+                }
+                else
+                {
+                    string textContent = DecodeBase64ToTextFile(mediaItem.Base64String, destinationPath);
+                    newReport.Media.Add(new Model.MediaItem { Base64String = mediaItem.Base64String, IsImage = false, IsText = true, IsPdf = false });
+                }
+            }
+
+            ReportManager.Instance.AddReport(newReport);
+
+            OnPropertyChanged(nameof(Reports));
+
+            // Debug output
+            Console.WriteLine("New report added:");
+            Console.WriteLine($"Name: {newReport.reportName}");
+            Console.WriteLine($"Location: {newReport.reportLocation}");
+            Console.WriteLine($"Category: {newReport.reportCategory}");
+            Console.WriteLine($"Description: {newReport.reportDescription}");
+            Console.WriteLine($"Media count: {newReport.Media.Count}");
+
+            foreach (var mediaItem in MediaItems)
+            {
+                Console.WriteLine($"Base64String length: {mediaItem.Base64String.Length}");
+                Console.WriteLine($"IsImage: {mediaItem.IsImage}");
+                Console.WriteLine($"IsText: {mediaItem.IsText}");
+                Console.WriteLine($"IsPdf: {mediaItem.IsPdf}");
+            }
+
+            // Clear inputs
+            IssueName = string.Empty;
+            Location = string.Empty;
+            Description = string.Empty;
+            SelectedCategory = string.Empty;
+            MediaItems.Clear();
         }
 
         private void UpdateProgress()
@@ -377,10 +463,8 @@ namespace ST10144453_PROG7312.MVVM.View_Model
             if (IsDescriptionFilled) filledFields++;
 
             double newProgress = (filledFields / 4.0) * 100; // Assuming there are 4 fields
-
+            Progress = newProgress;
         }
-
-        
 
         public event PropertyChangedEventHandler PropertyChanged;
         protected virtual void OnPropertyChanged([CallerMemberName] string propertyName = null)
