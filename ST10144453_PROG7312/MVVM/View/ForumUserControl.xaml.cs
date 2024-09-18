@@ -1,22 +1,36 @@
-﻿using ST10144453_PROG7312.MVVM.View_Model;
+﻿//0000000000oooooooooo..........Start Of File..........ooooooooooo00000000000//
+using ST10144453_PROG7312.MVVM.Model;
+using ST10144453_PROG7312.MVVM.View_Model;
 using System;
-using System.Linq;
+using System.Diagnostics;
+using System.IO;
 using System.Windows;
 using System.Windows.Controls;
-using System.IO;
-using System.Diagnostics;
-using ST10144453_PROG7312.MVVM.Model;
 using System.Windows.Data;
 
 namespace ST10144453_PROG7312.MVVM.View
 {
+    //============== Class: ForumUserControl ==============//
+    /// <summary>
+    /// This is the code-behind for the ForumUserControl class.
+    /// </summary>
     public partial class ForumUserControl : UserControl
     {
+        //++++++++++++++ Methods: Default Constructor ++++++++++++++//
+        /// <summary>
+        /// This method initializes the ForumUserControl class.
+        /// </summary>
         public ForumUserControl()
         {
             InitializeComponent();
         }
 
+        //++++++++++++++ Methods: ViewMediaButton_Click ++++++++++++++//
+        /// <summary>
+        /// This method opens the media file associated with the selected report.
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void ViewMediaButton_Click(object sender, RoutedEventArgs e)
         {
             var button = sender as Button;
@@ -82,6 +96,12 @@ namespace ST10144453_PROG7312.MVVM.View
             }
         }
 
+        //++++++++++++++ Methods: ForumUserControl_Loaded ++++++++++++++//
+        /// <summary>
+        /// This method refreshes the reports collection view source when the user control is loaded.
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void ForumUserControl_Loaded(object sender, RoutedEventArgs e)
         {
             var viewModel = DataContext as ReportViewModel;
@@ -92,3 +112,4 @@ namespace ST10144453_PROG7312.MVVM.View
         }
     }
 }
+//0000000000oooooooooo...........End Of File...........ooooooooooo00000000000//

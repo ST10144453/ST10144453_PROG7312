@@ -22,34 +22,37 @@
                 <ResourceDictionary Source="pack://application:,,,/ST10144453_PROG7312;component/ResourceDictionaries/ComboBoxStyles.xaml" />
             </ResourceDictionary.MergedDictionaries>
 
-            <Style x:Key="RoundedProgressBarStyle" TargetType="ProgressBar">
+            <Style TargetType="ProgressBar">
                 <Setter Property="Template">
                     <Setter.Value>
                         <ControlTemplate TargetType="ProgressBar">
                             <Grid>
-                                <!--  Background  -->
+                                <!--  Background of the progress bar (transparent)  -->
                                 <Border
+                                    Height="20"
                                     HorizontalAlignment="Stretch"
-                                    VerticalAlignment="Stretch"
-                                    BorderBrush="Transparent"
-                                    BorderThickness="1"
-                                    CornerRadius="10">
-                                    <Border.Background>
-                                        <LinearGradientBrush StartPoint="0,0" EndPoint="1,1">
-                                            <GradientStop Offset="0" Color="LightGray" />
-                                            <GradientStop Offset="1" Color="DarkGray" />
-                                        </LinearGradientBrush>
-                                    </Border.Background>
+                                    VerticalAlignment="Center"
+                                    Background="Transparent"
+                                    BorderBrush="{TemplateBinding BorderBrush}"
+                                    BorderThickness="{TemplateBinding BorderThickness}"
+                                    CornerRadius="15">
+                                    <Border
+                                        Margin="2"
+                                        Background="#E0E0E0"
+                                        CornerRadius="15" />
                                 </Border>
-
-                                <!--  Foreground  -->
+                                <!--  Foreground of the progress bar (curved)  -->
                                 <Border
-                                    x:Name="PART_Indicator"
-                                    Width="{Binding ProgressBarWidth}"
+                                    Margin="2"
                                     HorizontalAlignment="Left"
-                                    VerticalAlignment="Stretch"
-                                    Background="DodgerBlue"
-                                    CornerRadius="10" />
+                                    VerticalAlignment="Center"
+                                    Background="{TemplateBinding Foreground}"
+                                    CornerRadius="15">
+                                    <Border
+                                        Width="{Binding Path=Value, RelativeSource={RelativeSource TemplatedParent}}"
+                                        Background="{TemplateBinding Foreground}"
+                                        CornerRadius="15" />
+                                </Border>
                             </Grid>
                         </ControlTemplate>
                     </Setter.Value>
@@ -87,6 +90,56 @@
                     </Setter.Value>
                 </Setter>
             </Style>
+            <Style x:Key="ErrorTextBoxStyle" TargetType="TextBox">
+                <Style.Triggers>
+                    <DataTrigger Binding="{Binding IsIssueNameFilled, UpdateSourceTrigger=PropertyChanged}" Value="False">
+                        <Setter Property="BorderBrush" Value="Red" />
+                        <Setter Property="BorderThickness" Value="2" />
+                    </DataTrigger>
+                    <DataTrigger Binding="{Binding IsLocationFilled, UpdateSourceTrigger=PropertyChanged}" Value="False">
+                        <Setter Property="BorderBrush" Value="Red" />
+                        <Setter Property="BorderThickness" Value="2" />
+                    </DataTrigger>
+                    <DataTrigger Binding="{Binding IsDescriptionFilled, UpdateSourceTrigger=PropertyChanged}" Value="False">
+                        <Setter Property="BorderBrush" Value="Red" />
+                        <Setter Property="BorderThickness" Value="2" />
+                    </DataTrigger>
+                </Style.Triggers>
+            </Style>
+
+            <!-- Style for ComboBox when validation fails -->
+            <Style x:Key="ErrorComboBoxStyle" TargetType="ComboBox">
+                <Style.Triggers>
+                    <DataTrigger Binding="{Binding IsCategorySelected, UpdateSourceTrigger=PropertyChanged}" Value="False">
+                        <Setter Property="BorderBrush" Value="Red" />
+                        <Setter Property="BorderThickness" Value="2" />
+                    </DataTrigger>
+                </Style.Triggers>
+            </Style>
+
+            <!-- Style for error message -->
+            <Style x:Key="ErrorTextBlockStyle" TargetType="TextBlock">
+                <Setter Property="Foreground" Value="Red" />
+                <Setter Property="Visibility" Value="Collapsed" />
+                <Style.Triggers>
+                    <DataTrigger Binding="{Binding IsIssueNameFilled, UpdateSourceTrigger=PropertyChanged}" Value="False">
+                        <Setter Property="Visibility" Value="Visible" />
+                        <Setter Property="Text" Value="Issue Name is required." />
+                    </DataTrigger>
+                    <DataTrigger Binding="{Binding IsLocationFilled, UpdateSourceTrigger=PropertyChanged}" Value="False">
+                        <Setter Property="Visibility" Value="Visible" />
+                        <Setter Property="Text" Value="Location is required." />
+                    </DataTrigger>
+                    <DataTrigger Binding="{Binding IsDescriptionFilled, UpdateSourceTrigger=PropertyChanged}" Value="False">
+                        <Setter Property="Visibility" Value="Visible" />
+                        <Setter Property="Text" Value="Description is required." />
+                    </DataTrigger>
+                    <DataTrigger Binding="{Binding IsCategorySelected, UpdateSourceTrigger=PropertyChanged}" Value="False">
+                        <Setter Property="Visibility" Value="Visible" />
+                        <Setter Property="Text" Value="Category is required." />
+                    </DataTrigger>
+                </Style.Triggers>
+            </Style>
         </ResourceDictionary>
     </UserControl.Resources>
 
@@ -122,14 +175,47 @@
 
         <!--  Progress Bar  -->
         <ProgressBar
-            x:Name="ProgressBar"
-            Grid.Row="0"
-            Height="20"
-            Margin="0,0,0,10"
-            Maximum="100"
-            Minimum="0"
-            Style="{StaticResource RoundedProgressBarStyle}"
-            Value="{Binding Progress, Mode=OneWay}" />
+    x:Name="progressBar"
+    Minimum="0"
+    Maximum="100"
+    Value="{Binding Progress}"
+    Height="20"
+    Background="Transparent"
+    BorderBrush="Transparent">
+            <ProgressBar.Template>
+                <ControlTemplate TargetType="ProgressBar">
+                    <Border
+                Background="LightGray"
+                BorderThickness="0"
+                CornerRadius="10">
+                        <Border
+                    x:Name="PART_Track"
+                    Background="Transparent"
+                    BorderThickness="0"
+                    CornerRadius="10">
+                            <Border
+                        x:Name="PART_Indicator"
+                        Height="20"
+                        CornerRadius="10">
+                                <Border.Background>
+                                    <LinearGradientBrush StartPoint="0,0" EndPoint="1,0">
+                                        <!-- Define gradient stops here -->
+                                        <GradientStop Color="#007A33" Offset="0.0" />
+                                        <!-- Green -->
+                                        <GradientStop Color="#FFD100" Offset="0.25" />
+                                        <!-- Yellow -->
+                                        <GradientStop Color="#D92B22" Offset="0.5" />
+                                        <!-- Black -->
+                                        <GradientStop Color="#2C2F80" Offset="0.75" />
+                                        <!-- Red -->
+                                    </LinearGradientBrush>
+                                </Border.Background>
+                            </Border>
+                        </Border>
+                    </Border>
+                </ControlTemplate>
+            </ProgressBar.Template>
+        </ProgressBar>
 
         <!--  Issue Name Label and TextBox  -->
         <Label Grid.Row="1" Content="Issue Name:" />
@@ -140,7 +226,8 @@
             MinHeight="30"
             Margin="0,5,0,10"
             Text="{Binding IssueName, Mode=TwoWay}"
-            TextChanged="OnIssueNameTextChanged" />
+            TextChanged="OnIssueNameTextChanged"
+            ToolTip="Enter the name of the issue here." />
 
         <!--  Location Label and TextBox  -->
         <Label Grid.Row="3" Content="Location:" />
@@ -151,7 +238,8 @@
             MinHeight="30"
             Margin="0,5,0,10"
             Text="{Binding Location, Mode=TwoWay}"
-            TextChanged="OnLocationTextChanged" />
+            TextChanged="OnLocationTextChanged"
+            ToolTip="Specify the location related to the issue." />
 
         <!--  Category Label and ComboBox  -->
         <Label Grid.Row="5" Content="Category:" />
@@ -163,8 +251,8 @@
             Margin="0,5,0,10"
             ItemsSource="{Binding Categories}"
             SelectedItem="{Binding SelectedCategory, Mode=TwoWay}"
-            SelectionChanged="OnCategorySelectionChanged" />
-
+            SelectionChanged="OnCategorySelectionChanged"
+            ToolTip="Select the category that best describes the issue." />
 
         <!--  Description Label and TextBox  -->
         <Label Grid.Row="7" Content="Description:" />
@@ -176,7 +264,8 @@
             Margin="0,5,0,10"
             AcceptsReturn="True"
             Text="{Binding Description, Mode=TwoWay}"
-            TextChanged="OnDescriptionTextChanged" />
+            TextChanged="OnDescriptionTextChanged"
+            ToolTip="Provide a detailed description of the issue here." />
 
         <!--  Attach Media Button  -->
         <Button

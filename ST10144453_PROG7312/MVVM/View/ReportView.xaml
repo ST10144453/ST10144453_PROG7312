@@ -10,6 +10,9 @@
     d:DesignHeight="1080"
     d:DesignWidth="1910"
     Background="White"
+    ResizeMode="CanResize"
+    WindowState="Maximized"
+    WindowStyle="None"
     mc:Ignorable="d">
 
     <Window.DataContext>
@@ -17,9 +20,8 @@
     </Window.DataContext>
 
     <Window.Resources>
-        <!-- Base Button Style -->
+        <!--  Base Button Style  -->
         <Style x:Key="ImageButtonStyle" TargetType="Button">
-            <!-- Default Button Properties -->
             <Setter Property="Background">
                 <Setter.Value>
                     <ImageBrush ImageSource="pack://application:,,,/Resources/Images/Report/reportBtn.png" Stretch="Fill" />
@@ -28,14 +30,11 @@
             <Setter Property="Foreground" Value="Black" />
             <Setter Property="BorderBrush" Value="Transparent" />
             <Setter Property="BorderThickness" Value="0" />
-            <!-- Adjust Padding for space inside the button -->
             <Setter Property="Padding" Value="10,5" />
             <Setter Property="FontWeight" Value="Bold" />
             <Setter Property="HorizontalContentAlignment" Value="Center" />
             <Setter Property="VerticalContentAlignment" Value="Center" />
-            <!-- Button Size (Adjust accordingly) -->
             <Setter Property="Height" Value="136" />
-            <!-- Remove the Viewbox to prevent content scaling issues -->
             <Setter Property="Template">
                 <Setter.Value>
                     <ControlTemplate TargetType="Button">
@@ -51,8 +50,6 @@
                     </ControlTemplate>
                 </Setter.Value>
             </Setter>
-
-            <!-- Hover and Pressed State Triggers -->
             <Style.Triggers>
                 <Trigger Property="IsMouseOver" Value="True">
                     <Setter Property="Background">
@@ -61,7 +58,6 @@
                         </Setter.Value>
                     </Setter>
                 </Trigger>
-
                 <Trigger Property="IsPressed" Value="True">
                     <Setter Property="Background">
                         <Setter.Value>
@@ -72,20 +68,17 @@
             </Style.Triggers>
         </Style>
 
-        <!-- Style for Button 4 (Different Design and Slimmer) -->
+        <!--  Style for Button 4 (Different Design and Slimmer)  -->
         <Style
             x:Key="Button4Style"
             BasedOn="{StaticResource ImageButtonStyle}"
             TargetType="Button">
-            <!-- Override the Default Background -->
             <Setter Property="Background">
                 <Setter.Value>
                     <ImageBrush ImageSource="pack://application:,,,/Resources/Images/Report/quitReportDefautBtn.png" Stretch="Uniform" />
                 </Setter.Value>
             </Setter>
-            <!-- Override the Foreground to make the text white -->
             <Setter Property="Foreground" Value="White" />
-            <!-- Override the Hover Background -->
             <Style.Triggers>
                 <Trigger Property="IsMouseOver" Value="True">
                     <Setter Property="Background">
@@ -94,8 +87,6 @@
                         </Setter.Value>
                     </Setter>
                 </Trigger>
-
-                <!-- Override the Pressed Background -->
                 <Trigger Property="IsPressed" Value="True">
                     <Setter Property="Background">
                         <Setter.Value>
@@ -105,18 +96,43 @@
                 </Trigger>
             </Style.Triggers>
         </Style>
-
     </Window.Resources>
 
-    <!-- Main Grid for the Layout -->
+    <!--  Main Grid for the Layout  -->
     <Grid>
-        <!-- Define two columns: one for navigation and one for content -->
         <Grid.ColumnDefinitions>
-            <!-- Side Navigation Column -->
             <ColumnDefinition Width="300" />
-            <!-- Content Area Column -->
             <ColumnDefinition Width="*" />
         </Grid.ColumnDefinitions>
+
+        <Grid Grid.Column="1" HorizontalAlignment="Right" VerticalAlignment="Top" Margin="10">
+            <StackPanel Orientation="Horizontal" HorizontalAlignment="Right" VerticalAlignment="Top">
+                <Button
+            x:Name="MinimizeButton"
+            Width="30"
+            Background="Transparent"
+            BorderBrush="Transparent"
+            Click="MinimizeButton_Click"
+            Content="🗕"
+            Foreground="Black" />
+                <Button
+            x:Name="MaximizeButton"
+            Width="30"
+            Background="Transparent"
+            BorderBrush="Transparent"
+            Click="MaximizeButton_Click"
+            Content="🗖"
+            Foreground="Black" />
+                <Button
+            x:Name="CloseButton"
+            Width="30"
+            Background="Transparent"
+            BorderBrush="Transparent"
+            Click="CloseButton_Click"
+            Content="✕"
+            Foreground="Black" />
+            </StackPanel>
+        </Grid>
 
         <Canvas Panel.ZIndex="-1">
             <Image
@@ -153,24 +169,39 @@
                 Source="pack://application:,,,/Resources/Images/Blobs/yellowBlob.png" />
         </Canvas>
 
-        <!-- Side Navigation Bar -->
-        <Border
-            CornerRadius="0,15,15,0"
-            Grid.Column="0">
-            <Border.Background>
-                <ImageBrush ImageSource="pack://application:,,,/Resources/Images/Report/reportBackground.png" Stretch="UniformToFill" />
-            </Border.Background>
+        <!--  Side Navigation Bar  -->
+        <Grid Grid.Column="0">
+            <!--  Rectangle with Curved Corners and Drop Shadow  -->
+            <Rectangle
+                HorizontalAlignment="Stretch"
+                VerticalAlignment="Stretch"
+                Fill="White"
+                RadiusX="15"
+                RadiusY="15">
+                <Rectangle.Clip>
+                    <RectangleGeometry
+                        RadiusX="15"
+                        RadiusY="15"
+                        Rect="0,0,300,1080" />
+                </Rectangle.Clip>
+            </Rectangle>
 
-            <!-- Content -->
+            <!--  StackPanel with content, placed above the Rectangle  -->
             <StackPanel
                 x:Name="ContentPanel"
                 Width="300"
                 Margin="0,0,0,0"
                 HorizontalAlignment="Center"
                 VerticalAlignment="Center"
-                Panel.ZIndex="2">
+                Panel.ZIndex="1">
 
                 <StackPanel x:Name="ButtonStack" Margin="0,0,0,0">
+                    <TextBlock
+                        Margin="0,20,0,0"
+                        HorizontalAlignment="Center"
+                        FontSize="30"
+                        FontWeight="Bold"
+                        Text="Manage Mzansi" />
                     <Button
                         Margin="0,5"
                         Command="{Binding NavigateToHomeCommand}"
@@ -219,16 +250,17 @@
                         Margin="0,5"
                         Content="Quit"
                         FontSize="30"
+                        Click="CloseButton_Click"
                         Style="{StaticResource Button4Style}" />
                 </StackPanel>
             </StackPanel>
-        </Border>
+        </Grid>
 
-        <!-- Content Area -->
+        <!--  Content Area  -->
         <ContentControl
             x:Name="MainContentControl"
             Grid.Column="1"
-            Margin="0,0,0,0"
+            Margin="0,30,0,0"
             Content="{Binding CurrentView}" />
     </Grid>
 </Window>

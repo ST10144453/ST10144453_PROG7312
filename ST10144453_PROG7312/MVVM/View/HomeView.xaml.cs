@@ -1,19 +1,51 @@
-﻿using System;
+﻿//0000000000oooooooooo..........Start Of File..........ooooooooooo00000000000//
+using System;
 using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Media.Animation;
 
 namespace ST10144453_PROG7312.MVVM.View
 {
+    //============== Class: HomeView ==============//
+    /// <summary>
+    /// This is the code-behind for the HomeView class.
+    /// </summary>
     public partial class HomeView : UserControl
     {
+        //++++++++++++++ Constants ++++++++++++++//
+        /// <summary>
+        /// This constant holds the original width of the HomeView.
+        /// </summary>
         private const double OriginalWidth = 1910;
+
+        /// <summary>
+        /// This constant holds the original height of the HomeView.
+        /// </summary>
         private const double OriginalHeight = 1080;
+
+        /// <summary>
+        /// This constant holds the content width of the HomeView.
+        /// </summary>
         private const double ContentWidth = 766;
+
+        /// <summary>
+        /// This constant holds the content height of the HomeView.
+        /// </summary>
         private const double ContentHeight = 792;
+
+        /// <summary>
+        /// This constant holds the background width of the HomeView.
+        /// </summary>
         private const double BackgroundWidth = 866;
+
+        /// <summary>
+        /// This constant holds the background height of the HomeView.
+        /// </summary>
         private const double BackgroundHeight = 892;
 
+        //++++++++++++++ Methods: Default Constructor ++++++++++++++//
+        /// <summary>
+        /// This method initializes the HomeView class.
+        /// </summary>
         public HomeView()
         {
             InitializeComponent();
@@ -21,17 +53,33 @@ namespace ST10144453_PROG7312.MVVM.View
             SizeChanged += OnSizeChanged;
         }
 
+        //++++++++++++++ Methods: OnLoaded ++++++++++++++//
+        /// <summary>
+        /// This method is called when the HomeView is loaded.
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void OnLoaded(object sender, RoutedEventArgs e)
         {
             UpdateLayout();
         }
 
+        //++++++++++++++ Methods: OnSizeChanged ++++++++++++++//
+        /// <summary>
+        /// This method is called when the size of the HomeView changes.
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void OnSizeChanged(object sender, SizeChangedEventArgs e)
         {
             UpdateLayout();
         }
 
-        private void UpdateLayout()
+        //++++++++++++++ Methods: UpdateLayout ++++++++++++++//
+        /// <summary>
+        /// This method updates the layout of the HomeView.
+        /// </summary>
+        private new void UpdateLayout()
         {
             double scaleX = ActualWidth / OriginalWidth;
             double scaleY = ActualHeight / OriginalHeight;
@@ -64,7 +112,16 @@ namespace ST10144453_PROG7312.MVVM.View
             manageMsg.FontSize = 64 * scale;
         }
 
-
-        
+        //++++++++++++++ Methods: CloseButton_Click ++++++++++++++//
+        /// <summary>
+        /// This method closes the HomeView.
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void CloseButton_Click(object sender, RoutedEventArgs e)
+        {
+            Window.GetWindow(this)?.Close();
+        }
     }
 }
+//0000000000oooooooooo..........End Of File..........ooooooooooo00000000000//

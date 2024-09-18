@@ -37,6 +37,9 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="Newtonsoft.Json, Version=13.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
+      <HintPath>..\packages\Newtonsoft.Json.13.0.3\lib\net45\Newtonsoft.Json.dll</HintPath>
+    </Reference>
     <Reference Include="Syncfusion.Compression.Base, Version=26.2462.14.0, Culture=neutral, PublicKeyToken=3d67ed1f87d44c89, processorArchitecture=MSIL">
       <HintPath>..\packages\Syncfusion.Compression.Base.26.2.14\lib\net462\Syncfusion.Compression.Base.dll</HintPath>
     </Reference>
@@ -188,9 +191,7 @@
   <ItemGroup>
     <None Include="App.config" />
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="Files\" />
-  </ItemGroup>
+  <ItemGroup />
   <ItemGroup>
     <Resource Include="Resources\Images\Blobs\blueBlob.png" />
     <Resource Include="Resources\Images\Blobs\greenBlob.png" />

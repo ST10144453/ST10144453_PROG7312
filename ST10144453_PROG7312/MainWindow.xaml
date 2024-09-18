@@ -11,9 +11,46 @@
     Height="1080"
     ResizeMode="CanResize"
     WindowState="Maximized"
+    WindowStyle="None"
     mc:Ignorable="d">
     <Grid>
         <views:HomeView />
+
+
+        <Grid
+            Margin="10"
+            HorizontalAlignment="Right"
+            VerticalAlignment="Top">
+            <StackPanel
+                HorizontalAlignment="Right"
+                VerticalAlignment="Top"
+                Orientation="Horizontal">
+                <Button
+                    x:Name="MinimizeButton"
+                    Width="30"
+                    Background="Transparent"
+                    BorderBrush="Transparent"
+                    Click="MinimizeButton_Click"
+                    Content="🗕"
+                    Foreground="Black" />
+                <Button
+                    x:Name="MaximizeButton"
+                    Width="30"
+                    Background="Transparent"
+                    BorderBrush="Transparent"
+                    Click="MaximizeButton_Click"
+                    Content="🗖"
+                    Foreground="Black" />
+                <Button
+                    x:Name="CloseButton"
+                    Width="30"
+                    Background="Transparent"
+                    BorderBrush="Transparent"
+                    Click="CloseButton_Click"
+                    Content="✕"
+                    Foreground="Black" />
+            </StackPanel>
+        </Grid>
 
         <Canvas Panel.ZIndex="-1">
             <Image

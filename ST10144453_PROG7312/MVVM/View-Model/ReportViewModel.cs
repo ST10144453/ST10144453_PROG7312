@@ -1,4 +1,5 @@
-﻿using Microsoft.Win32;
+﻿//0000000000oooooooooo..........Start Of File..........ooooooooooo00000000000//
+using Microsoft.Win32;
 using ST10144453_PROG7312.Core;
 using ST10144453_PROG7312.MVVM.Model;
 using ST10144453_PROG7312.MVVM.View;
@@ -12,28 +13,70 @@ using System.Linq;
 using System.Runtime.CompilerServices;
 using System.Text;
 using System.Windows;
-using System.Windows.Controls;
 using System.Windows.Input;
-using System.Windows.Media.Animation;
-using System.Windows.Threading;
-
 
 namespace ST10144453_PROG7312.MVVM.View_Model
 {
+    //============== Class: ReportViewModel ==============//
+    /// <summary>
+    /// This class holds the base implementation for the ReportViewModel class.
+    /// </summary>
     public class ReportViewModel : INotifyPropertyChanged
     {
+        //++++++++++++++ Declarations ++++++++++++++//
+        /// <summary>
+        /// This property holds the issue name.
+        /// </summary>
         private string _issueName;
+
+        /// <summary>
+        /// This property holds the location.
+        /// </summary>
         private string _location;
+
+        /// <summary>
+        /// This property holds the selected category.
+        /// </summary>
         private string _selectedCategory;
+
+        /// <summary>
+        /// This property holds the description.
+        /// </summary>
         private string _description;
+
+        /// <summary>
+        /// This property determines whether the issue name is filled.
+        /// </summary>
         private bool _isIssueNameFilled;
+
+        /// <summary>
+        /// This property determines whether the location is filled.
+        /// </summary>
         private bool _isLocationFilled;
+
+        /// <summary>
+        /// This property determines whether the category is selected.
+        /// </summary>
         private bool _isCategorySelected;
+
+        /// <summary>
+        /// This property determines whether the description is filled.
+        /// </summary>
         private bool _isDescriptionFilled;
+
+        /// <summary>
+        /// This property holds the progress.
+        /// </summary>
         private double _progress;
-        public double ProgressBarWidth => GetProgressBarWidth();
 
+        /// <summary>
+        /// This property holds the media items.
+        /// </summary>
+        public event PropertyChangedEventHandler PropertyChanged;
 
+        /// <summary>
+        /// This property holds the media items.
+        /// </summary>
         public string IssueName
         {
             get => _issueName;
@@ -48,6 +91,30 @@ namespace ST10144453_PROG7312.MVVM.View_Model
             }
         }
 
+        /// <summary>
+        /// This property holds the progress value.
+        /// </summary>
+        private double _progressValue;
+
+        /// <summary>
+        /// This property holds the progress value.
+        /// </summary>
+        public double ProgressValue
+        {
+            get => _progressValue;
+            set
+            {
+                if (_progressValue != value)
+                {
+                    _progressValue = value;
+                    OnPropertyChanged(nameof(ProgressValue));
+                }
+            }
+        }
+
+        /// <summary>
+        /// This property holds the location.
+        /// </summary>
         public string Location
         {
             get => _location;
@@ -62,6 +129,9 @@ namespace ST10144453_PROG7312.MVVM.View_Model
             }
         }
 
+        /// <summary>
+        /// This property holds the selected category.
+        /// </summary>
         public string SelectedCategory
         {
             get => _selectedCategory;
@@ -76,6 +146,9 @@ namespace ST10144453_PROG7312.MVVM.View_Model
             }
         }
 
+        /// <summary>
+        /// This property holds the description.
+        /// </summary>
         public string Description
         {
             get => _description;
@@ -90,10 +163,13 @@ namespace ST10144453_PROG7312.MVVM.View_Model
             }
         }
 
+        /// <summary>
+        /// This property determines whether the issue name is filled.
+        /// </summary>
         public bool IsIssueNameFilled
         {
             get => _isIssueNameFilled;
-           set
+            set
             {
                 if (_isIssueNameFilled != value)
                 {
@@ -104,6 +180,9 @@ namespace ST10144453_PROG7312.MVVM.View_Model
             }
         }
 
+        /// <summary>
+        /// This property determines whether the location is filled.
+        /// </summary>
         public bool IsLocationFilled
         {
             get => _isLocationFilled;
@@ -118,6 +197,9 @@ namespace ST10144453_PROG7312.MVVM.View_Model
             }
         }
 
+        /// <summary>
+        /// This property determines whether the category is selected.
+        /// </summary>
         public bool IsCategorySelected
         {
             get => _isCategorySelected;
@@ -132,6 +214,9 @@ namespace ST10144453_PROG7312.MVVM.View_Model
             }
         }
 
+        /// <summary>
+        /// This property determines whether the description is filled.
+        /// </summary>
         public bool IsDescriptionFilled
         {
             get => _isDescriptionFilled;
@@ -146,6 +231,9 @@ namespace ST10144453_PROG7312.MVVM.View_Model
             }
         }
 
+        /// <summary>
+        /// This property holds the progress.
+        /// </summary>
         public double Progress
         {
             get => _progress;
@@ -155,20 +243,28 @@ namespace ST10144453_PROG7312.MVVM.View_Model
                 {
                     _progress = value;
                     OnPropertyChanged();
-                    OnPropertyChanged(nameof(ProgressBarWidth)); // Notify the width property change
-
                 }
             }
         }
 
-        
-
-
+        /// <summary>
+        /// This property holds the categories.
+        /// </summary>
         public ObservableCollection<string> Categories { get; set; }
 
+        /// <summary>
+        /// This property holds the reports.
+        /// </summary>
         public ObservableCollection<ReportModel> Reports { get; set; }
 
+        /// <summary>
+        /// This property holds the media items.
+        /// </summary>
         private ObservableCollection<MediaItem> _mediaItems;
+
+        /// <summary>
+        /// This property holds the media items.
+        /// </summary>
         public ObservableCollection<MediaItem> MediaItems
         {
             get => _mediaItems;
@@ -182,10 +278,21 @@ namespace ST10144453_PROG7312.MVVM.View_Model
             }
         }
 
+        /// <summary>
+        /// This property determines whether the media items contain an image.
+        /// </summary>
         public bool ContainsPdf => MediaItems.Any(m => m.IsPdf);
+
+        /// <summary>
+        /// This property determines whether the media items contain a text file.
+        /// </summary>
         public bool ContainsWord => MediaItems.Any(m => m.IsWord);
 
+        /// <summary>
+        /// This property determines whether the media items contain a text file.
+        /// </summary>
         private object _currentView;
+
         public object CurrentView
         {
             get => _currentView;
@@ -199,7 +306,14 @@ namespace ST10144453_PROG7312.MVVM.View_Model
             }
         }
 
+        /// <summary>
+        /// This property holds the selected media item.
+        /// </summary>
         private MediaItem _selectedMediaItem;
+
+        /// <summary>
+        /// This property holds the selected media item. 
+        /// </summary>
         public MediaItem SelectedMediaItem
         {
             get => _selectedMediaItem;
@@ -213,10 +327,25 @@ namespace ST10144453_PROG7312.MVVM.View_Model
             }
         }
 
+        /// <summary>
+        /// This property holds the selected report.
+        /// </summary>
         public ICommand AttachMediaCommand { get; private set; }
+
+        /// <summary>
+        /// This property holds the selected report.
+        /// </summary>
         public ICommand SubmitCommand { get; private set; }
+
+        /// <summary>
+        /// This property holds the selected report.
+        /// </summary>
         public ICommand NavigateToHomeCommand { get; private set; }
 
+        //~~~~~~~~~~~~~ Methods: Default Constructor ~~~~~~~~~~~~~//
+        /// <summary>
+        /// This constructor initializes the ReportViewModel class.
+        /// </summary>
         public ReportViewModel()
         {
             AttachMediaCommand = new RelayCommand(AttachMedia);
@@ -242,6 +371,10 @@ namespace ST10144453_PROG7312.MVVM.View_Model
             };
         }
 
+        //++++++++++++++ Methods: NavigateToHome ++++++++++++++//
+        /// <summary>
+        /// This method handles the NavigateToHome command.
+        /// </summary>
         private void NavigateToHome()
         {
             var reportWindow = Application.Current.Windows.OfType<ReportView>().FirstOrDefault();
@@ -251,6 +384,14 @@ namespace ST10144453_PROG7312.MVVM.View_Model
             mainWindow?.Show();
         }
 
+        //++++++++++++++ Methods: EncodeFileToBase64 ++++++++++++++//
+        /// <summary>
+        /// This method encodes a file to a base64 string.
+        /// </summary>
+        /// <param name="filePath"></param>
+        /// <returns></returns>
+        /// <exception cref="FileNotFoundException"></exception>
+        /// <exception cref="NotSupportedException"></exception>
         private string EncodeFileToBase64(string filePath)
         {
             if (!File.Exists(filePath))
@@ -270,6 +411,12 @@ namespace ST10144453_PROG7312.MVVM.View_Model
             return Convert.ToBase64String(fileBytes);
         }
 
+        //++++++++++++++ Methods: EncodeTextFileToBase64 ++++++++++++++//
+        /// <summary>
+        /// This method encodes a text file to a base64 string.
+        /// </summary>
+        /// <param name="filePath"></param>
+        /// <returns></returns>
         private string EncodeTextFileToBase64(string filePath)
         {
             string fileContent = File.ReadAllText(filePath);
@@ -277,6 +424,13 @@ namespace ST10144453_PROG7312.MVVM.View_Model
             return Convert.ToBase64String(fileBytes);
         }
 
+        //++++++++++++++ Methods: DecodeBase64ToFile ++++++++++++++//
+        /// <summary>
+        /// This method decodes a base64 string to a file.
+        /// </summary>
+        /// <param name="base64String"></param>
+        /// <param name="outputFilePath"></param>
+        /// <returns></returns>
         private string DecodeBase64ToFile(string base64String, string outputFilePath)
         {
             byte[] fileBytes = Convert.FromBase64String(base64String);
@@ -284,6 +438,13 @@ namespace ST10144453_PROG7312.MVVM.View_Model
             return outputFilePath;
         }
 
+        //++++++++++++++ Methods: DecodeBase64ToTextFile ++++++++++++++//
+        /// <summary>
+        /// This method decodes a base64 string to a text file.
+        /// </summary>
+        /// <param name="base64String"></param>
+        /// <param name="outputFilePath"></param>
+        /// <returns></returns>
         private string DecodeBase64ToTextFile(string base64String, string outputFilePath)
         {
             byte[] fileBytes = Convert.FromBase64String(base64String);
@@ -292,29 +453,57 @@ namespace ST10144453_PROG7312.MVVM.View_Model
             return fileContent;
         }
 
+        //++++++++++++++ Methods: IsImageFile ++++++++++++++//
+        /// <summary>
+        /// This method determines if the file is an image.
+        /// </summary>
+        /// <param name="filename"></param>
+        /// <returns></returns>
         private bool IsImageFile(string filename)
         {
             string[] imageExtensions = { ".png", ".jpg", ".jpeg" };
             return imageExtensions.Contains(Path.GetExtension(filename).ToLower());
         }
 
+        //++++++++++++++ Methods: IsTextFile ++++++++++++++//
+        /// <summary>
+        /// This method determines if the file is a text file.
+        /// </summary>
+        /// <param name="filename"></param>
+        /// <returns></returns>
         private bool IsTextFile(string filename)
         {
             string[] textExtensions = { ".txt", ".csv", ".log" };
             return textExtensions.Contains(Path.GetExtension(filename).ToLower());
         }
 
+        //++++++++++++++ Methods: IsPdfFile ++++++++++++++//
+        /// <summary>
+        /// This method determines if the file is a PDF file.
+        /// </summary>
+        /// <param name="filename"></param>
+        /// <returns></returns>
         private bool IsPdfFile(string filename)
         {
             return Path.GetExtension(filename).ToLower() == ".pdf";
         }
 
+        //++++++++++++++ Methods: IsWordFile ++++++++++++++//
+        /// <summary>
+        /// This method determines if the file is a Word file.
+        /// </summary>
+        /// <param name="filename"></param>
+        /// <returns></returns>
         private bool IsWordFile(string filename)
         {
             string[] wordExtensions = { ".doc", ".docx" };
             return wordExtensions.Contains(Path.GetExtension(filename).ToLower());
         }
 
+        //++++++++++++++ Methods: AttachMedia ++++++++++++++//
+        /// <summary>
+        /// This method attaches media to the report.
+        /// </summary>
         private void AttachMedia()
         {
             var openFileDialog = new OpenFileDialog
@@ -352,6 +541,12 @@ namespace ST10144453_PROG7312.MVVM.View_Model
             }
         }
 
+        //++++++++++++++ Methods: TryOpenFile ++++++++++++++//
+        /// <summary>
+        /// This method tries to open a file.
+        /// </summary>
+        /// <param name="base64String"></param>
+        /// <param name="fileExtension"></param>
         public void TryOpenFile(string base64String, string fileExtension)
         {
             try
@@ -372,8 +567,38 @@ namespace ST10144453_PROG7312.MVVM.View_Model
             }
         }
 
+        //++++++++++++++ Methods: Submit ++++++++++++++//
+        /// <summary>
+        /// This method submits the report.
+        /// </summary>
         private void Submit()
         {
+            // Validate input fields
+            if (string.IsNullOrWhiteSpace(IssueName))
+            {
+                MessageBox.Show("Please enter a report name.", "Validation Error", MessageBoxButton.OK, MessageBoxImage.Warning);
+                return;
+            }
+
+            if (string.IsNullOrWhiteSpace(Location))
+            {
+                MessageBox.Show("Please enter a location.", "Validation Error", MessageBoxButton.OK, MessageBoxImage.Warning);
+                return;
+            }
+
+            if (string.IsNullOrWhiteSpace(SelectedCategory))
+            {
+                MessageBox.Show("Please select a category.", "Validation Error", MessageBoxButton.OK, MessageBoxImage.Warning);
+                return;
+            }
+
+            if (string.IsNullOrWhiteSpace(Description))
+            {
+                MessageBox.Show("Please enter a description.", "Validation Error", MessageBoxButton.OK, MessageBoxImage.Warning);
+                return;
+            }
+
+            // Create new report model
             var newReport = new ReportModel
             {
                 reportName = IssueName,
@@ -381,13 +606,14 @@ namespace ST10144453_PROG7312.MVVM.View_Model
                 reportDescription = Description,
                 reportCategory = SelectedCategory,
                 Media = new List<Model.MediaItem>(),
-                reportDate = DateTime.Now // Fix: Assign DateTime.Now directly without ToString()
+                reportDate = DateTime.Now
             };
 
             string reportGuid = Guid.NewGuid().ToString();
             string reportFolder = Path.Combine("Files", reportGuid);
             Directory.CreateDirectory(reportFolder);
 
+            // Handle media items
             foreach (var mediaItem in MediaItems)
             {
                 string fileName = Guid.NewGuid().ToString();
@@ -395,28 +621,27 @@ namespace ST10144453_PROG7312.MVVM.View_Model
 
                 if (mediaItem.IsImage)
                 {
-                    string filePath = DecodeBase64ToFile(mediaItem.Base64String, destinationPath);
-                    newReport.Media.Add(new Model.MediaItem { Base64String = mediaItem.Base64String, IsImage = true, IsPdf = false });
+                    DecodeBase64ToFile(mediaItem.Base64String, destinationPath);
+                    newReport.Media.Add(new Model.MediaItem { Base64String = mediaItem.Base64String, IsImage = true });
                 }
                 else if (mediaItem.IsPdf)
                 {
-                    string filePath = DecodeBase64ToFile(mediaItem.Base64String, destinationPath);
-                    newReport.Media.Add(new Model.MediaItem { Base64String = mediaItem.Base64String, IsPdf = true, IsImage = false, IsText = false });
+                    DecodeBase64ToFile(mediaItem.Base64String, destinationPath);
+                    newReport.Media.Add(new Model.MediaItem { Base64String = mediaItem.Base64String, IsPdf = true });
                 }
                 else if (mediaItem.IsWord)
                 {
-                    string filePath = DecodeBase64ToFile(mediaItem.Base64String, destinationPath);
-                    newReport.Media.Add(new Model.MediaItem { Base64String = mediaItem.Base64String, IsPdf = false, IsImage = false, IsText = false, IsWord = true });
+                    DecodeBase64ToFile(mediaItem.Base64String, destinationPath);
+                    newReport.Media.Add(new Model.MediaItem { Base64String = mediaItem.Base64String, IsWord = true });
                 }
                 else
                 {
-                    string textContent = DecodeBase64ToTextFile(mediaItem.Base64String, destinationPath);
-                    newReport.Media.Add(new Model.MediaItem { Base64String = mediaItem.Base64String, IsImage = false, IsText = true, IsPdf = false });
+                    DecodeBase64ToTextFile(mediaItem.Base64String, destinationPath);
+                    newReport.Media.Add(new Model.MediaItem { Base64String = mediaItem.Base64String, IsText = true });
                 }
             }
 
             ReportManager.Instance.AddReport(newReport);
-
             OnPropertyChanged(nameof(Reports));
 
             // Debug output
@@ -433,6 +658,7 @@ namespace ST10144453_PROG7312.MVVM.View_Model
                 Console.WriteLine($"IsImage: {mediaItem.IsImage}");
                 Console.WriteLine($"IsText: {mediaItem.IsText}");
                 Console.WriteLine($"IsPdf: {mediaItem.IsPdf}");
+                Console.WriteLine($"IsWord: {mediaItem.IsWord}");
             }
 
             // Clear inputs
@@ -443,6 +669,10 @@ namespace ST10144453_PROG7312.MVVM.View_Model
             MediaItems.Clear();
         }
 
+        //++++++++++++++ Methods: UpdateProgress ++++++++++++++//
+        /// <summary>
+        /// This method updates the progress.
+        /// </summary>
         private void UpdateProgress()
         {
             int filledFields = 0;
@@ -451,25 +681,19 @@ namespace ST10144453_PROG7312.MVVM.View_Model
             if (IsCategorySelected) filledFields++;
             if (IsDescriptionFilled) filledFields++;
 
-            double newProgress = (filledFields / 4.0) * 100; // Assuming there are 4 fields
+            double newProgress = (filledFields / 4.0) * 100;
             Progress = newProgress;
         }
 
-        public double GetProgressBarWidth()
-        {
-            // Assuming the maximum width of the progress bar container is 300
-            double maxWidth = 300;
-            double progress = Progress; // Your progress value
-            return (progress / 100) * maxWidth; // Adjust as needed
-        }
-
-
-        public event PropertyChangedEventHandler PropertyChanged;
+        //++++++++++++++ Methods: OnPropertyChanged ++++++++++++++//
+        /// <summary>
+        /// This method is called when a property is changed.
+        /// </summary>
+        /// <param name="propertyName"></param>
         protected virtual void OnPropertyChanged([CallerMemberName] string propertyName = null)
         {
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
         }
-
-      
     }
 }
+//0000000000oooooooooo...........End Of File...........ooooooooooo00000000000//

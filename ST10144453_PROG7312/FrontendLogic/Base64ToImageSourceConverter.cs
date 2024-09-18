@@ -1,15 +1,28 @@
-﻿using System;
+﻿//0000000000oooooooooo..........Start Of File..........ooooooooooo00000000000//
+using ST10144453_PROG7312.MVVM.Model;
+using System;
 using System.Globalization;
 using System.IO;
 using System.Windows.Data;
 using System.Windows.Media.Imaging;
-using ST10144453_PROG7312.MVVM.View_Model;
-using ST10144453_PROG7312.MVVM.Model;
 
 namespace ST10144453_PROG7312.FrontendLogic
 {
+    //============== Class: Base64ToImageSourceConverter ==============//
+    /// <summary>
+    /// This class holds the base implementation for the Base64ToImageSourceConverter class.
+    /// </summary>
     public class Base64ToImageSourceConverter : IValueConverter
     {
+        //++++++++++++++ Methods: Convert ++++++++++++++//
+        /// <summary>
+        /// This method converts a base64 string to an image source.
+        /// </summary>
+        /// <param name="value"></param>
+        /// <param name="targetType"></param>
+        /// <param name="parameter"></param>
+        /// <param name="culture"></param>
+        /// <returns></returns>
         public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
         {
             var mediaItem = value as MediaItem;
@@ -37,9 +50,20 @@ namespace ST10144453_PROG7312.FrontendLogic
             }
         }
 
+        //++++++++++++++ Methods: ConvertBack ++++++++++++++//
+        /// <summary>
+        /// This method converts an image source to a base64 string.
+        /// </summary>
+        /// <param name="value"></param>
+        /// <param name="targetType"></param>
+        /// <param name="parameter"></param>
+        /// <param name="culture"></param>
+        /// <returns></returns>
+        /// <exception cref="NotImplementedException"></exception>
         public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
         {
             throw new NotImplementedException();
         }
     }
 }
+//0000000000oooooooooo...........End Of File...........ooooooooooo00000000000//
