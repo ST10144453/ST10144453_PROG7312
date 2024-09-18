@@ -17,20 +17,46 @@
 
     <UserControl.Resources>
         <ResourceDictionary>
-            <!-- Merging external resource dictionaries -->
+            <!--  Merging external resource dictionaries  -->
             <ResourceDictionary.MergedDictionaries>
                 <ResourceDictionary Source="pack://application:,,,/ST10144453_PROG7312;component/ResourceDictionaries/ComboBoxStyles.xaml" />
             </ResourceDictionary.MergedDictionaries>
 
-            <!-- Define Storyboard for ProgressBar animation -->
-            <Storyboard x:Key="ProgressBarAnimation">
-                <DoubleAnimation
-                    Storyboard.TargetProperty="Value"
-                    Storyboard.TargetName="ProgressBar"
-                    Duration="0:0:0.5" />
-            </Storyboard>
+            <Style x:Key="RoundedProgressBarStyle" TargetType="ProgressBar">
+                <Setter Property="Template">
+                    <Setter.Value>
+                        <ControlTemplate TargetType="ProgressBar">
+                            <Grid>
+                                <!--  Background  -->
+                                <Border
+                                    HorizontalAlignment="Stretch"
+                                    VerticalAlignment="Stretch"
+                                    BorderBrush="Transparent"
+                                    BorderThickness="1"
+                                    CornerRadius="10">
+                                    <Border.Background>
+                                        <LinearGradientBrush StartPoint="0,0" EndPoint="1,1">
+                                            <GradientStop Offset="0" Color="LightGray" />
+                                            <GradientStop Offset="1" Color="DarkGray" />
+                                        </LinearGradientBrush>
+                                    </Border.Background>
+                                </Border>
 
-            <!-- Define a style for TextBox -->
+                                <!--  Foreground  -->
+                                <Border
+                                    x:Name="PART_Indicator"
+                                    Width="{Binding ProgressBarWidth}"
+                                    HorizontalAlignment="Left"
+                                    VerticalAlignment="Stretch"
+                                    Background="DodgerBlue"
+                                    CornerRadius="10" />
+                            </Grid>
+                        </ControlTemplate>
+                    </Setter.Value>
+                </Setter>
+            </Style>
+
+            <!--  Define a style for TextBox  -->
             <Style TargetType="TextBox">
                 <Setter Property="Background" Value="White" />
                 <Setter Property="BorderBrush" Value="Transparent" />
@@ -100,10 +126,9 @@
             Grid.Row="0"
             Height="20"
             Margin="0,0,0,10"
-            Background="LightGray"
-            Foreground="DodgerBlue"
             Maximum="100"
             Minimum="0"
+            Style="{StaticResource RoundedProgressBarStyle}"
             Value="{Binding Progress, Mode=OneWay}" />
 
         <!--  Issue Name Label and TextBox  -->

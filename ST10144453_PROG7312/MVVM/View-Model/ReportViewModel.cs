@@ -31,6 +31,8 @@ namespace ST10144453_PROG7312.MVVM.View_Model
         private bool _isCategorySelected;
         private bool _isDescriptionFilled;
         private double _progress;
+        public double ProgressBarWidth => GetProgressBarWidth();
+
 
         public string IssueName
         {
@@ -153,26 +155,13 @@ namespace ST10144453_PROG7312.MVVM.View_Model
                 {
                     _progress = value;
                     OnPropertyChanged();
-                    AnimateProgressChange(value);
+                    OnPropertyChanged(nameof(ProgressBarWidth)); // Notify the width property change
+
                 }
             }
         }
 
-        private void AnimateProgressChange(double toValue)
-        {
-            Application.Current.Dispatcher.Invoke(() =>
-            {
-                var progressBar = Application.Current.MainWindow.FindName("ProgressBar") as ProgressBar;
-                if (progressBar != null)
-                {
-                    Storyboard storyboard = (Storyboard)Application.Current.Resources["ProgressBarAnimation"];
-                    DoubleAnimation animation = (DoubleAnimation)storyboard.Children[0];
-                    animation.To = toValue;
-
-                    storyboard.Begin(progressBar, true);
-                }
-            });
-        }
+        
 
 
         public ObservableCollection<string> Categories { get; set; }
@@ -465,6 +454,15 @@ namespace ST10144453_PROG7312.MVVM.View_Model
             double newProgress = (filledFields / 4.0) * 100; // Assuming there are 4 fields
             Progress = newProgress;
         }
+
+        public double GetProgressBarWidth()
+        {
+            // Assuming the maximum width of the progress bar container is 300
+            double maxWidth = 300;
+            double progress = Progress; // Your progress value
+            return (progress / 100) * maxWidth; // Adjust as needed
+        }
+
 
         public event PropertyChangedEventHandler PropertyChanged;
         protected virtual void OnPropertyChanged([CallerMemberName] string propertyName = null)

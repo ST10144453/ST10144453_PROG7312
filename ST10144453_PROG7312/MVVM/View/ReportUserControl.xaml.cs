@@ -62,6 +62,5 @@ namespace ST10144453_PROG7312.MVVM.View
                 viewModel.IsDescriptionFilled = !string.IsNullOrEmpty(viewModel.Description);
             }
         }
-
     }
 }
