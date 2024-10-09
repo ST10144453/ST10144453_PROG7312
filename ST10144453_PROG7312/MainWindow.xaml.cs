@@ -1,4 +1,5 @@
 ﻿//0000000000oooooooooo..........Start Of File..........ooooooooooo00000000000//
+using ST10144453_PROG7312.MVVM.ViewMode;
 using System;
 using System.Windows;
 using System.Windows.Controls;
@@ -32,6 +33,9 @@ namespace ST10144453_PROG7312
             InitializeComponent();
             Loaded += OnLoaded;
             SizeChanged += OnSizeChanged;
+            DataContext = new MainWindowViewModel();
+            MainContentControl.Content = new MVVM.View.LoginRegisterMenu();
+
         }
 
         //++++++++++++++ Methods: OnLoaded ++++++++++++++//

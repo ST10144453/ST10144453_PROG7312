@@ -5,6 +5,7 @@
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:local="clr-namespace:ST10144453_PROG7312"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:viewModels="clr-namespace:ST10144453_PROG7312.MVVM.View_Model"
     xmlns:views="clr-namespace:ST10144453_PROG7312.MVVM.View"
     Title="MainWindow"
     Width="1910"
@@ -13,10 +14,17 @@
     WindowState="Maximized"
     WindowStyle="None"
     mc:Ignorable="d">
+
+    <Window.Resources>
+        <DataTemplate DataType="{x:Type viewModels:LoginRegisterViewModel}">
+            <views:LoginRegisterMenu />
+        </DataTemplate>
+        <DataTemplate DataType="{x:Type viewModels:HomeViewModel}">
+            <views:HomeView />
+        </DataTemplate>
+    </Window.Resources>
+
     <Grid>
-        <views:HomeView />
-
-
         <Grid
             Margin="10"
             HorizontalAlignment="Right"
@@ -84,5 +92,7 @@
                 VerticalAlignment="Center"
                 Source="pack://application:,,,/Resources/Images/Blobs/yellowBlob.png" />
         </Canvas>
+
+        <ContentControl x:Name="MainContentControl" Margin="0,40,0,0" Grid.ZIndex="1" />
     </Grid>
 </Window>
