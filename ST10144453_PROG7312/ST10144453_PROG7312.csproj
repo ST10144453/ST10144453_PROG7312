@@ -89,9 +89,14 @@
     <Compile Include="FrontendLogic\FileTypeToVisibilityConverter.cs" />
     <Compile Include="FrontendLogic\InverseBoolToVisibilityConverter.cs" />
     <Compile Include="FrontendLogic\ScaleConverter.cs" />
+    <Compile Include="MVVM\Model\AnnouncementModel.cs" />
+    <Compile Include="MVVM\Model\EventModel.cs" />
+    <Compile Include="MVVM\Model\GuestUserModel.cs" />
     <Compile Include="MVVM\Model\MediaItem.cs" />
     <Compile Include="MVVM\Model\ReportManager.cs" />
     <Compile Include="MVVM\Model\ReportModel.cs" />
+    <Compile Include="MVVM\Model\TagsModel.cs" />
+    <Compile Include="MVVM\Model\UserModel.cs" />
     <Compile Include="MVVM\View-Model\ForumViewModel.cs" />
     <Compile Include="MVVM\View-Model\LoginRegisterViewModel.cs" />
     <Compile Include="MVVM\View-Model\MainWindowViewModel.cs" />
