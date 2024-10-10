@@ -99,7 +99,9 @@
     <Compile Include="MVVM\Model\UserModel.cs" />
     <Compile Include="MVVM\View-Model\ForumViewModel.cs" />
     <Compile Include="MVVM\View-Model\LoginRegisterViewModel.cs" />
+    <Compile Include="MVVM\View-Model\LoginViewModel.cs" />
     <Compile Include="MVVM\View-Model\MainWindowViewModel.cs" />
+    <Compile Include="MVVM\View-Model\RegisterViewModel.cs" />
     <Compile Include="MVVM\View-Model\ReportService.cs" />
     <Compile Include="MVVM\View-Model\ReportViewModel.cs" />
     <Compile Include="MVVM\View\ForumUserControl.xaml.cs">
@@ -272,6 +274,15 @@
   <ItemGroup>
     <Resource Include="Resources\Icons\icon_login.png" />
     <Resource Include="Resources\Icons\icon_register.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\Icons\icon_back.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\Icons\icon_nosee.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\Icons\icon_see.png" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Import Project="..\packages\Syncfusion.PdfToImageConverter.WPF.26.2.14\build\net462\Syncfusion.PdfToImageConverter.WPF.targets" Condition="Exists('..\packages\Syncfusion.PdfToImageConverter.WPF.26.2.14\build\net462\Syncfusion.PdfToImageConverter.WPF.targets')" />
