@@ -233,6 +233,20 @@
                             <ColumnDefinition Width="1*" />
                         </Grid.ColumnDefinitions>
 
+                        <Button
+                            Width="40"
+                            Height="auto"
+                            Margin="20,30,0,0"
+                            HorizontalAlignment="Left"
+                            VerticalAlignment="Top"
+                            Background="Transparent"
+                            BorderBrush="Transparent"
+                            Click="BackButton_Click"
+                            Cursor="Hand"
+                            Style="{StaticResource ImageButtonStyle}">
+                            <Image Source="pack://application:,,,/Resources/Icons/icon_back.png" />
+                        </Button>
+
                         <!--  Left Column  -->
                         <StackPanel
                             Grid.Column="0"
@@ -284,8 +298,7 @@
                                 BorderThickness="2"
                                 CornerRadius="75"
                                 DragOver="ProfilePhotoBorder_DragOver"
-                                Drop="ProfilePhotoBorder_Drop"
-                                MouseLeftButtonUp="ProfilePhotoBorder_MouseLeftButtonUp">
+                                Drop="ProfilePhotoBorder_Drop">
                                 <Image x:Name="ProfilePhoto" Stretch="UniformToFill">
                                     <Image.Clip>
                                         <EllipseGeometry
@@ -299,8 +312,10 @@
                                 Width="200"
                                 Height="50"
                                 Margin="0,10,0,0"
+                                Click="UploadImageButton_Click"
                                 Content="Upload Image"
                                 Style="{StaticResource ImageButtonStyle}" />
+
                         </StackPanel>
 
                         <!--  Right Column  -->
@@ -366,11 +381,30 @@
                                         VerticalAlignment="Center"
                                         Background="Transparent"
                                         BorderBrush="Transparent"
-                                        Click="TogglePasswordVisibility_Click"
-                                        Content="&#xE783;"
-                                        FontFamily="Segoe MDL2 Assets"
-                                        FontSize="16"
-                                        IsChecked="False" />
+                                        Click="TogglePasswordVisibility_Click">
+                                        <ToggleButton.Style>
+                                            <Style TargetType="ToggleButton">
+                                                <Setter Property="Content">
+                                                    <Setter.Value>
+                                                        <Grid>
+                                                            <Image HorizontalAlignment="Left" Source="pack://application:,,,/Resources/Icons/icon_see.png" />
+                                                        </Grid>
+                                                    </Setter.Value>
+                                                </Setter>
+                                                <Style.Triggers>
+                                                    <Trigger Property="IsChecked" Value="True">
+                                                        <Setter Property="Content">
+                                                            <Setter.Value>
+                                                                <Grid>
+                                                                    <Image HorizontalAlignment="Left" Source="pack://application:,,,/Resources/Icons/icon_nosee.png" />
+                                                                </Grid>
+                                                            </Setter.Value>
+                                                        </Setter>
+                                                    </Trigger>
+                                                </Style.Triggers>
+                                            </Style>
+                                        </ToggleButton.Style>
+                                    </ToggleButton>
                                 </Grid>
                             </StackPanel>
 
@@ -404,11 +438,30 @@
                                         VerticalAlignment="Center"
                                         Background="Transparent"
                                         BorderBrush="Transparent"
-                                        Click="ToggleConfirmPasswordVisibility_Click"
-                                        Content="&#xE783;"
-                                        FontFamily="Segoe MDL2 Assets"
-                                        FontSize="16"
-                                        IsChecked="False" />
+                                        Click="ToggleConfirmPasswordVisibility_Click">
+                                        <ToggleButton.Style>
+                                            <Style TargetType="ToggleButton">
+                                                <Setter Property="Content">
+                                                    <Setter.Value>
+                                                        <Grid>
+                                                            <Image HorizontalAlignment="Left" Source="pack://application:,,,/Resources/Icons/icon_see.png" />
+                                                        </Grid>
+                                                    </Setter.Value>
+                                                </Setter>
+                                                <Style.Triggers>
+                                                    <Trigger Property="IsChecked" Value="True">
+                                                        <Setter Property="Content">
+                                                            <Setter.Value>
+                                                                <Grid>
+                                                                    <Image HorizontalAlignment="Left" Source="pack://application:,,,/Resources/Icons/icon_nosee.png" />
+                                                                </Grid>
+                                                            </Setter.Value>
+                                                        </Setter>
+                                                    </Trigger>
+                                                </Style.Triggers>
+                                            </Style>
+                                        </ToggleButton.Style>
+                                    </ToggleButton>
                                 </Grid>
                             </StackPanel>
 

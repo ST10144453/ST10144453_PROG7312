@@ -24,5 +24,36 @@ namespace ST10144453_PROG7312.MVVM.View
         {
             InitializeComponent();
         }
+
+
+        private void TogglePasswordVisibility_Click(object sender, RoutedEventArgs e)
+        {
+            if (TogglePasswordVisibility.IsChecked == true)
+            {
+                PlainTextPasswordBox.Text = PasswordBox.Password;
+                PasswordBox.Visibility = Visibility.Collapsed;
+                PlainTextPasswordBox.Visibility = Visibility.Visible;
+            }
+            else
+            {
+                PasswordBox.Password = PlainTextPasswordBox.Text;
+                PasswordBox.Visibility = Visibility.Visible;
+                PlainTextPasswordBox.Visibility = Visibility.Collapsed;
+            }
+        }
+
+        private void Login_Click(object sender, RoutedEventArgs e)
+        {
+
+        }
+
+        private void BackButton_Click(object sender, RoutedEventArgs e)
+        {
+            var parent = Window.GetWindow(this) as MainWindow;
+            if (parent != null)
+            {
+                parent.MainContentControl.Content = new LoginRegisterMenu();
+            }
+        }
     }
 }

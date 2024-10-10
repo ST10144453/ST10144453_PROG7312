@@ -14,19 +14,6 @@ namespace ST10144453_PROG7312.MVVM.View
             InitializeComponent();
         }
 
-        private void ProfilePhotoBorder_MouseLeftButtonUp(object sender, MouseButtonEventArgs e)
-        {
-            OpenFileDialog openFileDialog = new OpenFileDialog
-            {
-                Filter = "Image files (*.png;*.jpeg;*.jpg)|*.png;*.jpeg;*.jpg"
-            };
-
-            if (openFileDialog.ShowDialog() == true)
-            {
-                SetProfilePhoto(openFileDialog.FileName);
-            }
-        }
-
         private void ProfilePhotoBorder_Drop(object sender, DragEventArgs e)
         {
             if (e.Data.GetDataPresent(DataFormats.FileDrop))
@@ -90,6 +77,28 @@ namespace ST10144453_PROG7312.MVVM.View
         private void Register_Click(object sender, RoutedEventArgs e)
         {
 
+        }
+
+        private void BackButton_Click(object sender, RoutedEventArgs e)
+        {
+            var parent = Window.GetWindow(this) as MainWindow;
+            if (parent != null)
+            {
+                parent.MainContentControl.Content = new LoginRegisterMenu();
+            }
+        }
+
+        private void UploadImageButton_Click(object sender, RoutedEventArgs e)
+        {
+            OpenFileDialog openFileDialog = new OpenFileDialog
+            {
+                Filter = "Image files (*.png;*.jpeg;*.jpg)|*.png;*.jpeg;*.jpg"
+            };
+
+            if (openFileDialog.ShowDialog() == true)
+            {
+                SetProfilePhoto(openFileDialog.FileName);
+            }
         }
     }
 }
