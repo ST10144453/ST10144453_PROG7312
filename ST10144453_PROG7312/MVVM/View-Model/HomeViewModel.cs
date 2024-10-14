@@ -34,21 +34,13 @@ namespace ST10144453_PROG7312.MVVM.View_Model
 
         private UserModel _user;
 
-        public UserModel User
-        {
-            get => _user;
-            set
-            {
-                _user = value;
-                OnPropertyChanged();
-            }
-        }
+        public UserModel User { get; set; }
 
         public string Username => User?.userName;
 
-        public HomeViewModel(UserModel user)
+        public HomeViewModel()
         {
-            User = user;
+            User = UserSession.CurrentUser; // Get the current user
             NavigateReportCommand = new RelayCommand(NavigateReport);
             ShowUnderDevelopmentPopupCommand = new RelayCommand(ShowUnderDevelopmentPopup);
         }
@@ -74,26 +66,17 @@ namespace ST10144453_PROG7312.MVVM.View_Model
 
         private void NavigateReport()
         {
-            // Get the main window (Home or Main Menu window)
-            var mainWindow = Application.Current.MainWindow;
+            var mainWindow = Application.Current.MainWindow as MainWindow;
 
-            // Create the new ReportView window
-            var reportWindow = new ReportView
+            if (mainWindow != null)
             {
-                Owner = mainWindow
-            };
-
-            // Hide the main window before showing the new window
-            mainWindow.Visibility = Visibility.Collapsed;
-
-            // Show the report window
-            reportWindow.Closed += (s, e) =>
-            {
-                // Re-show the main window when the report window closes
-                mainWindow.Visibility = Visibility.Visible;
-            };
-            reportWindow.ShowDialog(); // Or use Show() if you don't want modal behavior
+                var reportSectionUserControl = new ReportSectionUserControl(User);
+                mainWindow.MainContentControl.Content = reportSectionUserControl;
+            }
         }
+
+
+
         protected void OnPropertyChanged([CallerMemberName] string propertyName = null)
         {
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));

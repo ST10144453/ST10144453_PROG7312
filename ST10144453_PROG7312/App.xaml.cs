@@ -19,7 +19,6 @@ namespace ST10144453_PROG7312
         protected override void OnStartup(StartupEventArgs e)
         {
             base.OnStartup(e);
-            SharedReportViewModel = new ReportViewModel();
         }
     }
 }

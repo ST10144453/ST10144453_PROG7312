@@ -1,0 +1,217 @@
+﻿<UserControl
+    x:Class="ST10144453_PROG7312.MVVM.View.StaffMenu"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:local="clr-namespace:ST10144453_PROG7312.MVVM.View"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:viewModel="clr-namespace:ST10144453_PROG7312.MVVM.View_Model"
+    d:DesignHeight="1080"
+    d:DesignWidth="1910"
+    Background="Transparent"
+    mc:Ignorable="d">
+
+    <UserControl.DataContext>
+        <viewModel:StaffMenuViewModel />
+    </UserControl.DataContext>
+
+    <UserControl.Resources>
+        <!--  Base Button Style  -->
+        <Style x:Key="ImageButtonStyle" TargetType="Button">
+            <!--  Default Button Properties  -->
+            <Setter Property="Background">
+                <Setter.Value>
+                    <ImageBrush ImageSource="pack://application:,,,/Resources/Images/HomePage/Buttons/BigBtn/bigBtnDefault.png" Stretch="Fill" />
+                </Setter.Value>
+            </Setter>
+            <Setter Property="Foreground" Value="Black" />
+            <Setter Property="BorderBrush" Value="Transparent" />
+            <Setter Property="BorderThickness" Value="0" />
+            <!--  Adjust Padding for space inside the button  -->
+            <Setter Property="Padding" Value="10,5" />
+            <Setter Property="FontWeight" Value="Bold" />
+            <Setter Property="HorizontalContentAlignment" Value="Center" />
+            <Setter Property="VerticalContentAlignment" Value="Center" />
+            <!--  Button Size (Adjust accordingly)  -->
+            <Setter Property="Height" Value="100" />
+            <!--  Increased height  -->
+            <Setter Property="Width" Value="300" />
+            <!--  Remove the Viewbox to prevent content scaling issues  -->
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="Button">
+                        <Border
+                            Background="{TemplateBinding Background}"
+                            BorderBrush="{TemplateBinding BorderBrush}"
+                            BorderThickness="{TemplateBinding BorderThickness}">
+                            <ContentPresenter
+                                HorizontalAlignment="Center"
+                                VerticalAlignment="Center"
+                                TextElement.FontSize="24" />
+                        </Border>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+
+            <!--  Hover and Pressed State Triggers  -->
+            <Style.Triggers>
+                <Trigger Property="IsMouseOver" Value="True">
+                    <Setter Property="Background">
+                        <Setter.Value>
+                            <ImageBrush ImageSource="pack://application:,,,/Resources/Images/HomePage/Buttons/BigBtn/bigBtnHover.png" Stretch="Fill" />
+                        </Setter.Value>
+                    </Setter>
+                </Trigger>
+
+                <Trigger Property="IsPressed" Value="True">
+                    <Setter Property="Background">
+                        <Setter.Value>
+                            <ImageBrush ImageSource="pack://application:,,,/Resources/Images/HomePage/Buttons/BigBtn/bigBtnClick.png" Stretch="Fill" />
+                        </Setter.Value>
+                    </Setter>
+                </Trigger>
+            </Style.Triggers>
+        </Style>
+
+        <!--  Style for Button 4 (Different Design and Slimmer)  -->
+        <Style
+            x:Key="Button4Style"
+            BasedOn="{StaticResource ImageButtonStyle}"
+            TargetType="Button">
+            <!--  Override the Default Background  -->
+            <Setter Property="Background">
+                <Setter.Value>
+                    <ImageBrush ImageSource="pack://application:,,,/Resources/Images/HomePage/Buttons/QuitBtn/quitBrnDefault.png" Stretch="Fill" />
+                </Setter.Value>
+            </Setter>
+            <!--  Override the Foreground to make the text white  -->
+            <Setter Property="Foreground" Value="White" />
+            <!--  Override the Hover Background  -->
+            <Style.Triggers>
+                <Trigger Property="IsMouseOver" Value="True">
+                    <Setter Property="Background">
+                        <Setter.Value>
+                            <ImageBrush ImageSource="pack://application:,,,/Resources/Images/HomePage/Buttons/QuitBtn/quitBtnHover.png" Stretch="Fill" />
+                        </Setter.Value>
+                    </Setter>
+                </Trigger>
+
+                <!--  Override the Pressed Background  -->
+                <Trigger Property="IsPressed" Value="True">
+                    <Setter Property="Background">
+                        <Setter.Value>
+                            <ImageBrush ImageSource="pack://application:,,,/Resources/Images/HomePage/Buttons/QuitBtn/quitBtnClick.png" Stretch="Fill" />
+                        </Setter.Value>
+                    </Setter>
+                </Trigger>
+            </Style.Triggers>
+        </Style>
+    </UserControl.Resources>
+
+    <Grid>
+        <Border
+            Margin="50"
+            Background="#B3FFFFFF"
+            CornerRadius="20">
+            <Grid>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto" />
+                    <RowDefinition Height="*" />
+                </Grid.RowDefinitions>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="Auto" />
+                    <ColumnDefinition Width="*" />
+                </Grid.ColumnDefinitions>
+
+                <!--  Profile Photo  -->
+                <Ellipse
+                    Grid.Row="0"
+                    Grid.Column="0"
+                    Width="150"
+                    Height="150"
+                    Margin="20">
+                    <Ellipse.Fill>
+                        <ImageBrush ImageSource="{Binding ProfilePhoto}" Stretch="UniformToFill" />
+                    </Ellipse.Fill>
+                </Ellipse>
+
+                <!--  Username and Email  -->
+                <StackPanel
+                    Grid.Row="0"
+                    Grid.Column="1"
+                    Margin="10,20,20,20"
+                    VerticalAlignment="Center">
+                    <TextBlock
+                        FontSize="50"
+                        FontWeight="Bold"
+                        Text="{Binding Username}" />
+                    <TextBlock
+                        FontSize="28"
+                        Foreground="Gray"
+                        Text="{Binding Email}" />
+                </StackPanel>
+
+                <!--  Buttons  -->
+                <StackPanel
+                    Grid.Row="1"
+                    Grid.Column="0"
+                    Width="300"
+                    Margin="20,0,20,20"
+                    VerticalAlignment="Top">
+                    <Button
+                        Margin="0,0,0,10"
+                        Padding="10,5"
+                        Content="Reports"
+                        Style="{StaticResource ImageButtonStyle}">
+                        <Button.ContentTemplate>
+                            <DataTemplate>
+                                <StackPanel Orientation="Horizontal">
+                                    <Image
+                                        Width="20"
+                                        Height="20"
+                                        Margin="5,0,10,0"
+                                        Source="pack://application:,,,/Resources/Icons/request_Icon.png" />
+                                    <TextBlock Text="{Binding}" />
+                                </StackPanel>
+                            </DataTemplate>
+                        </Button.ContentTemplate>
+                    </Button>
+                    <Button
+                        Margin="0,0,0,10"
+                        Padding="10,5"
+                        Content="Manage Events"
+                        Style="{StaticResource ImageButtonStyle}">
+                        <Button.ContentTemplate>
+                            <DataTemplate>
+                                <StackPanel Orientation="Horizontal">
+                                    <Image
+                                        Width="20"
+                                        Height="20"
+                                        Margin="5,0,10,0"
+                                        Source="pack://application:,,,/Resources/Icons/event_icon.png" />
+                                    <TextBlock Text="{Binding}" />
+                                </StackPanel>
+                            </DataTemplate>
+                        </Button.ContentTemplate>
+                    </Button>
+                    <Button
+                        Padding="10,5"
+                        Content="Quit"
+                        Style="{StaticResource Button4Style}" />
+                </StackPanel>
+
+                <!--  Content Area (Another UserControl)  -->
+                <Border
+                    Grid.Row="1"
+                    Grid.Column="1"
+                    Margin="10,0,20,20"
+                    Background="LightGray"
+                    CornerRadius="5">
+                    <!--  Place your content UserControl here  -->
+                    <ContentControl x:Name="ContentArea" />
+                </Border>
+            </Grid>
+        </Border>
+    </Grid>
+</UserControl>
+

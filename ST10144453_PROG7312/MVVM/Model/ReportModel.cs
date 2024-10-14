@@ -68,6 +68,9 @@ namespace ST10144453_PROG7312.MVVM.Model
             get { return Media != null && Media.Any(item => item.IsWord); }
         }
 
+        public bool isPrivate { get; set; }
+
+        public UserModel CreatedBy { get; set; }
         //~~~~~~~~~~~~~ Methods: Default Constructor ~~~~~~~~~~~~~//
         /// <summary>
         /// This constructor initializes the ReportModel class.

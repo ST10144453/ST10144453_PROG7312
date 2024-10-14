@@ -1,4 +1,5 @@
 ﻿//0000000000oooooooooo..........Start Of File..........ooooooooooo00000000000//
+using ST10144453_PROG7312.MVVM.Model;
 using ST10144453_PROG7312.MVVM.View_Model;
 using System.Windows;
 using System.Windows.Controls;
@@ -20,6 +21,8 @@ namespace ST10144453_PROG7312.MVVM.View
         public ReportUserControl()
         {
             InitializeComponent();
+            UserModel currentUser = new UserModel(); // Create a new instance of UserModel
+            DataContext = new ReportViewModel(); // Pass the currentUser instance to the ReportViewModel constructor
         }
 
         //++++++++++++++ Methods: OnIssueNameTextChanged ++++++++++++++//
@@ -107,6 +110,24 @@ namespace ST10144453_PROG7312.MVVM.View
                     indicator.SetBinding(Rectangle.WidthProperty, widthBinding);
                 }
             }
+        }
+
+        // Define the OnMediaDrop method
+        private void OnMediaDrop(object sender, DragEventArgs e)
+        {
+            // Handle the drop event
+        }
+
+        // Define the OnMediaDragEnter method
+        private void OnMediaDragEnter(object sender, DragEventArgs e)
+        {
+            // Handle the drag enter event
+        }
+
+        // Define the OnMediaDragLeave method
+        private void OnMediaDragLeave(object sender, DragEventArgs e)
+        {
+            // Handle the drag leave event
         }
     }
 }

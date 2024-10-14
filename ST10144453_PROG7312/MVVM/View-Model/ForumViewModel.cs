@@ -1,43 +1,56 @@
-﻿//0000000000oooooooooo..........Start Of File..........ooooooooooo00000000000//
-using ST10144453_PROG7312.MVVM.Model;
+﻿using ST10144453_PROG7312.MVVM.Model;
+using System;
+using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+using System.Windows.Data;
 
 namespace ST10144453_PROG7312.MVVM.View_Model
 {
-    //============== Class: ForumViewModel ==============//
-    /// <summary>
-    /// This class holds the base implementation for the ForumViewModel class.
-    /// </summary>
     public class ForumViewModel : INotifyPropertyChanged
     {
-        //++++++++++++++ Properties: Reports ++++++++++++++//
-        /// <summary>
-        /// This property holds the reports.
-        /// </summary>
-        public ObservableCollection<ReportModel> Reports => ReportService.Instance.Reports;
+        private ObservableCollection<ReportModel> _allReports; // Store all reports
+        private ICollectionView _filteredReports; // Collection for filtered reports
+        private ReportViewModel _reportViewModel; // Instance of ReportViewModel
 
-        //++++++++++++++ Methods: Default Constructor ++++++++++++++//
-        public ForumViewModel()
+        public ICollectionView FilteredReports
         {
-            ReportService.Instance.ReportsChanged += (sender, args) => OnPropertyChanged(nameof(Reports));
+            get => _filteredReports;
+            private set
+            {
+                _filteredReports = value;
+                OnPropertyChanged(nameof(FilteredReports));
+            }
         }
 
-        //++++++++++++++ Events: PropertyChanged ++++++++++++++//
-        /// <summary>
-        /// This event is raised when a property is changed.
-        /// </summary>
+        public ForumViewModel(ReportViewModel reportViewModel)
+        {
+            _reportViewModel = reportViewModel;
+            _allReports = new ObservableCollection<ReportModel>();
+            FilteredReports = CollectionViewSource.GetDefaultView(_allReports);
+        }
+
+
+        public void FilterReportsByCurrentUser()
+        {
+            if (_reportViewModel.CurrentUser == null)
+            {
+                FilteredReports.Filter = null; // No filter if no user
+                return;
+            }
+
+            // Filter by current user's ID
+            FilteredReports.Filter = report => ((ReportModel)report).CreatedBy.userID == _reportViewModel.CurrentUser.userID;
+        }
+
         public event PropertyChangedEventHandler PropertyChanged;
 
-        //++++++++++++++ Methods: OnPropertyChanged ++++++++++++++//
-        /// <summary>
-        /// This method is called when a property is changed.
-        /// </summary>
-        /// <param name="propertyName"></param>
-        protected virtual void OnPropertyChanged(string propertyName)
+        protected void OnPropertyChanged(string propertyName)
         {
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
         }
     }
 }
-//0000000000oooooooooo..........End Of File..........ooooooooooo00000000000//

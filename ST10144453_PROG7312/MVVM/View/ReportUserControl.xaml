@@ -11,9 +11,6 @@
     Background="Transparent"
     mc:Ignorable="d">
 
-    <UserControl.DataContext>
-        <viewModel:ReportViewModel />
-    </UserControl.DataContext>
 
     <UserControl.Resources>
         <ResourceDictionary>
@@ -107,7 +104,7 @@
                 </Style.Triggers>
             </Style>
 
-            <!-- Style for ComboBox when validation fails -->
+            <!--  Style for ComboBox when validation fails  -->
             <Style x:Key="ErrorComboBoxStyle" TargetType="ComboBox">
                 <Style.Triggers>
                     <DataTrigger Binding="{Binding IsCategorySelected, UpdateSourceTrigger=PropertyChanged}" Value="False">
@@ -117,7 +114,7 @@
                 </Style.Triggers>
             </Style>
 
-            <!-- Style for error message -->
+            <!--  Style for error message  -->
             <Style x:Key="ErrorTextBlockStyle" TargetType="TextBlock">
                 <Setter Property="Foreground" Value="Red" />
                 <Setter Property="Visibility" Value="Collapsed" />
@@ -144,241 +141,207 @@
     </UserControl.Resources>
 
     <Grid Margin="10">
-        <!--  Define row and column definitions for layout  -->
-        <Grid.RowDefinitions>
-            <RowDefinition Height="Auto" />
-            <!--  For ProgressBar  -->
-            <RowDefinition Height="Auto" />
-            <!--  For Issue Name Label  -->
-            <RowDefinition Height="Auto" />
-            <!--  For Issue Name TextBox  -->
-            <RowDefinition Height="Auto" />
-            <!--  For Location Label  -->
-            <RowDefinition Height="Auto" />
-            <!--  For Location TextBox  -->
-            <RowDefinition Height="Auto" />
-            <!--  For Category Label  -->
-            <RowDefinition Height="Auto" />
-            <!--  For Category ComboBox  -->
-            <RowDefinition Height="Auto" />
-            <!--  For Description Label  -->
-            <RowDefinition Height="Auto" />
-            <!--  For Description TextBox  -->
-            <RowDefinition Height="Auto" />
-            <!--  For Media Attachment Button  -->
-            <RowDefinition Height="Auto" />
-            <!--  For Submit Button  -->
-        </Grid.RowDefinitions>
         <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="*" />
             <ColumnDefinition Width="*" />
         </Grid.ColumnDefinitions>
 
-        <!--  Progress Bar  -->
-        <ProgressBar
-    x:Name="progressBar"
-    Minimum="0"
-    Maximum="100"
-    Value="{Binding Progress}"
-    Height="20"
-    Background="Transparent"
-    BorderBrush="Transparent">
-            <ProgressBar.Template>
-                <ControlTemplate TargetType="ProgressBar">
-                    <Border
-                Background="LightGray"
-                BorderThickness="0"
-                CornerRadius="10">
-                        <Border
-                    x:Name="PART_Track"
-                    Background="Transparent"
-                    BorderThickness="0"
-                    CornerRadius="10">
-                            <Border
-                        x:Name="PART_Indicator"
-                        Height="20"
-                        CornerRadius="10">
-                                <Border.Background>
-                                    <LinearGradientBrush StartPoint="0,0" EndPoint="1,0">
-                                        <!-- Define gradient stops here -->
-                                        <GradientStop Color="#007A33" Offset="0.0" />
-                                        <!-- Green -->
-                                        <GradientStop Color="#FFD100" Offset="0.25" />
-                                        <!-- Yellow -->
-                                        <GradientStop Color="#D92B22" Offset="0.5" />
-                                        <!-- Black -->
-                                        <GradientStop Color="#2C2F80" Offset="0.75" />
-                                        <!-- Red -->
-                                    </LinearGradientBrush>
-                                </Border.Background>
-                            </Border>
-                        </Border>
-                    </Border>
-                </ControlTemplate>
-            </ProgressBar.Template>
-        </ProgressBar>
+        <!--  Left Column - Input Fields  -->
+        <StackPanel Grid.Column="0" Margin="0,0,10,0">
 
-        <!--  Issue Name Label and TextBox  -->
-        <Label Grid.Row="1" Content="Issue Name:" />
-        <TextBox
-            x:Name="IssueNameTextBox"
-            Grid.Row="2"
-            MinWidth="200"
-            MinHeight="30"
-            Margin="0,5,0,10"
-            Text="{Binding IssueName, Mode=TwoWay}"
-            TextChanged="OnIssueNameTextChanged"
-            ToolTip="Enter the name of the issue here." />
+            <!--  Issue Name Label and TextBox  -->
+            <Label Content="Issue Name:" />
+            <TextBox
+                x:Name="IssueNameTextBox"
+                MinWidth="200"
+                MinHeight="30"
+                Margin="0,5,0,10"
+                Text="{Binding IssueName, Mode=TwoWay}"
+                TextChanged="OnIssueNameTextChanged"
+                ToolTip="Enter the name of the issue here." />
 
-        <!--  Location Label and TextBox  -->
-        <Label Grid.Row="3" Content="Location:" />
-        <TextBox
-            x:Name="LocationTextBox"
-            Grid.Row="4"
-            MinWidth="200"
-            MinHeight="30"
-            Margin="0,5,0,10"
-            Text="{Binding Location, Mode=TwoWay}"
-            TextChanged="OnLocationTextChanged"
-            ToolTip="Specify the location related to the issue." />
+            <!--  Location Label and TextBox  -->
+            <Label Content="Location:" />
+            <TextBox
+                x:Name="LocationTextBox"
+                MinWidth="200"
+                MinHeight="30"
+                Margin="0,5,0,10"
+                Text="{Binding Location, Mode=TwoWay}"
+                TextChanged="OnLocationTextChanged"
+                ToolTip="Specify the location related to the issue." />
 
-        <!--  Category Label and ComboBox  -->
-        <Label Grid.Row="5" Content="Category:" />
-        <ComboBox
-            x:Name="CategoryComboBox"
-            Grid.Row="6"
-            MinWidth="200"
-            MinHeight="30"
-            Margin="0,5,0,10"
-            ItemsSource="{Binding Categories}"
-            SelectedItem="{Binding SelectedCategory, Mode=TwoWay}"
-            SelectionChanged="OnCategorySelectionChanged"
-            ToolTip="Select the category that best describes the issue." />
+            <!--  Category Label and ComboBox  -->
+            <Label Content="Category:" />
+            <ComboBox
+                x:Name="CategoryComboBox"
+                MinWidth="200"
+                MinHeight="30"
+                Margin="0,5,0,10"
+                ItemsSource="{Binding Categories}"
+                SelectedItem="{Binding SelectedCategory, Mode=TwoWay}"
+                SelectionChanged="OnCategorySelectionChanged"
+                ToolTip="Select the category that best describes the issue." />
 
-        <!--  Description Label and TextBox  -->
-        <Label Grid.Row="7" Content="Description:" />
-        <TextBox
-            x:Name="DescriptionTextBox"
-            Grid.Row="8"
-            MinWidth="200"
-            MinHeight="100"
-            Margin="0,5,0,10"
-            AcceptsReturn="True"
-            Text="{Binding Description, Mode=TwoWay}"
-            TextChanged="OnDescriptionTextChanged"
-            ToolTip="Provide a detailed description of the issue here." />
+            <!--  Description Label and TextBox  -->
+            <Label Content="Description:" />
+            <TextBox
+                x:Name="DescriptionTextBox"
+                MinWidth="200"
+                MinHeight="100"
+                Margin="0,5,0,10"
+                AcceptsReturn="True"
+                Text="{Binding Description, Mode=TwoWay}"
+                TextChanged="OnDescriptionTextChanged"
+                ToolTip="Provide a detailed description of the issue here." />
 
-        <!--  Attach Media Button  -->
-        <Button
-            x:Name="AttachMediaButton"
-            Grid.Row="9"
-            Height="50"
-            MinWidth="200"
-            Margin="300,5,300,10"
-            HorizontalAlignment="Stretch"
-            VerticalAlignment="Top"
-            Command="{Binding AttachMediaCommand}"
-            Content="Attach Media"
-            FontSize="16"
-            FontWeight="Bold">
-            <Button.Style>
-                <Style TargetType="Button">
-                    <!--  Base style  -->
-                    <Setter Property="Background" Value="#2C2F80" />
-                    <Setter Property="Foreground" Value="White" />
-                    <Setter Property="BorderBrush" Value="Transparent" />
-                    <Setter Property="BorderThickness" Value="1" />
-                    <Setter Property="Padding" Value="10,5" />
-                    <Setter Property="FontSize" Value="16" />
+            <StackPanel Margin="0,5,0,10" Orientation="Horizontal">
+                <CheckBox x:Name="MyCheckBox" 
+                          Margin="0,0,5,0" 
+                          IsChecked="{Binding IsPrivate}"
+                          ToolTip="Mark this report as private."/>
+                <Label Content="Private" />
+            </StackPanel>
 
-                    <!--  ControlTemplate  -->
-                    <Setter Property="Template">
-                        <Setter.Value>
-                            <ControlTemplate TargetType="Button">
-                                <Border
-                                    Background="{TemplateBinding Background}"
-                                    BorderBrush="{TemplateBinding BorderBrush}"
-                                    BorderThickness="{TemplateBinding BorderThickness}"
-                                    CornerRadius="20">
-                                    <!--  Apply CornerRadius directly here  -->
-                                    <ContentPresenter
-                                        Margin="{TemplateBinding Padding}"
-                                        HorizontalAlignment="Center"
-                                        VerticalAlignment="Center"
-                                        TextElement.FontSize="{TemplateBinding FontSize}" />
-                                </Border>
-                            </ControlTemplate>
-                        </Setter.Value>
-                    </Setter>
+            <!--  Submit Button  -->
+            <Button
+                x:Name="SubmitButton"
+                Height="50"
+                MinWidth="200"
+                Margin="200,5,200,10"
+                Command="{Binding SubmitCommand}"
+                Content="Submit"
+                FontSize="16"
+                FontWeight="Bold">
+                <Button.Style>
+                    <Style TargetType="Button">
+                        <!--  Base style  -->
+                        <Setter Property="Background" Value="#007646" />
+                        <Setter Property="Foreground" Value="White" />
+                        <Setter Property="BorderBrush" Value="Transparent" />
+                        <Setter Property="BorderThickness" Value="1" />
+                        <Setter Property="Padding" Value="10,5" />
+                        <Setter Property="FontSize" Value="16" />
 
-                    <!--  Triggers for visual states  -->
-                    <Style.Triggers>
-                        <Trigger Property="IsMouseOver" Value="True">
-                            <Setter Property="Background" Value="#3a4d92" />
-                            <!--  Darker shade for hover  -->
-                        </Trigger>
-                        <Trigger Property="IsPressed" Value="True">
-                            <Setter Property="Background" Value="#1a2e6e" />
-                            <!--  Even darker shade for click  -->
-                        </Trigger>
-                    </Style.Triggers>
-                </Style>
-            </Button.Style>
-        </Button>
+                        <!--  ControlTemplate  -->
+                        <Setter Property="Template">
+                            <Setter.Value>
+                                <ControlTemplate TargetType="Button">
+                                    <Border
+                                        Background="{TemplateBinding Background}"
+                                        BorderBrush="{TemplateBinding BorderBrush}"
+                                        BorderThickness="{TemplateBinding BorderThickness}"
+                                        CornerRadius="20">
+                                        <!--  Apply CornerRadius directly here  -->
+                                        <ContentPresenter
+                                            Margin="{TemplateBinding Padding}"
+                                            HorizontalAlignment="Center"
+                                            VerticalAlignment="Center"
+                                            TextElement.FontSize="{TemplateBinding FontSize}" />
+                                    </Border>
+                                </ControlTemplate>
+                            </Setter.Value>
+                        </Setter>
 
-        <!--  Submit Button  -->
-        <Button
-            x:Name="SubmitButton"
-            Grid.Row="10"
-            Height="50"
-            MinWidth="200"
-            Margin="200,5,200,10"
-            Command="{Binding SubmitCommand}"
-            Content="Submit"
-            FontSize="16"
-            FontWeight="Bold">
-            <Button.Style>
-                <Style TargetType="Button">
-                    <!--  Base style  -->
-                    <Setter Property="Background" Value="#007646" />
-                    <Setter Property="Foreground" Value="White" />
-                    <Setter Property="BorderBrush" Value="Transparent" />
-                    <Setter Property="BorderThickness" Value="1" />
-                    <Setter Property="Padding" Value="10,5" />
-                    <Setter Property="FontSize" Value="16" />
+                        <!--  Triggers for visual states  -->
+                        <Style.Triggers>
+                            <Trigger Property="IsMouseOver" Value="True">
+                                <Setter Property="Background" Value="#00965a" />
+                                <!--  Darker shade for hover  -->
+                            </Trigger>
+                            <Trigger Property="IsPressed" Value="True">
+                                <Setter Property="Background" Value="#005b35" />
+                                <!--  Even darker shade for click  -->
+                            </Trigger>
+                        </Style.Triggers>
+                    </Style>
+                </Button.Style>
+            </Button>
+        </StackPanel>
 
-                    <!--  ControlTemplate  -->
-                    <Setter Property="Template">
-                        <Setter.Value>
-                            <ControlTemplate TargetType="Button">
-                                <Border
-                                    Background="{TemplateBinding Background}"
-                                    BorderBrush="{TemplateBinding BorderBrush}"
-                                    BorderThickness="{TemplateBinding BorderThickness}"
-                                    CornerRadius="20">
-                                    <!--  Apply CornerRadius directly here  -->
-                                    <ContentPresenter
-                                        Margin="{TemplateBinding Padding}"
-                                        HorizontalAlignment="Center"
-                                        VerticalAlignment="Center"
-                                        TextElement.FontSize="{TemplateBinding FontSize}" />
-                                </Border>
-                            </ControlTemplate>
-                        </Setter.Value>
-                    </Setter>
+        <!--  Right Column - Media Upload  -->
+        <StackPanel Grid.Column="1" Margin="10,0,0,0">
+            <!--  Drag and Drop Area  -->
+            <Border
+                Height="300"
+                Margin="0,0,0,20"
+                AllowDrop="True"
+                BorderBrush="#2C2F80"
+                BorderThickness="2"
+                CornerRadius="10"
+                DragEnter="OnMediaDragEnter"
+                DragLeave="OnMediaDragLeave"
+                Drop="OnMediaDrop">
+                <Grid>
+                    <TextBlock
+                        HorizontalAlignment="Center"
+                        VerticalAlignment="Center"
+                        FontSize="18"
+                        Foreground="#2C2F80"
+                        Text="Drag and drop media files here" />
+                    <ItemsControl ItemsSource="{Binding UploadedFiles}">
+                        <!--  Add ItemTemplate for displaying uploaded files  -->
+                    </ItemsControl>
+                </Grid>
+            </Border>
 
-                    <!--  Triggers for visual states  -->
-                    <Style.Triggers>
-                        <Trigger Property="IsMouseOver" Value="True">
-                            <Setter Property="Background" Value="#00965a" />
-                            <!--  Darker shade for hover  -->
-                        </Trigger>
-                        <Trigger Property="IsPressed" Value="True">
-                            <Setter Property="Background" Value="#005b35" />
-                            <!--  Even darker shade for click  -->
-                        </Trigger>
-                    </Style.Triggers>
-                </Style>
-            </Button.Style>
-        </Button>
+            <!--  Attach Media Button  -->
+            <Button
+                x:Name="AttachMediaButton"
+                Grid.Row="9"
+                Height="50"
+                MinWidth="200"
+                Margin="300,5,300,10"
+                HorizontalAlignment="Stretch"
+                VerticalAlignment="Top"
+                Command="{Binding AttachMediaCommand}"
+                Content="Attach Media"
+                FontSize="16"
+                FontWeight="Bold">
+                <Button.Style>
+                    <Style TargetType="Button">
+                        <!--  Base style  -->
+                        <Setter Property="Background" Value="#2C2F80" />
+                        <Setter Property="Foreground" Value="White" />
+                        <Setter Property="BorderBrush" Value="Transparent" />
+                        <Setter Property="BorderThickness" Value="1" />
+                        <Setter Property="Padding" Value="10,5" />
+                        <Setter Property="FontSize" Value="16" />
+
+                        <!--  ControlTemplate  -->
+                        <Setter Property="Template">
+                            <Setter.Value>
+                                <ControlTemplate TargetType="Button">
+                                    <Border
+                                        Background="{TemplateBinding Background}"
+                                        BorderBrush="{TemplateBinding BorderBrush}"
+                                        BorderThickness="{TemplateBinding BorderThickness}"
+                                        CornerRadius="20">
+                                        <!--  Apply CornerRadius directly here  -->
+                                        <ContentPresenter
+                                            Margin="{TemplateBinding Padding}"
+                                            HorizontalAlignment="Center"
+                                            VerticalAlignment="Center"
+                                            TextElement.FontSize="{TemplateBinding FontSize}" />
+                                    </Border>
+                                </ControlTemplate>
+                            </Setter.Value>
+                        </Setter>
+
+                        <!--  Triggers for visual states  -->
+                        <Style.Triggers>
+                            <Trigger Property="IsMouseOver" Value="True">
+                                <Setter Property="Background" Value="#3a4d92" />
+                                <!--  Darker shade for hover  -->
+                            </Trigger>
+                            <Trigger Property="IsPressed" Value="True">
+                                <Setter Property="Background" Value="#1a2e6e" />
+                                <!--  Even darker shade for click  -->
+                            </Trigger>
+                        </Style.Triggers>
+                    </Style>
+                </Button.Style>
+            </Button>
+        </StackPanel>
     </Grid>
 </UserControl>

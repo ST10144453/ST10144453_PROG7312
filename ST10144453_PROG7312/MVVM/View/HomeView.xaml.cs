@@ -52,7 +52,7 @@ namespace ST10144453_PROG7312.MVVM.View
             InitializeComponent();
             Loaded += OnLoaded;
             SizeChanged += OnSizeChanged;
-            DataContext = new HomeViewModel(user);
+            DataContext = new HomeViewModel();
 
         }
 

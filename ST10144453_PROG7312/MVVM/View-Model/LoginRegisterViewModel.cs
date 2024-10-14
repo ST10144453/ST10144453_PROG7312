@@ -151,7 +151,7 @@ namespace ST10144453_PROG7312.MVVM.View_Model
 
             foreach (var registeredUser in Users)
             {
-                Console.WriteLine($"Stored User - Username: {registeredUser.userName}, Email: {registeredUser.email}, Password: {registeredUser.password}");
+                Console.WriteLine($"Stored User - Username: {registeredUser.userName}, Email: {registeredUser.email}, Password: {registeredUser.password}, ID: {registeredUser.userID}");
             }
 
             var user = Users.FirstOrDefault(u =>
@@ -161,17 +161,31 @@ namespace ST10144453_PROG7312.MVVM.View_Model
             if (user != null)
             {
                 Console.WriteLine("Login successful!");
-                // Navigate to the appropriate view based on user type
+                UserSession.CurrentUser = user; // Set the current user
+
                 var mainWindow = (MainWindow)Application.Current.MainWindow;
-                var homeView = new HomeView(user); // Pass the user to HomeView
-                mainWindow.Navigate(homeView);
-                Console.WriteLine(user.isStaff ? "Staff Login" : "User Login");
+                if (user.isStaff)
+                {
+                    var staffMenu = new StaffMenu(user)
+                    {
+                        DataContext = new StaffMenuViewModel(user)
+                    };
+                    mainWindow.Navigate(staffMenu);
+                    Console.WriteLine("Staff Login");
+                }
+                else
+                {
+                    var homeView = new HomeView(user);
+                    mainWindow.Navigate(homeView);
+                    Console.WriteLine("User Login");
+                }
             }
             else
             {
                 Console.WriteLine("Invalid username/email or password.");
             }
         }
+
 
 
         private string ConvertImageToBase64(string imagePath)

@@ -1,19 +1,15 @@
 ﻿<UserControl
-    x:Class="ST10144453_PROG7312.MVVM.View.ForumUserControl"
+    x:Class="ST10144453_PROG7312.MVVM.View.AllReportsUserControl"
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:Convert="clr-namespace:ST10144453_PROG7312.FrontendLogic"
-    xmlns:Syncfusion="clr-namespace:Syncfusion.Windows.PdfViewer;assembly=Syncfusion.PdfViewer.WPF"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:local="clr-namespace:ST10144453_PROG7312.MVVM.View"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-    xmlns:viewModel="clr-namespace:ST10144453_PROG7312.MVVM.View_Model" 
-    d:DataContext="{d:DesignInstance Type=viewModel:ForumViewModel}"
     d:DesignHeight="1080"
     d:DesignWidth="1710"
     Background="Transparent"
     mc:Ignorable="d">
-
     <UserControl.Resources>
         <Convert:AnyTrueInCollectionConverter x:Key="AnyTrueInCollectionConverter" />
         <Convert:Base64ToTextConverter x:Key="Base64ToTextConverter" />
@@ -23,7 +19,7 @@
 
     <Grid>
         <ScrollViewer VerticalScrollBarVisibility="Auto">
-            <ItemsControl x:Name="ReportListBox" ItemsSource="{Binding FilteredReports}">
+            <ItemsControl x:Name="ReportListBox" ItemsSource="{Binding Reports}">
                 <ItemsControl.ItemTemplate>
                     <DataTemplate>
                         <Border
