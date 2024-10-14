@@ -78,6 +78,7 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Compile Include="Core\NavigationService.cs" />
     <Compile Include="Core\RelayCommand.cs" />
     <Compile Include="FrontendLogic\AnyTrueInCollectionConverter.cs" />
     <Compile Include="FrontendLogic\Base64ToImageSourceConverter.cs" />
@@ -88,6 +89,7 @@
     <Compile Include="FrontendLogic\FileToContentConverter.cs" />
     <Compile Include="FrontendLogic\FileTypeToVisibilityConverter.cs" />
     <Compile Include="FrontendLogic\InverseBoolToVisibilityConverter.cs" />
+    <Compile Include="FrontendLogic\PasswordBoxHelper.cs" />
     <Compile Include="FrontendLogic\ScaleConverter.cs" />
     <Compile Include="MVVM\Model\AnnouncementModel.cs" />
     <Compile Include="MVVM\Model\EventModel.cs" />
@@ -99,9 +101,7 @@
     <Compile Include="MVVM\Model\UserModel.cs" />
     <Compile Include="MVVM\View-Model\ForumViewModel.cs" />
     <Compile Include="MVVM\View-Model\LoginRegisterViewModel.cs" />
-    <Compile Include="MVVM\View-Model\LoginViewModel.cs" />
     <Compile Include="MVVM\View-Model\MainWindowViewModel.cs" />
-    <Compile Include="MVVM\View-Model\RegisterViewModel.cs" />
     <Compile Include="MVVM\View-Model\ReportService.cs" />
     <Compile Include="MVVM\View-Model\ReportViewModel.cs" />
     <Compile Include="MVVM\View\ForumUserControl.xaml.cs">
@@ -125,7 +125,6 @@
     <Compile Include="MVVM\View\UnderDevelopmentPopup.xaml.cs">
       <DependentUpon>UnderDevelopmentPopup.xaml</DependentUpon>
     </Compile>
-    <Compile Include="ViewModelLocator.cs" />
     <Page Include="MainWindow.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
@@ -283,6 +282,12 @@
   </ItemGroup>
   <ItemGroup>
     <Resource Include="Resources\Icons\icon_see.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\Hardcoded\ProfilePhoto\koos_pfp.jpeg" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\Icons\icon_profile.png" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Import Project="..\packages\Syncfusion.PdfToImageConverter.WPF.26.2.14\build\net462\Syncfusion.PdfToImageConverter.WPF.targets" Condition="Exists('..\packages\Syncfusion.PdfToImageConverter.WPF.26.2.14\build\net462\Syncfusion.PdfToImageConverter.WPF.targets')" />

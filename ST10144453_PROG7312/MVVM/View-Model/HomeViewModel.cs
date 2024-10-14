@@ -1,7 +1,9 @@
 ﻿//0000000000oooooooooo..........Start Of File..........ooooooooooo00000000000//
 using ST10144453_PROG7312.Core;
+using ST10144453_PROG7312.MVVM.Model;
 using ST10144453_PROG7312.MVVM.View;
 using System.ComponentModel;
+using System.Runtime.CompilerServices;
 using System.Windows;
 using System.Windows.Input;
 
@@ -30,16 +32,27 @@ namespace ST10144453_PROG7312.MVVM.View_Model
         /// </summary>
         public ICommand NavigateReportCommand { get; private set; }
 
-        //++++++++++++++ Methods: Default Constructor ++++++++++++++//
-        /// <summary>
-        /// This method initializes the HomeViewModel class.
-        /// </summary>
-        public HomeViewModel()
-        {
-            ShowUnderDevelopmentPopupCommand = new RelayCommand(ShowUnderDevelopmentPopup);
+        private UserModel _user;
 
-            NavigateReportCommand = new RelayCommand(OpenReport);
+        public UserModel User
+        {
+            get => _user;
+            set
+            {
+                _user = value;
+                OnPropertyChanged();
+            }
         }
+
+        public string Username => User?.userName;
+
+        public HomeViewModel(UserModel user)
+        {
+            User = user;
+            NavigateReportCommand = new RelayCommand(NavigateReport);
+            ShowUnderDevelopmentPopupCommand = new RelayCommand(ShowUnderDevelopmentPopup);
+        }
+
 
         //++++++++++++++ Methods: ShowUnderDevelopmentPopup ++++++++++++++//
         /// <summary>
@@ -58,7 +71,8 @@ namespace ST10144453_PROG7312.MVVM.View_Model
         /// <summary>
         /// This method handles the NavigateReport command.
         /// </summary>
-        private void OpenReport()
+
+        private void NavigateReport()
         {
             // Get the main window (Home or Main Menu window)
             var mainWindow = Application.Current.MainWindow;
@@ -79,6 +93,10 @@ namespace ST10144453_PROG7312.MVVM.View_Model
                 mainWindow.Visibility = Visibility.Visible;
             };
             reportWindow.ShowDialog(); // Or use Show() if you don't want modal behavior
+        }
+        protected void OnPropertyChanged([CallerMemberName] string propertyName = null)
+        {
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
         }
     }
 }
