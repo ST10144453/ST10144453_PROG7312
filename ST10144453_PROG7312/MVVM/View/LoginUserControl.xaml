@@ -4,6 +4,7 @@
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:local="clr-namespace:ST10144453_PROG7312.MVVM.View"
+    xmlns:helper="clr-namespace:ST10144453_PROG7312.FrontendLogic"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:viewModel="clr-namespace:ST10144453_PROG7312.MVVM.View_Model"
     d:DesignHeight="1080"
@@ -289,7 +290,8 @@
                                     Height="50"
                                     FontFamily="Roboto"
                                     Foreground="#2e2e2e"
-                                    Style="{StaticResource RegisterTextBoxStyle}" />
+                                    Style="{StaticResource RegisterTextBoxStyle}"
+                                    Text="{Binding LoginUserNameOrEmail, UpdateSourceTrigger=PropertyChanged}" />
                             </StackPanel>
 
 
@@ -302,11 +304,13 @@
                                     Text="Password" />
                                 <Grid>
                                     <PasswordBox
-                                        x:Name="PasswordBox"
-                                        Height="50"
-                                        FontFamily="Roboto"
-                                        Foreground="#2e2e2e"
-                                        Style="{StaticResource RegisterPasswordBoxStyle}" />
+                                     x:Name="PasswordBox"
+                                     Height="50"
+                                     FontFamily="Roboto"
+                                     Foreground="#2e2e2e"
+                                     Style="{StaticResource RegisterPasswordBoxStyle}" 
+                                     helper:PasswordBoxHelper.BindPassword="True"
+                                     helper:PasswordBoxHelper.BoundPassword="{Binding LoginPassword, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
                                     <TextBox
                                         x:Name="PlainTextPasswordBox"
                                         Height="50"
@@ -355,6 +359,7 @@
                                 Width="300"
                                 Height="60"
                                 Click="Login_Click"
+                                Command="{Binding LoginCommand}"
                                 Content="Login"
                                 FontSize="22"
                                 Style="{StaticResource Button4Style}" />

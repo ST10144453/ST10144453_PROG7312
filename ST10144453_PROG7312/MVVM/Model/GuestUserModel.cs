@@ -12,9 +12,10 @@ namespace ST10144453_PROG7312.MVVM.Model
         //list of tags object 
         List<EventModel> savedEvents = new List<EventModel>();
 
+
         public GuestUserModel()
         {
-            isStaff = false;
+
         }
     }
 }

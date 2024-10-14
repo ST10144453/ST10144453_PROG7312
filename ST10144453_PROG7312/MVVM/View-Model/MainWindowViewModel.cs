@@ -1,4 +1,5 @@
 ﻿using ST10144453_PROG7312.Core;
+using ST10144453_PROG7312.MVVM.Model;
 using ST10144453_PROG7312.MVVM.View_Model;
 using System.ComponentModel;
 using System.Runtime.CompilerServices;
@@ -30,7 +31,10 @@ namespace ST10144453_PROG7312.MVVM.ViewMode
 
         private void ShowHomeView()
         {
-            CurrentView = new HomeViewModel();
+            // Assuming 'user' is a valid variable or property
+            var user = new UserModel(); // Replace 'User' with the actual user class
+
+            CurrentView = new HomeViewModel(user);
         }
 
         public event PropertyChangedEventHandler PropertyChanged;

@@ -161,7 +161,6 @@
                             Height="100"
                             Margin="0,10"
                             Click="Login_Click"
-                            Command="{Binding NavigateLoginCommand}"
                             FontSize="40"
                             Style="{StaticResource ImageButtonStyle}">
                             <StackPanel HorizontalAlignment="Left" Orientation="Horizontal">
@@ -179,7 +178,6 @@
                         <Button
                             Height="100"
                             Margin="0,10"
-                            Command="{Binding ShowUnderDevelopmentPopupCommand}"
                             FontSize="40"
                             Style="{StaticResource ImageButtonStyle}" Click="Register_Click">
                             <StackPanel HorizontalAlignment="Left" Orientation="Horizontal">
