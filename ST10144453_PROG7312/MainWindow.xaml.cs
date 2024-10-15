@@ -1,8 +1,11 @@
 ﻿//0000000000oooooooooo..........Start Of File..........ooooooooooo00000000000//
+using ST10144453_PROG7312.MVVM.View_Model;
+using ST10144453_PROG7312.MVVM.ViewMode;
 using System;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Media.Animation;
+using ST10144453_PROG7312.Core;
 
 namespace ST10144453_PROG7312
 {
@@ -32,6 +35,10 @@ namespace ST10144453_PROG7312
             InitializeComponent();
             Loaded += OnLoaded;
             SizeChanged += OnSizeChanged;
+            DataContext = new MainWindowViewModel();
+            MainContentControl.Content = new MVVM.View.LoginRegisterMenu();
+            var loginRegisterViewModel = new LoginRegisterViewModel();
+
         }
 
         //++++++++++++++ Methods: OnLoaded ++++++++++++++//
@@ -197,6 +204,11 @@ namespace ST10144453_PROG7312
         {
             base.OnMouseLeftButtonDown(e);
             Window.GetWindow(this)?.DragMove();
+        }
+
+        public void Navigate(UserControl nextPage)
+        {
+            MainContentControl.Content = nextPage;
         }
     }
 }

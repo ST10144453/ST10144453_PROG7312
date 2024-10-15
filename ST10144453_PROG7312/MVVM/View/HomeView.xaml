@@ -10,10 +10,6 @@
     Background="Transparent"
     mc:Ignorable="d">
 
-    <UserControl.DataContext>
-        <viewModel:HomeViewModel />
-    </UserControl.DataContext>
-
     <UserControl.Resources>
         <!--  Base Button Style  -->
         <Style x:Key="ImageButtonStyle" TargetType="Button">
@@ -145,14 +141,14 @@
                         HorizontalAlignment="Center"
                         FontFamily="Roboto"
                         FontSize="48"
-                        Text="Welcome to" />
+                        Text="Welcome," />
                     <TextBlock
                         x:Name="manageMsg"
                         HorizontalAlignment="Center"
                         FontFamily="Inter"
                         FontSize="64"
                         FontWeight="Bold"
-                        Text="Manage Mzansi" />
+                        Text="{Binding User.userName}" />
 
                     <StackPanel x:Name="ButtonStack" Margin="0,20,0,0">
                         <Button
@@ -176,7 +172,7 @@
                         <Button
                             Height="80"
                             Margin="0,10"
-                            Command="{Binding ShowUnderDevelopmentPopupCommand}"
+                            Command="{Binding NavigateEventCommand}"
                             FontSize="24"
                             Style="{StaticResource ImageButtonStyle}">
                             <StackPanel HorizontalAlignment="Left" Orientation="Horizontal">
@@ -207,6 +203,24 @@
 
                                 <!--  Text Block  -->
                                 <TextBlock VerticalAlignment="Center" Text="Service Request Status" />
+                            </StackPanel>
+                        </Button>
+                        <Button
+                            Height="80"
+                            Margin="0,10"
+                            Command="{Binding ShowUnderDevelopmentPopupCommand}"
+                            FontSize="24"
+                            Style="{StaticResource ImageButtonStyle}">
+                            <StackPanel HorizontalAlignment="Left" Orientation="Horizontal">
+                                <!--  Icon Image  -->
+                                <Image
+                                    Width="20"
+                                    Height="20"
+                                    Margin="5,0,10,0"
+                                    Source="pack://application:,,,/Resources/Icons/icon_profile.png" />
+
+                                <!--  Text Block  -->
+                                <TextBlock VerticalAlignment="Center" Text="Your Account" />
                             </StackPanel>
                         </Button>
                         <Button

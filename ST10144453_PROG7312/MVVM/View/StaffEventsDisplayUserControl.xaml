@@ -1,0 +1,83 @@
+﻿<UserControl
+    x:Class="ST10144453_PROG7312.MVVM.View.StaffEventsDisplayUserControl"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:local="clr-namespace:ST10144453_PROG7312.MVVM.View"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:viewModel="clr-namespace:ST10144453_PROG7312.MVVM.View_Model"
+    xmlns:converters="clr-namespace:ST10144453_PROG7312.FrontendLogic"
+    d:DesignHeight="450"
+    d:DesignWidth="800"
+    Background="Transparent"
+    mc:Ignorable="d">
+
+    <UserControl.Resources>
+        <converters:MaxItemsConverter x:Key="MaxItemsConverter"/>
+        <converters:Base64ToImageSourceConverter x:Key="Base64ToImageConverter"/>
+        <converters:EventPhotoConverter x:Key="EventPhotoConverter"/>
+    </UserControl.Resources>
+
+    <UserControl.DataContext>
+        <viewModel:CreateEventViewModel />
+    </UserControl.DataContext>
+
+    <Grid>
+
+        <ItemsControl ItemsSource="{Binding Events}" Margin="10">
+            <ItemsControl.ItemTemplate>
+                <DataTemplate>
+                    <Border Background="White" CornerRadius="10" Margin="10">
+                        <Grid Height="300" Width="300">
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="3*"/>
+                                <RowDefinition Height="2*"/>
+                            </Grid.RowDefinitions>
+
+                            <Image Source="{Binding eventPhotos[0]}" Grid.Row="0" Stretch="UniformToFill">
+                                <Image.Clip>
+                                    <RectangleGeometry Rect="0,0,300,180" RadiusX="10" RadiusY="10"/>
+                                </Image.Clip>
+                            </Image>
+                            <StackPanel Grid.Row="1" Margin="10">
+                                <TextBlock Text="{Binding eventTitle}" FontWeight="Bold" FontSize="16"/>
+                                <TextBlock>
+                                    <Run Text="Date: "/>
+                                    <Run Text="{Binding eventDate, StringFormat='{}{0:d}'}"/>
+                                </TextBlock>
+                                <TextBlock>
+                                    <Run Text="Location: "/>
+                                    <Run Text="{Binding eventLocation}"/>
+                                </TextBlock>
+                                <StackPanel Orientation="Horizontal" Margin="0,10,0,0">
+                                    <ItemsControl ItemsSource="{Binding eventTags, Converter={StaticResource MaxItemsConverter}, ConverterParameter=2}">
+                                        <ItemsControl.ItemsPanel>
+                                            <ItemsPanelTemplate>
+                                                <StackPanel Orientation="Horizontal"/>
+                                            </ItemsPanelTemplate>
+                                        </ItemsControl.ItemsPanel>
+                                        <ItemsControl.ItemTemplate>
+                                            <DataTemplate>
+                                                <Border CornerRadius="10" Padding="5,2" Margin="0,0,5,0">
+                                                    <Border.Background>
+                                                        <SolidColorBrush Color="{Binding TagBgColour, FallbackValue=Gray}"/>
+                                                    </Border.Background>
+                                                    <TextBlock Text="{Binding TagName}" Foreground="{Binding TagFontColour, FallbackValue=Black}"/>
+                                                </Border>
+                                            </DataTemplate>
+                                        </ItemsControl.ItemTemplate>
+                                    </ItemsControl>
+                                </StackPanel>
+                            </StackPanel>
+                        </Grid>
+                    </Border>
+                </DataTemplate>
+            </ItemsControl.ItemTemplate>
+            <ItemsControl.ItemsPanel>
+                <ItemsPanelTemplate>
+                    <WrapPanel/>
+                </ItemsPanelTemplate>
+            </ItemsControl.ItemsPanel>
+        </ItemsControl>
+    </Grid>
+</UserControl>

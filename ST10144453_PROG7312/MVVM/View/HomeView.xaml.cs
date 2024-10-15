@@ -1,4 +1,5 @@
-﻿//0000000000oooooooooo..........Start Of File..........ooooooooooo00000000000//
+﻿using ST10144453_PROG7312.MVVM.Model;
+using ST10144453_PROG7312.MVVM.View_Model;
 using System;
 using System.Windows;
 using System.Windows.Controls;
@@ -46,11 +47,13 @@ namespace ST10144453_PROG7312.MVVM.View
         /// <summary>
         /// This method initializes the HomeView class.
         /// </summary>
-        public HomeView()
+        public HomeView(UserModel user)
         {
             InitializeComponent();
             Loaded += OnLoaded;
             SizeChanged += OnSizeChanged;
+            DataContext = new HomeViewModel();
+
         }
 
         //++++++++++++++ Methods: OnLoaded ++++++++++++++//
@@ -124,4 +127,3 @@ namespace ST10144453_PROG7312.MVVM.View
         }
     }
 }
-//0000000000oooooooooo..........End Of File..........ooooooooooo00000000000//

@@ -1,5 +1,4 @@
-﻿//0000000000oooooooooo..........Start Of File..........ooooooooooo00000000000//
-using ST10144453_PROG7312.MVVM.Model;
+﻿using ST10144453_PROG7312.MVVM.Model;
 using ST10144453_PROG7312.MVVM.View_Model;
 using System;
 using System.Diagnostics;
@@ -10,19 +9,15 @@ using System.Windows.Data;
 
 namespace ST10144453_PROG7312.MVVM.View
 {
-    //============== Class: ForumUserControl ==============//
     /// <summary>
-    /// This is the code-behind for the ForumUserControl class.
+    /// Interaction logic for AllReportsUserControl.xaml
     /// </summary>
-    public partial class ForumUserControl : UserControl
+    public partial class AllReportsUserControl : UserControl
     {
-        //++++++++++++++ Methods: Default Constructor ++++++++++++++//
-        /// <summary>
-        /// This method initializes the ForumUserControl class.
-        /// </summary>
-        public ForumUserControl()
+        public AllReportsUserControl()
         {
             InitializeComponent();
+            DataContext = new ReportViewModel(); // Pass the currentUser instance to the ReportViewModel constructor
         }
 
         //++++++++++++++ Methods: ViewMediaButton_Click ++++++++++++++//
@@ -95,21 +90,5 @@ namespace ST10144453_PROG7312.MVVM.View
                 MessageBox.Show("No report selected.", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
             }
         }
-
-        //++++++++++++++ Methods: ForumUserControl_Loaded ++++++++++++++//
-        /// <summary>
-        /// This method refreshes the reports collection view source when the user control is loaded.
-        /// </summary>
-        /// <param name="sender"></param>
-        /// <param name="e"></param>
-        private void ForumUserControl_Loaded(object sender, RoutedEventArgs e)
-        {
-            var viewModel = DataContext as ReportViewModel;
-            if (viewModel != null)
-            {
-                CollectionViewSource.GetDefaultView(viewModel.Reports).Refresh();
-            }
-        }
     }
 }
-//0000000000oooooooooo...........End Of File...........ooooooooooo00000000000//

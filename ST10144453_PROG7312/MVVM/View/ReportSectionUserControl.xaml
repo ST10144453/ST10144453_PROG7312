@@ -1,25 +1,17 @@
-﻿<Window
-    x:Class="ST10144453_PROG7312.MVVM.View.ReportView"
+﻿<UserControl
+    x:Class="ST10144453_PROG7312.MVVM.View.ReportSectionUserControl"
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:local="clr-namespace:ST10144453_PROG7312.MVVM.View"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:viewModel="clr-namespace:ST10144453_PROG7312.MVVM.View_Model"
-    Title="ReportView"
     d:DesignHeight="1080"
     d:DesignWidth="1910"
-    Background="White"
-    ResizeMode="CanResize"
-    WindowState="Maximized"
-    WindowStyle="None"
+    Background="Transparent"
     mc:Ignorable="d">
 
-    <Window.DataContext>
-        <viewModel:ReportViewModel />
-    </Window.DataContext>
-
-    <Window.Resources>
+    <UserControl.Resources>
         <!--  Base Button Style  -->
         <Style x:Key="ImageButtonStyle" TargetType="Button">
             <Setter Property="Background">
@@ -96,7 +88,7 @@
                 </Trigger>
             </Style.Triggers>
         </Style>
-    </Window.Resources>
+    </UserControl.Resources>
 
     <!--  Main Grid for the Layout  -->
     <Grid>
@@ -105,69 +97,6 @@
             <ColumnDefinition Width="*" />
         </Grid.ColumnDefinitions>
 
-        <Grid Grid.Column="1" HorizontalAlignment="Right" VerticalAlignment="Top" Margin="10">
-            <StackPanel Orientation="Horizontal" HorizontalAlignment="Right" VerticalAlignment="Top">
-                <Button
-            x:Name="MinimizeButton"
-            Width="30"
-            Background="Transparent"
-            BorderBrush="Transparent"
-            Click="MinimizeButton_Click"
-            Content="🗕"
-            Foreground="Black" />
-                <Button
-            x:Name="MaximizeButton"
-            Width="30"
-            Background="Transparent"
-            BorderBrush="Transparent"
-            Click="MaximizeButton_Click"
-            Content="🗖"
-            Foreground="Black" />
-                <Button
-            x:Name="CloseButton"
-            Width="30"
-            Background="Transparent"
-            BorderBrush="Transparent"
-            Click="CloseButton_Click"
-            Content="✕"
-            Foreground="Black" />
-            </StackPanel>
-        </Grid>
-
-        <Canvas Panel.ZIndex="-1">
-            <Image
-                x:Name="BlobImage1"
-                Canvas.Left="1053"
-                Canvas.Top="266"
-                Width="2000"
-                Height="2000"
-                HorizontalAlignment="Left"
-                VerticalAlignment="Top"
-                Source="pack://application:,,,/Resources/Images/Blobs/redBlob.png" />
-            <Image
-                x:Name="BlobImage2"
-                Canvas.Left="879"
-                Canvas.Top="-322"
-                Width="2000"
-                Height="2000"
-                Source="pack://application:,,,/Resources/Images/Blobs/blueBlob.png" />
-            <Image
-                x:Name="BlobImage3"
-                Canvas.Left="144"
-                Canvas.Top="-238"
-                Width="2000"
-                Height="2000"
-                Source="pack://application:,,,/Resources/Images/Blobs/greenBlob.png" />
-            <Image
-                x:Name="BlobImage4"
-                Canvas.Left="96"
-                Canvas.Top="249"
-                Width="2000"
-                Height="2000"
-                HorizontalAlignment="Left"
-                VerticalAlignment="Top"
-                Source="pack://application:,,,/Resources/Images/Blobs/yellowBlob.png" />
-        </Canvas>
 
         <!--  Side Navigation Bar  -->
         <Grid Grid.Column="0">
@@ -175,7 +104,7 @@
             <Rectangle
                 HorizontalAlignment="Stretch"
                 VerticalAlignment="Stretch"
-                Fill="White"
+                Fill="#B3FFFFFF"
                 RadiusX="15"
                 RadiusY="15">
                 <Rectangle.Clip>
@@ -204,20 +133,6 @@
                         Text="Manage Mzansi" />
                     <Button
                         Margin="0,5"
-                        Command="{Binding NavigateToHomeCommand}"
-                        FontSize="30"
-                        Style="{StaticResource ImageButtonStyle}">
-                        <StackPanel HorizontalAlignment="Left" Orientation="Horizontal">
-                            <Image
-                                Width="24"
-                                Height="24"
-                                Margin="5,0,10,0"
-                                Source="pack://application:,,,/Resources/Icons/menuIcon.png" />
-                            <TextBlock VerticalAlignment="Center" Text="Main Menu" />
-                        </StackPanel>
-                    </Button>
-                    <Button
-                        Margin="0,5"
                         Click="NavigateToReportIssue_Click"
                         FontSize="30"
                         Style="{StaticResource ImageButtonStyle}">
@@ -232,7 +147,7 @@
                     </Button>
                     <Button
                         Margin="0,5"
-                        Click="NavigateToPastReports_Click"
+                        Click="NavigateToAllReports_Click"
                         FontSize="30"
                         Style="{StaticResource ImageButtonStyle}">
                         <StackPanel HorizontalAlignment="Left" Orientation="Horizontal">
@@ -240,17 +155,17 @@
                                 Width="24"
                                 Height="24"
                                 Margin="5,0,10,0"
-                                Source="pack://application:,,,/Resources/Icons/forumIcon.png" />
-                            <TextBlock VerticalAlignment="Center" Text="Past Reports" />
+                                Source="pack://application:,,,/Resources/Icons/request_Icon.png" />
+                            <TextBlock VerticalAlignment="Center" Text="All Reports" />
                         </StackPanel>
                     </Button>
                     <Button
                         Width="280"
                         Height="180"
                         Margin="0,5"
-                        Content="Quit"
+                        Click="NavigateHome_Click"
+                        Content="Back"
                         FontSize="30"
-                        Click="CloseButton_Click"
                         Style="{StaticResource Button4Style}" />
                 </StackPanel>
             </StackPanel>
@@ -263,4 +178,4 @@
             Margin="0,30,0,0"
             Content="{Binding CurrentView}" />
     </Grid>
-</Window>
+</UserControl>

@@ -1,84 +1,54 @@
-﻿//0000000000oooooooooo..........Start Of File..........ooooooooooo00000000000//
+﻿using ST10144453_PROG7312.MVVM.Model;
+using ST10144453_PROG7312.MVVM.View_Model;
 using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
+using System.Windows.Data;
+using System.Windows.Documents;
+using System.Windows.Input;
+using System.Windows.Media;
 using System.Windows.Media.Animation;
+using System.Windows.Media.Imaging;
+using System.Windows.Shapes;
 
 namespace ST10144453_PROG7312.MVVM.View
 {
-    //============== Class: ReportView ==============//
     /// <summary>
-    /// Interaction logic for ReportView.xaml
+    /// Interaction logic for CreateEventView.xaml
     /// </summary>
-    public partial class ReportView : Window
+    public partial class CreateEventView : Window
     {
+
         //++++++++++++++ Constants ++++++++++++++//
         /// <summary>
         /// This constant holds the size of the blob.
         /// </summary>
-        private const double BlobSize = 400; // Reduced blob size for better visibility
-
-        /// <summary>
-        /// This constant holds the margin of the blob.
-        /// </summary>
-        private const double Margin = 50;
+        private const double BlobSize = 1000;
 
         /// <summary>
         /// This constant holds the duration of the animation.
         /// </summary>
-        private const double AnimationDuration = 15;
+        private const double AnimationDuration = 30;
 
-        /// <summary>
-        /// This constant holds the duration of the animation.
-        /// </summary>
-        private ReportUserControl _reportIssueView;
+        public List<TagsModel> Tags { get; set; }
 
-        /// <summary>
-        /// This constant holds the duration of the animation.
-        /// </summary>
-        private ForumUserControl _pastReportsView;
-
-        //++++++++++++++ Methods: Default Constructor ++++++++++++++//
-        /// <summary>
-        /// This method initializes the ReportView class.
-        /// </summary>
-        public ReportView()
+        public CreateEventView()
         {
             InitializeComponent();
             Loaded += OnLoaded;
-            SizeChanged += OnSizeChanged;
-
-            _reportIssueView = new ReportUserControl();
-            _pastReportsView = new ForumUserControl();
-
-            MainContentControl.Content = _reportIssueView;
+            DataContext = new CreateEventViewModel();
+            Tags = TagsModel.Tags; // Assuming Tags is a property in your ViewModel
         }
 
-        //++++++++++++++ Methods: NavigateToReportIssue_Click ++++++++++++++//
-        /// <summary>
-        /// This method navigates to the ReportIssue view.
-        /// </summary>
-        /// <param name="sender"></param>
-        /// <param name="e"></param>
-        private void NavigateToReportIssue_Click(object sender, RoutedEventArgs e)
-        {
-            MainContentControl.Content = _reportIssueView;
-        }
-
-        //++++++++++++++ Methods: NavigateToPastReports_Click ++++++++++++++//
-        /// <summary>
-        /// This method navigates to the PastReports view.
-        /// </summary>
-        /// <param name="sender"></param>
-        /// <param name="e"></param>
-        private void NavigateToPastReports_Click(object sender, RoutedEventArgs e)
-        {
-            MainContentControl.Content = _pastReportsView;
-        }
+       
 
         //++++++++++++++ Methods: OnLoaded ++++++++++++++//
         /// <summary>
-        /// This method is called when the ReportView is loaded.
+        /// This method is called when the MainWindow is loaded.
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
@@ -86,71 +56,6 @@ namespace ST10144453_PROG7312.MVVM.View
         {
             SetInitialBlobPositions();
             StartAnimation();
-        }
-
-        //++++++++++++++ Methods: OnSizeChanged ++++++++++++++//
-        /// <summary>
-        /// This method is called when the size of the ReportView changes.
-        /// </summary>
-        /// <param name="sender"></param>
-        /// <param name="e"></param>
-        private void OnSizeChanged(object sender, SizeChangedEventArgs e)
-        {
-            SetInitialBlobPositions();
-            StartAnimation();
-        }
-
-        //++++++++++++++ Methods: MinimizeButton_Click ++++++++++++++//
-        /// <summary>
-        /// This method minimizes the window.
-        /// </summary>
-        /// <param name="sender"></param>
-        /// <param name="e"></param>
-        private void MinimizeButton_Click(object sender, RoutedEventArgs e)
-        {
-            this.WindowState = WindowState.Minimized;
-        }
-
-        //++++++++++++++ Methods: MaximizeButton_Click ++++++++++++++//
-        /// <summary>
-        /// This method maximizes the window.
-        /// </summary>
-        /// <param name="sender"></param>
-        /// <param name="e"></param>
-        private void MaximizeButton_Click(object sender, RoutedEventArgs e)
-        {
-            if (this.WindowState == WindowState.Maximized)
-            {
-                this.WindowState = WindowState.Normal;
-                MaximizeButton.Content = "🗖";
-            }
-            else
-            {
-                this.WindowState = WindowState.Maximized;
-                MaximizeButton.Content = "🗗";
-            }
-        }
-
-        //++++++++++++++ Methods: CloseButton_Click ++++++++++++++//
-        /// <summary>
-        /// This method closes the window.
-        /// </summary>
-        /// <param name="sender"></param>
-        /// <param name="e"></param>
-        private void CloseButton_Click(object sender, RoutedEventArgs e)
-        {
-            this.Close();
-        }
-
-        //++++++++++++++ Methods: OnMouseLeftButtonDown ++++++++++++++//
-        /// <summary>
-        /// This method allows the window to be dragged.
-        /// </summary>
-        /// <param name="e"></param>
-        protected override void OnMouseLeftButtonDown(System.Windows.Input.MouseButtonEventArgs e)
-        {
-            base.OnMouseLeftButtonDown(e);
-            this.DragMove();
         }
 
         //++++++++++++++ Methods: SetInitialBlobPositions ++++++++++++++//
@@ -237,6 +142,11 @@ namespace ST10144453_PROG7312.MVVM.View
 
             element.BeginAnimation(property, animation);
         }
+
+        private void CreateEvent_Click(object sender, RoutedEventArgs e)
+        {
+            Close();
+        }
+
     }
 }
-//0000000000oooooooooo..........End Of File..........ooooooooooo00000000000//

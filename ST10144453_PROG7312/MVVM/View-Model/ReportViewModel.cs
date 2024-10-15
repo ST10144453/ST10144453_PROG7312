@@ -74,6 +74,35 @@ namespace ST10144453_PROG7312.MVVM.View_Model
         /// </summary>
         public event PropertyChangedEventHandler PropertyChanged;
 
+        private bool _isPrivate;
+
+        public UserModel CurrentUser { get; set; }
+
+        private ObservableCollection<ReportModel> _filteredReports;
+        public ObservableCollection<ReportModel> FilteredReports
+        {
+            get => _filteredReports;
+            set
+            {
+                _filteredReports = value;
+                OnPropertyChanged(nameof(FilteredReports));
+            }
+        }
+
+        public bool IsPrivate
+        {
+            get => _isPrivate;
+            set
+            {
+                if (_isPrivate != value)
+                {
+                    _isPrivate = value;
+                    OnPropertyChanged();
+                }
+            }
+        }
+
+
         /// <summary>
         /// This property holds the media items.
         /// </summary>
@@ -354,6 +383,17 @@ namespace ST10144453_PROG7312.MVVM.View_Model
             MediaItems = new ObservableCollection<MediaItem>();
             Reports = ReportManager.Instance.Reports;
 
+            CurrentUser = UserSession.CurrentUser; // Get the current user
+
+            if (CurrentUser == null)
+            {
+                Debug.WriteLine("CurrentUser is null in ReportViewModel constructor");
+            }
+            else
+            {
+                Debug.WriteLine($"CurrentUser is set in ReportViewModel constructor: {CurrentUser.userName}");
+
+            }
             Categories = new ObservableCollection<string>
             {
                 "Roads and Traffic",
@@ -369,6 +409,9 @@ namespace ST10144453_PROG7312.MVVM.View_Model
                 "Economic Development",
                 "Education and Youth Services"
             };
+
+            Console.WriteLine($"ReportViewModel initialized with user: {CurrentUser?.userName}");
+
         }
 
         //++++++++++++++ Methods: NavigateToHome ++++++++++++++//
@@ -377,9 +420,6 @@ namespace ST10144453_PROG7312.MVVM.View_Model
         /// </summary>
         private void NavigateToHome()
         {
-            var reportWindow = Application.Current.Windows.OfType<ReportView>().FirstOrDefault();
-            reportWindow?.Close();
-
             var mainWindow = Application.Current.Windows.OfType<MainWindow>().FirstOrDefault();
             mainWindow?.Show();
         }
@@ -598,6 +638,12 @@ namespace ST10144453_PROG7312.MVVM.View_Model
                 return;
             }
 
+            if (CurrentUser == null)
+            {
+                MessageBox.Show("Error: No user is currently logged in.", "User Error", MessageBoxButton.OK, MessageBoxImage.Error);
+                return;
+            }
+
             // Create new report model
             var newReport = new ReportModel
             {
@@ -606,7 +652,9 @@ namespace ST10144453_PROG7312.MVVM.View_Model
                 reportDescription = Description,
                 reportCategory = SelectedCategory,
                 Media = new List<Model.MediaItem>(),
-                reportDate = DateTime.Now
+                reportDate = DateTime.Now,
+                CreatedBy = CurrentUser.userName // Link the report to the current user
+
             };
 
             string reportGuid = Guid.NewGuid().ToString();
@@ -644,13 +692,12 @@ namespace ST10144453_PROG7312.MVVM.View_Model
             ReportManager.Instance.AddReport(newReport);
             OnPropertyChanged(nameof(Reports));
 
+            Debug.WriteLine($"New report added by user: {CurrentUser?.userName}");
+
+
             // Debug output
-            Console.WriteLine("New report added:");
-            Console.WriteLine($"Name: {newReport.reportName}");
-            Console.WriteLine($"Location: {newReport.reportLocation}");
-            Console.WriteLine($"Category: {newReport.reportCategory}");
-            Console.WriteLine($"Description: {newReport.reportDescription}");
-            Console.WriteLine($"Media count: {newReport.Media.Count}");
+            Debug.WriteLine($"New report added:\nName: {newReport.reportName}\nLocation: {newReport.reportLocation}\nCategory: {newReport.reportCategory}\nDescription: {newReport.reportDescription}\nMedia count: {MediaItems.Count}\nUser: {CurrentUser?.userName}");
+
 
             foreach (var mediaItem in MediaItems)
             {
@@ -684,6 +731,9 @@ namespace ST10144453_PROG7312.MVVM.View_Model
             double newProgress = (filledFields / 4.0) * 100;
             Progress = newProgress;
         }
+
+      
+
 
         //++++++++++++++ Methods: OnPropertyChanged ++++++++++++++//
         /// <summary>
