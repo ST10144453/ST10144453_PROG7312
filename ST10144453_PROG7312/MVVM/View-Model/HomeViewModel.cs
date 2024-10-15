@@ -32,6 +32,8 @@ namespace ST10144453_PROG7312.MVVM.View_Model
         /// </summary>
         public ICommand NavigateReportCommand { get; private set; }
 
+        public ICommand NavigateEventCommand { get; private set; }
+
         private UserModel _user;
 
         public UserModel User { get; set; }
@@ -43,6 +45,7 @@ namespace ST10144453_PROG7312.MVVM.View_Model
             User = UserSession.CurrentUser; // Get the current user
             NavigateReportCommand = new RelayCommand(NavigateReport);
             ShowUnderDevelopmentPopupCommand = new RelayCommand(ShowUnderDevelopmentPopup);
+            NavigateEventCommand = new RelayCommand(NavigateEvent);
         }
 
 
@@ -72,6 +75,17 @@ namespace ST10144453_PROG7312.MVVM.View_Model
             {
                 var reportSectionUserControl = new ReportSectionUserControl(User);
                 mainWindow.MainContentControl.Content = reportSectionUserControl;
+            }
+        }
+
+        private void NavigateEvent()
+        {
+            var mainWindow = Application.Current.MainWindow as MainWindow;
+
+            if (mainWindow != null)
+            {
+                var eventUserControl = new EventsViewUserControl(User);
+                mainWindow.MainContentControl.Content = eventUserControl;
             }
         }
 

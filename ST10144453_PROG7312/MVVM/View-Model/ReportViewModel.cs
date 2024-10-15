@@ -653,8 +653,7 @@ namespace ST10144453_PROG7312.MVVM.View_Model
                 reportCategory = SelectedCategory,
                 Media = new List<Model.MediaItem>(),
                 reportDate = DateTime.Now,
-                isPrivate = IsPrivate,
-                CreatedBy = CurrentUser // Link the report to the current user
+                CreatedBy = CurrentUser.userName // Link the report to the current user
 
             };
 
@@ -697,7 +696,7 @@ namespace ST10144453_PROG7312.MVVM.View_Model
 
 
             // Debug output
-            Debug.WriteLine($"New report added:\nName: {newReport.reportName}\nLocation: {newReport.reportLocation}\nCategory: {newReport.reportCategory}\nDescription: {newReport.reportDescription}\nMedia count: {MediaItems.Count}\nIs Private: {newReport.isPrivate}\nUser: {CurrentUser?.userName}");
+            Debug.WriteLine($"New report added:\nName: {newReport.reportName}\nLocation: {newReport.reportLocation}\nCategory: {newReport.reportCategory}\nDescription: {newReport.reportDescription}\nMedia count: {MediaItems.Count}\nUser: {CurrentUser?.userName}");
 
 
             foreach (var mediaItem in MediaItems)
@@ -733,23 +732,7 @@ namespace ST10144453_PROG7312.MVVM.View_Model
             Progress = newProgress;
         }
 
-       public void FilterReportsByCurrentUser()
-{
-    if (CurrentUser == null)
-    {
-        FilteredReports = new ObservableCollection<ReportModel>();
-        Console.WriteLine("CurrentUser is null.");
-        return;
-    }
-
-    Console.WriteLine($"Filtering reports for user ID: {CurrentUser.userID}");
-
-    FilteredReports = new ObservableCollection<ReportModel>(
-        Reports.Where(report => report.CreatedBy.userID == CurrentUser.userID));
-
-    Console.WriteLine($"Found {FilteredReports.Count} reports for the current user.");
-}
-
+      
 
 
         //++++++++++++++ Methods: OnPropertyChanged ++++++++++++++//

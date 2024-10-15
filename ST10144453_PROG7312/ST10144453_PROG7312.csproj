@@ -72,6 +72,21 @@
     <Reference Include="WindowsBase" />
     <Reference Include="PresentationCore" />
     <Reference Include="PresentationFramework" />
+    <Reference Include="Xceed.Wpf.AvalonDock, Version=4.6.0.0, Culture=neutral, PublicKeyToken=3e4669d2f30244f4, processorArchitecture=MSIL">
+      <HintPath>..\packages\Extended.Wpf.Toolkit.4.6.1\lib\net40\Xceed.Wpf.AvalonDock.dll</HintPath>
+    </Reference>
+    <Reference Include="Xceed.Wpf.AvalonDock.Themes.Aero, Version=4.6.0.0, Culture=neutral, PublicKeyToken=3e4669d2f30244f4, processorArchitecture=MSIL">
+      <HintPath>..\packages\Extended.Wpf.Toolkit.4.6.1\lib\net40\Xceed.Wpf.AvalonDock.Themes.Aero.dll</HintPath>
+    </Reference>
+    <Reference Include="Xceed.Wpf.AvalonDock.Themes.Metro, Version=4.6.0.0, Culture=neutral, PublicKeyToken=3e4669d2f30244f4, processorArchitecture=MSIL">
+      <HintPath>..\packages\Extended.Wpf.Toolkit.4.6.1\lib\net40\Xceed.Wpf.AvalonDock.Themes.Metro.dll</HintPath>
+    </Reference>
+    <Reference Include="Xceed.Wpf.AvalonDock.Themes.VS2010, Version=4.6.0.0, Culture=neutral, PublicKeyToken=3e4669d2f30244f4, processorArchitecture=MSIL">
+      <HintPath>..\packages\Extended.Wpf.Toolkit.4.6.1\lib\net40\Xceed.Wpf.AvalonDock.Themes.VS2010.dll</HintPath>
+    </Reference>
+    <Reference Include="Xceed.Wpf.Toolkit, Version=4.6.0.0, Culture=neutral, PublicKeyToken=3e4669d2f30244f4, processorArchitecture=MSIL">
+      <HintPath>..\packages\Extended.Wpf.Toolkit.4.6.1\lib\net40\Xceed.Wpf.Toolkit.dll</HintPath>
+    </Reference>
   </ItemGroup>
   <ItemGroup>
     <ApplicationDefinition Include="App.xaml">
@@ -79,18 +94,24 @@
       <SubType>Designer</SubType>
     </ApplicationDefinition>
     <Compile Include="Core\NavigationService.cs" />
+    <Compile Include="Core\PriorityQueueManager.cs" />
     <Compile Include="Core\RelayCommand.cs" />
+    <Compile Include="Core\RelayCommandT.cs" />
+    <Compile Include="Core\TimeSpanToNullableConverter.cs" />
     <Compile Include="FrontendLogic\AnyTrueInCollectionConverter.cs" />
     <Compile Include="FrontendLogic\Base64ToImageSourceConverter.cs" />
     <Compile Include="FrontendLogic\Base64ToPdfStreamConverter.cs" />
     <Compile Include="FrontendLogic\Base64ToTextConverter.cs" />
     <Compile Include="FrontendLogic\BoolToVisibilityConverter.cs" />
+    <Compile Include="FrontendLogic\EventPhotoConverter.cs" />
     <Compile Include="FrontendLogic\FilePathToImageSourceConverter.cs" />
     <Compile Include="FrontendLogic\FileToContentConverter.cs" />
     <Compile Include="FrontendLogic\FileTypeToVisibilityConverter.cs" />
     <Compile Include="FrontendLogic\InverseBoolToVisibilityConverter.cs" />
+    <Compile Include="FrontendLogic\MaxItemsConverter.cs" />
     <Compile Include="FrontendLogic\PasswordBoxHelper.cs" />
     <Compile Include="FrontendLogic\ScaleConverter.cs" />
+    <Compile Include="FrontendLogic\TagSelectionConverter.cs" />
     <Compile Include="MVVM\Model\AnnouncementModel.cs" />
     <Compile Include="MVVM\Model\EventModel.cs" />
     <Compile Include="MVVM\Model\GuestUserModel.cs" />
@@ -100,7 +121,8 @@
     <Compile Include="MVVM\Model\TagsModel.cs" />
     <Compile Include="MVVM\Model\UserModel.cs" />
     <Compile Include="MVVM\Model\UserSession.cs" />
-    <Compile Include="MVVM\View-Model\ForumViewModel.cs" />
+    <Compile Include="MVVM\View-Model\CreateEventViewModel.cs" />
+    <Compile Include="MVVM\View-Model\EventsViewModel.cs" />
     <Compile Include="MVVM\View-Model\LoginRegisterViewModel.cs" />
     <Compile Include="MVVM\View-Model\MainWindowViewModel.cs" />
     <Compile Include="MVVM\View-Model\ReportService.cs" />
@@ -109,14 +131,23 @@
     <Compile Include="MVVM\View\AllReportsUserControl.xaml.cs">
       <DependentUpon>AllReportsUserControl.xaml</DependentUpon>
     </Compile>
-    <Compile Include="MVVM\View\ForumUserControl.xaml.cs">
-      <DependentUpon>ForumUserControl.xaml</DependentUpon>
+    <Compile Include="MVVM\View\CreateEventUserControl.xaml.cs">
+      <DependentUpon>CreateEventUserControl.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="MVVM\View\CreateEventView.xaml.cs">
+      <DependentUpon>CreateEventView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="MVVM\View\EventsViewUserControl.xaml.cs">
+      <DependentUpon>EventsViewUserControl.xaml</DependentUpon>
     </Compile>
     <Compile Include="MVVM\View\LoginRegisterMenu.xaml.cs">
       <DependentUpon>LoginRegisterMenu.xaml</DependentUpon>
     </Compile>
     <Compile Include="MVVM\View\LoginUserControl.xaml.cs">
       <DependentUpon>LoginUserControl.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="MVVM\View\ReccomendedEventsUserControl.xaml.cs">
+      <DependentUpon>ReccomendedEventsUserControl.xaml</DependentUpon>
     </Compile>
     <Compile Include="MVVM\View\RegisterUserControl.xaml.cs">
       <DependentUpon>RegisterUserControl.xaml</DependentUpon>
@@ -126,6 +157,9 @@
     </Compile>
     <Compile Include="MVVM\View\ReportUserControl.xaml.cs">
       <DependentUpon>ReportUserControl.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="MVVM\View\StaffEventsDisplayUserControl.xaml.cs">
+      <DependentUpon>StaffEventsDisplayUserControl.xaml</DependentUpon>
     </Compile>
     <Compile Include="MVVM\View\StaffMenu.xaml.cs">
       <DependentUpon>StaffMenu.xaml</DependentUpon>
@@ -149,7 +183,15 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="MVVM\View\ForumUserControl.xaml">
+    <Page Include="MVVM\View\CreateEventUserControl.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="MVVM\View\CreateEventView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="MVVM\View\EventsViewUserControl.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -165,6 +207,10 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
+    <Page Include="MVVM\View\ReccomendedEventsUserControl.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="MVVM\View\RegisterUserControl.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
@@ -174,6 +220,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="MVVM\View\ReportUserControl.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="MVVM\View\StaffEventsDisplayUserControl.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -304,6 +354,96 @@
   </ItemGroup>
   <ItemGroup>
     <Resource Include="Resources\Icons\icon_profile.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\Hardcoded\MandelaDay\mandela1.jpg" />
+    <Resource Include="Resources\Hardcoded\MandelaDay\mandela2.jpg" />
+    <Resource Include="Resources\Hardcoded\MandelaDay\mandela3.jpg" />
+    <Resource Include="Resources\Hardcoded\MandelaDay\mandela4.jpg" />
+    <Resource Include="Resources\Hardcoded\MandelaDay\mandela5.jpg" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\Hardcoded\HeratigeDay\heratige1.jpg" />
+    <Resource Include="Resources\Hardcoded\HeratigeDay\heratige3.jpg" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\Hardcoded\HeratigeDay\heratige4.jpeg" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\Hardcoded\HeratigeDay\heratige2.jpg" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\Hardcoded\CycleTour\cycle1.jpg" />
+    <Resource Include="Resources\Hardcoded\CycleTour\cycle2.jpg" />
+    <Resource Include="Resources\Hardcoded\CycleTour\cycle3.jpg" />
+    <Resource Include="Resources\Hardcoded\CycleTour\cycle4.jpg" />
+    <Resource Include="Resources\Hardcoded\CycleTour\cycle5.jpeg" />
+    <Resource Include="Resources\Hardcoded\CycleTour\cycle6.jpg" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\Hardcoded\Kirstenbosch\kirstenbosch1.jpg" />
+    <Resource Include="Resources\Hardcoded\Kirstenbosch\kirstenbosch2.jpg" />
+    <Resource Include="Resources\Hardcoded\Kirstenbosch\kirstenbosch3.jpg" />
+    <Resource Include="Resources\Hardcoded\Kirstenbosch\kirstenbosch4.jpg" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\Hardcoded\JobFair\job1.jpg" />
+    <Resource Include="Resources\Hardcoded\JobFair\job2.jpg" />
+    <Resource Include="Resources\Hardcoded\JobFair\job3.jpg" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\Hardcoded\TblHike\hike1.jpg" />
+    <Resource Include="Resources\Hardcoded\TblHike\hike2.jpg" />
+    <Resource Include="Resources\Hardcoded\TblHike\hike3.jpg" />
+    <Resource Include="Resources\Hardcoded\TblHike\hike4.jpg" />
+    <Resource Include="Resources\Hardcoded\TblHike\hike5.jpg" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\Hardcoded\Youth\youth1.jpg" />
+    <Resource Include="Resources\Hardcoded\Youth\youth2.jpg" />
+    <Resource Include="Resources\Hardcoded\Youth\youth3.jpg" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\Hardcoded\Race\Race1.jpg" />
+    <Resource Include="Resources\Hardcoded\Race\race2.jpg" />
+    <Resource Include="Resources\Hardcoded\Race\race3.jpg" />
+    <Resource Include="Resources\Hardcoded\Race\race4.jpg" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\Hardcoded\Disaster\disaster1.jpg" />
+    <Resource Include="Resources\Hardcoded\Disaster\disaster2.jpg" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\Hardcoded\Oppikoppi\oppikoppi1.jpg" />
+    <Resource Include="Resources\Hardcoded\Oppikoppi\oppikoppi2.jpg" />
+    <Resource Include="Resources\Hardcoded\Oppikoppi\oppikoppi3.jpg" />
+    <Resource Include="Resources\Hardcoded\Oppikoppi\oppikoppi4.jpg" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\Hardcoded\Marathon\marathon1.JPG" />
+    <Resource Include="Resources\Hardcoded\Marathon\marathon2.jpg" />
+    <Resource Include="Resources\Hardcoded\Marathon\marathon3.jpg" />
+    <Resource Include="Resources\Hardcoded\Marathon\marathon4.jpg" />
+    <Resource Include="Resources\Hardcoded\Marathon\marathon4.png" />
+    <Resource Include="Resources\Hardcoded\Marathon\marathon5.jpeg" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\Hardcoded\Franschoek\franschoek1.jpg" />
+    <Resource Include="Resources\Hardcoded\Franschoek\franschoek2.jpg" />
+    <Resource Include="Resources\Hardcoded\Franschoek\franschoek3.jpg" />
+    <Resource Include="Resources\Hardcoded\Franschoek\franschoek4.jpg" />
+    <Resource Include="Resources\Hardcoded\Franschoek\franschoek5.jpg" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\Hardcoded\National\national1.jpg" />
+    <Resource Include="Resources\Hardcoded\National\national2.jpg" />
+    <Resource Include="Resources\Hardcoded\National\national3.jpg" />
+    <Resource Include="Resources\Hardcoded\National\national4.jpg" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\Hardcoded\Harvest\harvest1.jpg" />
+    <Resource Include="Resources\Hardcoded\Harvest\harvest2.jpg" />
+    <Resource Include="Resources\Hardcoded\Harvest\harvest3.jpg" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Import Project="..\packages\Syncfusion.PdfToImageConverter.WPF.26.2.14\build\net462\Syncfusion.PdfToImageConverter.WPF.targets" Condition="Exists('..\packages\Syncfusion.PdfToImageConverter.WPF.26.2.14\build\net462\Syncfusion.PdfToImageConverter.WPF.targets')" />

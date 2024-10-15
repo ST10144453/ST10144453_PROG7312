@@ -27,10 +27,6 @@ namespace ST10144453_PROG7312.MVVM.View
         /// </summary>
         private ReportUserControl _reportIssueView;
 
-        /// <summary>
-        /// This constant holds the duration of the animation.
-        /// </summary>
-        private ForumUserControl _pastReportsView;
 
         private AllReportsUserControl _allReportsUserControl;
 

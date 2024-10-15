@@ -195,14 +195,6 @@
                 TextChanged="OnDescriptionTextChanged"
                 ToolTip="Provide a detailed description of the issue here." />
 
-            <StackPanel Margin="0,5,0,10" Orientation="Horizontal">
-                <CheckBox x:Name="MyCheckBox" 
-                          Margin="0,0,5,0" 
-                          IsChecked="{Binding IsPrivate}"
-                          ToolTip="Mark this report as private."/>
-                <Label Content="Private" />
-            </StackPanel>
-
             <!--  Submit Button  -->
             <Button
                 x:Name="SubmitButton"

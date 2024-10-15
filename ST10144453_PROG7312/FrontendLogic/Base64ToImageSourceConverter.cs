@@ -14,55 +14,35 @@ namespace ST10144453_PROG7312.FrontendLogic
     /// </summary>
     public class Base64ToImageSourceConverter : IValueConverter
     {
-        //++++++++++++++ Methods: Convert ++++++++++++++//
-        /// <summary>
-        /// This method converts a base64 string to an image source.
-        /// </summary>
-        /// <param name="value"></param>
-        /// <param name="targetType"></param>
-        /// <param name="parameter"></param>
-        /// <param name="culture"></param>
-        /// <returns></returns>
         public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
         {
-            var mediaItem = value as MediaItem;
-            if (mediaItem == null || !mediaItem.IsImage)
-                return null;
-
-            try
+            if (value is string base64String && !string.IsNullOrEmpty(base64String))
             {
-                var base64String = mediaItem.Base64String;
-                var imageData = System.Convert.FromBase64String(base64String);
-                using (var stream = new MemoryStream(imageData))
+                try
                 {
-                    var bitmap = new BitmapImage();
-                    bitmap.BeginInit();
-                    bitmap.StreamSource = stream;
-                    bitmap.CacheOption = BitmapCacheOption.OnLoad;
-                    bitmap.EndInit();
-                    return bitmap;
+                    byte[] imageBytes = System.Convert.FromBase64String(base64String);
+                    using (var ms = new MemoryStream(imageBytes))
+                    {
+                        var image = new BitmapImage();
+                        image.BeginInit();
+                        image.StreamSource = ms;
+                        image.CacheOption = BitmapCacheOption.OnLoad;
+                        image.EndInit();
+                        return image;
+                    }
+                }
+                catch (Exception ex)
+                {
+                    Console.WriteLine($"Error converting base64 string to image: {ex.Message}");
                 }
             }
-            catch (Exception ex)
-            {
-                // Log or handle the exception
-                return null;
-            }
+            return null;
         }
 
-        //++++++++++++++ Methods: ConvertBack ++++++++++++++//
-        /// <summary>
-        /// This method converts an image source to a base64 string.
-        /// </summary>
-        /// <param name="value"></param>
-        /// <param name="targetType"></param>
-        /// <param name="parameter"></param>
-        /// <param name="culture"></param>
-        /// <returns></returns>
-        /// <exception cref="NotImplementedException"></exception>
         public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
         {
             throw new NotImplementedException();
+            Console.WriteLine("ConvertBack method not implemented.");
         }
     }
 }

@@ -17,6 +17,8 @@ namespace ST10144453_PROG7312.MVVM.Model
         public string email { get; set; }
         public bool isStaff { get; set; }
         public string profilePhoto { get; set; }
+        public List<TagsModel> SelectedTags { get; set; } = new List<TagsModel>();
+
 
         //~~~~~~~~~~~~~ Methods: Default Constructor ~~~~~~~~~~~~~//
         /// <summary>
@@ -33,17 +35,9 @@ namespace ST10144453_PROG7312.MVVM.Model
         /// There is only 1 staff member as I feel like that any more would be redundant. 
         /// </summary>
         public static List<UserModel> Users => new List<UserModel>
-        {
-            new UserModel
-            {
-                userID = Guid.Parse("12345678-1234-1234-1234-123456789012"),
-                userName = "Koos_Staff1",
-                password = "K00s_B0x",
-                email = "Koos@staff.co.za",
-                isStaff = true,
-                profilePhoto = "Resources/Hardcoded/ProfilePhoto/koos_pfp.jpeg" //Profile photo is hardcoded into the project because HE is :) 
-            }
-        };
+{
+   
+};
 
     }
 }

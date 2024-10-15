@@ -162,6 +162,7 @@
                         Margin="0,0,0,10"
                         Padding="10,5"
                         Content="Reports"
+                        Click="ShowReports_Click"
                         Style="{StaticResource ImageButtonStyle}">
                         <Button.ContentTemplate>
                             <DataTemplate>
@@ -176,10 +177,12 @@
                             </DataTemplate>
                         </Button.ContentTemplate>
                     </Button>
+                    
                     <Button
                         Margin="0,0,0,10"
                         Padding="10,5"
                         Content="Manage Events"
+                        Click="ManageEvents_Click"
                         Style="{StaticResource ImageButtonStyle}">
                         <Button.ContentTemplate>
                             <DataTemplate>
@@ -205,7 +208,7 @@
                     Grid.Row="1"
                     Grid.Column="1"
                     Margin="10,0,20,20"
-                    Background="LightGray"
+                    Background="Transparent"
                     CornerRadius="5">
                     <!--  Place your content UserControl here  -->
                     <ContentControl x:Name="ContentArea" />

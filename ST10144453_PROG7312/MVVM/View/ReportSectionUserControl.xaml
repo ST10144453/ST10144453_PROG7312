@@ -156,7 +156,7 @@
                                 Height="24"
                                 Margin="5,0,10,0"
                                 Source="pack://application:,,,/Resources/Icons/request_Icon.png" />
-                            <TextBlock VerticalAlignment="Center" Text="Your Reports" />
+                            <TextBlock VerticalAlignment="Center" Text="All Reports" />
                         </StackPanel>
                     </Button>
                     <Button

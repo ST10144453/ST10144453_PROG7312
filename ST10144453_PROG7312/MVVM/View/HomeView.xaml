@@ -172,7 +172,7 @@
                         <Button
                             Height="80"
                             Margin="0,10"
-                            Command="{Binding ShowUnderDevelopmentPopupCommand}"
+                            Command="{Binding NavigateEventCommand}"
                             FontSize="24"
                             Style="{StaticResource ImageButtonStyle}">
                             <StackPanel HorizontalAlignment="Left" Orientation="Horizontal">

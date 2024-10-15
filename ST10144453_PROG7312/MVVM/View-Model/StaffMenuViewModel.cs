@@ -1,6 +1,7 @@
 ﻿using ST10144453_PROG7312.MVVM.Model;
 using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Linq;
 using System.Runtime.CompilerServices;
@@ -44,6 +45,7 @@ namespace ST10144453_PROG7312.MVVM.View_Model
                 OnPropertyChanged();
             }
         }
+
 
         public event PropertyChangedEventHandler PropertyChanged;
 
