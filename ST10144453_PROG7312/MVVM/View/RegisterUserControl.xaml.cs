@@ -55,7 +55,7 @@ namespace ST10144453_PROG7312.MVVM.View
             bitmap.BeginInit();
             bitmap.UriSource = new Uri(filePath);
             bitmap.EndInit();
-            ProfilePhoto.Source = bitmap;
+            //ProfilePhoto.Source = bitmap;
         }
 
         private void TogglePasswordVisibility_Click(object sender, RoutedEventArgs e)
