@@ -112,22 +112,49 @@ namespace ST10144453_PROG7312.MVVM.View
             }
         }
 
-        // Define the OnMediaDrop method
+        //++++++++++++++ Methods: OnMediaDrop ++++++++++++++//
+        /// <summary>
+        /// This method is called when a media file is dropped.
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void OnMediaDrop(object sender, DragEventArgs e)
         {
-            // Handle the drop event
+            if (e.Data.GetDataPresent(DataFormats.FileDrop))
+            {
+                string[] files = (string[])e.Data.GetData(DataFormats.FileDrop);
+                // Handle the dropped files
+                MessageBox.Show($"Dropped {files.Length} file(s).");
+            }
         }
 
-        // Define the OnMediaDragEnter method
+        //++++++++++++++ Methods: OnMediaDragEnter ++++++++++++++//
+        /// <summary>
+        /// This method is called when a media file is dragged into the control.
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void OnMediaDragEnter(object sender, DragEventArgs e)
         {
-            // Handle the drag enter event
+            if (e.Data.GetDataPresent(DataFormats.FileDrop))
+            {
+                e.Effects = DragDropEffects.Copy;
+            }
+            else
+            {
+                e.Effects = DragDropEffects.None;
+            }
         }
 
-        // Define the OnMediaDragLeave method
+        //++++++++++++++ Methods: OnMediaDragLeave ++++++++++++++//
+        /// <summary>
+        /// This method is called when a media file is dragged out of the control.
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void OnMediaDragLeave(object sender, DragEventArgs e)
         {
-            // Handle the drag leave event
+            // Handle the drag leave event if needed
         }
     }
 }

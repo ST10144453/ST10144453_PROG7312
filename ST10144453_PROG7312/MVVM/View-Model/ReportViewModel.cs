@@ -513,7 +513,7 @@ namespace ST10144453_PROG7312.MVVM.View_Model
         /// <returns></returns>
         private bool IsTextFile(string filename)
         {
-            string[] textExtensions = { ".txt", ".csv", ".log" };
+            string[] textExtensions = { ".txt"};
             return textExtensions.Contains(Path.GetExtension(filename).ToLower());
         }
 
@@ -549,7 +549,7 @@ namespace ST10144453_PROG7312.MVVM.View_Model
             var openFileDialog = new OpenFileDialog
             {
                 Multiselect = true,
-                Filter = "All Files (*.*)|*.*"
+                Filter = "Image Files (*.png;*.jpg;*.jpeg)|*.png;*.jpg;*.jpeg|Text Files (*.txt;*.csv;*.log)|*.txt;*.csv;*.log|PDF Files (*.pdf)|*.pdf|Word Files (*.doc;*.docx)|*.doc;*.docx|All Files (*.*)|*.*"
             };
 
             if (openFileDialog.ShowDialog() == true)

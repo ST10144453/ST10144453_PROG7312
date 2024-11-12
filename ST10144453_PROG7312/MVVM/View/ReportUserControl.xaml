@@ -9,9 +9,11 @@
     d:DesignHeight="1080"
     d:DesignWidth="1710"
     Background="Transparent"
-    mc:Ignorable="d">
-
-
+    mc:Ignorable="d"
+    AllowDrop="True"
+    DragEnter="OnMediaDragEnter"
+    DragLeave="OnMediaDragLeave"
+    Drop="OnMediaDrop">
     <UserControl.Resources>
         <ResourceDictionary>
             <!--  Merging external resource dictionaries  -->
