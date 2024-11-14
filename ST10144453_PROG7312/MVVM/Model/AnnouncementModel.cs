@@ -12,6 +12,19 @@ namespace ST10144453_PROG7312.MVVM.Model
         public string announcementTitle { get; set; }
         public string announcementDescription { get; set; }
         public DateTime announcementDate { get; set; }
+        public string announcementImage { get; set; }
+        public string announcementIcon { get; set; }
+        public EventModel relatedEvent { get; set; }
+        public AnnouncementType announcementType { get; set; }
+        public bool isHighPriority { get; set; }
+
+        public enum AnnouncementType
+        {
+            Event,
+            Update,
+            Reminder,
+            Alert
+        }
 
         public AnnouncementModel()
         {

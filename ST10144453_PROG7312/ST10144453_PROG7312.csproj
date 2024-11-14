@@ -37,6 +37,9 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="HtmlAgilityPack, Version=1.11.71.0, Culture=neutral, PublicKeyToken=bd319b19eaf3b43a, processorArchitecture=MSIL">
+      <HintPath>..\packages\HtmlAgilityPack.1.11.71\lib\Net45\HtmlAgilityPack.dll</HintPath>
+    </Reference>
     <Reference Include="Newtonsoft.Json, Version=13.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
       <HintPath>..\packages\Newtonsoft.Json.13.0.3\lib\net45\Newtonsoft.Json.dll</HintPath>
     </Reference>
@@ -98,6 +101,7 @@
     <Compile Include="Core\RelayCommand.cs" />
     <Compile Include="Core\RelayCommandT.cs" />
     <Compile Include="Core\TimeSpanToNullableConverter.cs" />
+    <Compile Include="Core\WebScraperService.cs" />
     <Compile Include="FrontendLogic\AnyTrueInCollectionConverter.cs" />
     <Compile Include="FrontendLogic\Base64ToImageSourceConverter.cs" />
     <Compile Include="FrontendLogic\Base64ToPdfStreamConverter.cs" />
@@ -110,6 +114,7 @@
     <Compile Include="FrontendLogic\InverseBoolToVisibilityConverter.cs" />
     <Compile Include="FrontendLogic\MaxItemsConverter.cs" />
     <Compile Include="FrontendLogic\PasswordBoxHelper.cs" />
+    <Compile Include="FrontendLogic\PriorityToBrushConverter.cs" />
     <Compile Include="FrontendLogic\ScaleConverter.cs" />
     <Compile Include="FrontendLogic\TagSelectionConverter.cs" />
     <Compile Include="MVVM\Model\AnnouncementModel.cs" />
@@ -444,6 +449,29 @@
     <Resource Include="Resources\Hardcoded\Harvest\harvest1.jpg" />
     <Resource Include="Resources\Hardcoded\Harvest\harvest2.jpg" />
     <Resource Include="Resources\Hardcoded\Harvest\harvest3.jpg" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\Icons\art.png" />
+    <Resource Include="Resources\Icons\community.png" />
+    <Resource Include="Resources\Icons\consultation.png" />
+    <Resource Include="Resources\Icons\cultural.png" />
+    <Resource Include="Resources\Icons\default.png" />
+    <Resource Include="Resources\Icons\disaster.png" />
+    <Resource Include="Resources\Icons\education.png" />
+    <Resource Include="Resources\Icons\environment.png" />
+    <Resource Include="Resources\Icons\family.png" />
+    <Resource Include="Resources\Icons\health.png" />
+    <Resource Include="Resources\Icons\historical.png" />
+    <Resource Include="Resources\Icons\job.png" />
+    <Resource Include="Resources\Icons\market.png" />
+    <Resource Include="Resources\Icons\meeting.png" />
+    <Resource Include="Resources\Icons\participation.png" />
+    <Resource Include="Resources\Icons\safety.png" />
+    <Resource Include="Resources\Icons\social.png" />
+    <Resource Include="Resources\Icons\sports.png" />
+    <Resource Include="Resources\Icons\traffic.png" />
+    <Resource Include="Resources\Icons\volunteer.png" />
+    <Resource Include="Resources\Icons\youth.png" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Import Project="..\packages\Syncfusion.PdfToImageConverter.WPF.26.2.14\build\net462\Syncfusion.PdfToImageConverter.WPF.targets" Condition="Exists('..\packages\Syncfusion.PdfToImageConverter.WPF.26.2.14\build\net462\Syncfusion.PdfToImageConverter.WPF.targets')" />

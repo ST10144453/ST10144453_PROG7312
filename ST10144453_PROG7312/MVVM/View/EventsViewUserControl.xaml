@@ -6,7 +6,7 @@
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:local="clr-namespace:ST10144453_PROG7312.MVVM.View"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-    xmlns:viewModel="clr-namespace:ST10144453_PROG7312.MVVM.View_Model" d:DataContext="{d:DesignInstance Type=viewModel:EventsViewModel}"
+    xmlns:viewModel="clr-namespace:ST10144453_PROG7312.MVVM.View_Model"
     d:DesignHeight="1080"
     d:DesignWidth="1910"
     Background="Transparent"
@@ -16,6 +16,7 @@
         <converters:MaxItemsConverter x:Key="MaxItemsConverter" />
         <converters:Base64ToImageSourceConverter x:Key="Base64ToImageConverter" />
         <converters:EventPhotoConverter x:Key="EventPhotoConverter" />
+        <converters:PriorityToBrushConverter x:Key="PriorityToBrushConverter" />
         <!--  Base Button Style  -->
         <Style x:Key="ImageButtonStyle" TargetType="Button">
             <Setter Property="Background">
@@ -182,6 +183,30 @@
                 </Grid>
             </Border>
         </DataTemplate>
+
+        <Style x:Key="CircularButtonStyle" TargetType="Button">
+            <Setter Property="Background" Value="White" />
+            <Setter Property="BorderBrush" Value="#DDD" />
+            <Setter Property="BorderThickness" Value="1" />
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="Button">
+                        <Border
+                            Background="{TemplateBinding Background}"
+                            BorderBrush="{TemplateBinding BorderBrush}"
+                            BorderThickness="{TemplateBinding BorderThickness}"
+                            CornerRadius="15">
+                            <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center" />
+                        </Border>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+            <Style.Triggers>
+                <Trigger Property="IsMouseOver" Value="True">
+                    <Setter Property="Background" Value="#F5F5F5" />
+                </Trigger>
+            </Style.Triggers>
+        </Style>
     </UserControl.Resources>
 
     <!--  Main Grid for the Layout  -->
@@ -256,16 +281,99 @@
             <ScrollViewer VerticalScrollBarVisibility="Auto">
                 <StackPanel Orientation="Vertical">
 
-                    <!-- Announcement Section -->
-                    <Border Background="White" CornerRadius="10" Margin="10" Padding="10">
-                        <StackPanel>
-                            <TextBlock FontSize="20" FontWeight="Bold" Text="Announcements" />
-                            <TextBlock FontSize="16" FontWeight="SemiBold" Text="{Binding CurrentAnnouncement.announcementTitle}" />
-                            <TextBlock Text="{Binding CurrentAnnouncement.announcementDescription}" />
-                            <TextBlock FontSize="12" FontStyle="Italic" Text="{Binding CurrentAnnouncement.announcementDate, StringFormat='{}{0:MMMM dd, yyyy}'}" />
-                        </StackPanel>
+                    <!--  Announcement Section  -->
+                    <Border
+                        Margin="10"
+                        Padding="15"
+                        Background="White"
+                        CornerRadius="15">
+                        <Grid>
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="Auto" />
+                                <RowDefinition Height="*" />
+                            </Grid.RowDefinitions>
+
+                            <!--  Header with Navigation  -->
+                            <Grid>
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="Auto" />
+                                    <ColumnDefinition Width="*" />
+                                    <ColumnDefinition Width="Auto" />
+                                </Grid.ColumnDefinitions>
+
+                                <!--  Previous Button  -->
+                                <Button
+                                    Width="30"
+                                    Height="30"
+                                    Margin="0,0,10,0"
+                                    Command="{Binding PreviousAnnouncementCommand}"
+                                    Style="{StaticResource CircularButtonStyle}">
+                                    <Path
+                                        Data="M 12,24 L 4,12 L 12,0"
+                                        Stroke="#666"
+                                        StrokeThickness="2" />
+                                </Button>
+
+                                <!--  Title  -->
+                                <TextBlock
+                                    Grid.Column="1"
+                                    FontSize="24"
+                                    FontWeight="Bold"
+                                    Text="Announcements" />
+
+                                <!--  Next Button  -->
+                                <Button
+                                    Grid.Column="2"
+                                    Width="30"
+                                    Height="30"
+                                    Margin="10,0,0,0"
+                                    Command="{Binding NextAnnouncementCommand}"
+                                    Style="{StaticResource CircularButtonStyle}">
+                                    <Path
+                                        Data="M 4,24 L 12,12 L 4,0"
+                                        Stroke="#666"
+                                        StrokeThickness="2" />
+                                </Button>
+                            </Grid>
+
+                            <!--  Current Announcement  -->
+                            <Border
+                                Grid.Row="1"
+                                Margin="0,10,0,0"
+                                Padding="10"
+                                Background="{Binding CurrentAnnouncement.isHighPriority, Converter={StaticResource PriorityToBrushConverter}}"
+                                CornerRadius="10">
+                                <Grid>
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="Auto" />
+                                        <ColumnDefinition Width="*" />
+                                    </Grid.ColumnDefinitions>
+
+                                    <!--  Icon  -->
+                                    <Image
+                                        Width="40"
+                                        Height="40"
+                                        Margin="0,0,15,0"
+                                        Source="{Binding CurrentAnnouncement.announcementIcon}" />
+
+                                    <!--  Content  -->
+                                    <StackPanel Grid.Column="1">
+                                        <TextBlock
+                                            FontSize="18"
+                                            FontWeight="SemiBold"
+                                            Text="{Binding CurrentAnnouncement.announcementTitle}" />
+                                        <TextBlock Text="{Binding CurrentAnnouncement.announcementDescription}" TextWrapping="Wrap" />
+                                        <TextBlock
+                                            Margin="0,5,0,0"
+                                            FontSize="12"
+                                            Foreground="#666"
+                                            Text="{Binding CurrentAnnouncement.announcementDate, StringFormat='{}{0:MMMM dd, yyyy}'}" />
+                                    </StackPanel>
+                                </Grid>
+                            </Border>
+                        </Grid>
                     </Border>
-                    
+
                     <TextBlock
                         Margin="10"
                         FontSize="20"
@@ -361,7 +469,6 @@
 
         <!--  Side Navigation Bar (Right)  -->
         <Grid Grid.Column="2">
-            <!--  Rectangle with Curved Corners and Drop Shadow  -->
             <Rectangle
                 HorizontalAlignment="Stretch"
                 VerticalAlignment="Stretch"
@@ -376,38 +483,124 @@
                 </Rectangle.Clip>
             </Rectangle>
 
-            <!--  StackPanel with content, placed above the Rectangle  -->
-            <StackPanel
-                x:Name="ContentPanelRight"
-                Width="300"
-                Margin="0,0,0,0"
-                HorizontalAlignment="Center"
-                VerticalAlignment="Center"
-                Panel.ZIndex="1">
+            <StackPanel Margin="20">
+                <!--  Search Section  -->
+                <TextBlock
+                    Margin="0,0,0,10"
+                    FontSize="24"
+                    FontWeight="Bold"
+                    Text="Search Events" />
+                <Border
+                    Margin="0,0,0,20"
+                    Background="White"
+                    CornerRadius="10">
+                    <TextBox
+                        Margin="10"
+                        Padding="5"
+                        Background="Transparent"
+                        BorderThickness="0"
+                        Text="{Binding SearchQuery, UpdateSourceTrigger=PropertyChanged}"
+                        ToolTip="Search events by title or description" />
+                </Border>
 
-                <StackPanel x:Name="ButtonStackRight" Margin="0,0,0,0">
+                <!--  Date Range Section  -->
+                <TextBlock
+                    Margin="0,0,0,10"
+                    FontSize="24"
+                    FontWeight="Bold"
+                    Text="Date Range" />
+                <Border
+                    Margin="0,0,0,10"
+                    Background="White"
+                    CornerRadius="10">
+                    <DatePicker
+                        Margin="10"
+                        Background="Transparent"
+                        BorderThickness="0"
+                        SelectedDate="{Binding StartDate}"
+                        ToolTip="Start Date" />
+                </Border>
+                <Border
+                    Margin="0,0,0,20"
+                    Background="White"
+                    CornerRadius="10">
+                    <DatePicker
+                        Margin="10"
+                        Background="Transparent"
+                        BorderThickness="0"
+                        SelectedDate="{Binding EndDate}"
+                        ToolTip="End Date" />
+                </Border>
 
-                    <!--  Tags List  -->
-                    <TextBlock
-                        Margin="20,20,0,10"
-                        FontSize="18"
-                        FontWeight="SemiBold"
-                        Foreground="#4d4d4d"
-                        Text="Select Tags" />
-                    <ItemsControl ItemsSource="{Binding Tags}">
-                        <ItemsControl.ItemTemplate>
-                            <DataTemplate>
-                                <CheckBox
-                                    Command="{Binding DataContext.TagSelectedCommand, RelativeSource={RelativeSource AncestorType=ItemsControl}}"
-                                    CommandParameter="{Binding}"
-                                    Content="{Binding TagName}"
-                                    IsChecked="{Binding IsSelected, Mode=TwoWay}" />
-                            </DataTemplate>
-                        </ItemsControl.ItemTemplate>
-                    </ItemsControl>
+                <!--  Tags Section  -->
+                <TextBlock
+                    Margin="0,0,0,10"
+                    FontSize="24"
+                    FontWeight="Bold"
+                    Text="Filter by Tags" />
+                <Border
+                    Margin="0,0,0,20"
+                    Padding="10"
+                    Background="White"
+                    CornerRadius="10">
+                    <ScrollViewer MaxHeight="300" VerticalScrollBarVisibility="Auto">
+                        <ItemsControl ItemsSource="{Binding Tags}">
+                            <ItemsControl.ItemTemplate>
+                                <DataTemplate>
+                                    <CheckBox
+                                        Margin="0,5"
+                                        Command="{Binding DataContext.TagSelectedCommand, RelativeSource={RelativeSource AncestorType=ItemsControl}}"
+                                        CommandParameter="{Binding}"
+                                        Content="{Binding TagName}"
+                                        IsChecked="{Binding IsSelected, Mode=TwoWay}">
+                                        <CheckBox.Style>
+                                            <Style TargetType="CheckBox">
+                                                <Style.Triggers>
+                                                    <Trigger Property="IsChecked" Value="True">
+                                                        <Setter Property="Foreground" Value="#FF4081" />
+                                                    </Trigger>
+                                                </Style.Triggers>
+                                            </Style>
+                                        </CheckBox.Style>
+                                    </CheckBox>
+                                </DataTemplate>
+                            </ItemsControl.ItemTemplate>
+                        </ItemsControl>
+                    </ScrollViewer>
+                </Border>
 
-                </StackPanel>
+                <!--  Clear Filters Button  -->
+                <Button
+                    Height="40"
+                    Margin="0,20,0,0"
+                    Background="#FF0000"
+                    Command="{Binding ClearFiltersCommand}"
+                    Content="Clear Filters"
+                    Foreground="White">
+                    <Button.Style>
+                        <Style TargetType="Button">
+                            <Setter Property="Template">
+                                <Setter.Value>
+                                    <ControlTemplate TargetType="Button">
+                                        <Border Background="{TemplateBinding Background}" CornerRadius="20">
+                                            <ContentPresenter
+                                                HorizontalAlignment="Center"
+                                                VerticalAlignment="Center"
+                                                Content="{TemplateBinding Content}" />
+                                        </Border>
+                                    </ControlTemplate>
+                                </Setter.Value>
+                            </Setter>
+                            <Style.Triggers>
+                                <Trigger Property="IsMouseOver" Value="True">
+                                    <Setter Property="Background" Value="#FF2B5A" />
+                                </Trigger>
+                            </Style.Triggers>
+                        </Style>
+                    </Button.Style>
+                </Button>
             </StackPanel>
         </Grid>
     </Grid>
 </UserControl>
+
