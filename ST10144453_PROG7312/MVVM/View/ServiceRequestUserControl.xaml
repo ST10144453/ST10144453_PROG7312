@@ -1,0 +1,119 @@
+﻿<UserControl
+    x:Class="ST10144453_PROG7312.MVVM.View.ServiceRequestUserControl"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:local="clr-namespace:ST10144453_PROG7312.MVVM.View"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:view_model="clr-namespace:ST10144453_PROG7312.MVVM.View_Model"
+    d:DataContext="{d:DesignInstance Type=view_model:ServiceRequestViewModel}"
+    d:DesignHeight="800"
+    d:DesignWidth="1000"
+    mc:Ignorable="d">
+
+    <ScrollViewer>
+        <Grid Margin="20">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="*" />
+            </Grid.RowDefinitions>
+
+            <!--  Header  -->
+            <TextBlock
+                Margin="0,0,0,20"
+                FontSize="24"
+                FontWeight="Bold"
+                Text="Service Request Form" />
+
+            <!--  Form Content  -->
+            <StackPanel Grid.Row="1" Margin="0,10">
+                <!--  Personal Information Section  -->
+                <GroupBox Margin="0,0,0,20" Header="Personal Information">
+                    <Grid Margin="10">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="*" />
+                            <ColumnDefinition Width="*" />
+                        </Grid.ColumnDefinitions>
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="Auto" />
+                            <RowDefinition Height="Auto" />
+                            <RowDefinition Height="Auto" />
+                        </Grid.RowDefinitions>
+
+                        <StackPanel Grid.Column="0" Margin="0,0,10,0">
+                            <Label Content="First Name:" />
+                            <TextBox Margin="0,0,0,10" Text="{Binding FirstName, UpdateSourceTrigger=PropertyChanged}" />
+
+                            <Label Content="Email:" />
+                            <TextBox Margin="0,0,0,10" Text="{Binding Email, UpdateSourceTrigger=PropertyChanged}" />
+                        </StackPanel>
+
+                        <StackPanel Grid.Column="1">
+                            <Label Content="Surname:" />
+                            <TextBox Margin="0,0,0,10" Text="{Binding Surname, UpdateSourceTrigger=PropertyChanged}" />
+
+                            <Label Content="Phone Number:" />
+                            <TextBox Margin="0,0,0,10" Text="{Binding PhoneNumber, UpdateSourceTrigger=PropertyChanged}" />
+                        </StackPanel>
+                    </Grid>
+                </GroupBox>
+
+                <!--  Request Details Section  -->
+                <GroupBox Margin="0,0,0,20" Header="Request Details">
+                    <StackPanel Margin="10">
+                        <Label Content="Category:" />
+                        <ComboBox
+                            Margin="0,0,0,10"
+                            ItemsSource="{Binding Categories}"
+                            SelectedItem="{Binding Category, UpdateSourceTrigger=PropertyChanged}" />
+
+                        <Label Content="Description:" />
+                        <TextBox
+                            Height="100"
+                            Margin="0,0,0,10"
+                            AcceptsReturn="True"
+                            Text="{Binding Description, UpdateSourceTrigger=PropertyChanged}"
+                            TextWrapping="Wrap" />
+
+
+                        <Label Content="Address:" />
+                        <TextBox Margin="0,0,0,10" Text="{Binding AdditionalAddress, UpdateSourceTrigger=PropertyChanged}" />
+
+                        <Label Content="Preferred Feedback Method:" />
+                        <ComboBox
+                            Margin="0,0,0,10"
+                            ItemsSource="{Binding FeedbackMethods}"
+                            SelectedItem="{Binding PreferredFeedbackMethod, UpdateSourceTrigger=PropertyChanged}" />
+                    </StackPanel>
+                </GroupBox>
+
+                <!--  Supporting Documents Section  -->
+                <GroupBox Margin="0,0,0,20" Header="Supporting Documents">
+                    <StackPanel Margin="10">
+                        <Button
+                            Margin="0,0,0,10"
+                            Click="Button_Click"
+                            Command="{Binding AddMediaCommand}"
+                            Content="Attach Evidence" />
+
+                        <Button
+                            Margin="0,0,0,10"
+                            Click="Button_Click_1"
+                            Command="{Binding SelectReportsCommand}"
+                            Content="Select Related Reports" />
+
+                        <ItemsControl Margin="0,10" ItemsSource="{Binding SupportingEvidence}" />
+                    </StackPanel>
+                </GroupBox>
+
+                <!--  Submit Button  -->
+                <Button
+                    Height="40"
+                    Margin="0,20,0,0"
+                    Command="{Binding SubmitRequestCommand}"
+                    Content="Submit Request"
+                    IsEnabled="{Binding IsFormValid}" />
+            </StackPanel>
+        </Grid>
+    </ScrollViewer>
+</UserControl>
