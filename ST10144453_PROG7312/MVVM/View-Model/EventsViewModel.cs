@@ -5,8 +5,10 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Diagnostics;
+using System.Diagnostics.Tracing;
 using System.Linq;
 using System.Runtime.CompilerServices;
+using System.Runtime.InteropServices.ComTypes;
 using System.Windows.Input;
 using System.Windows.Threading;
 
@@ -34,6 +36,8 @@ namespace ST10144453_PROG7312.MVVM.View_Model
         private DateTime? _startDate;
         private DateTime? _endDate;
         private List<TagsModel> _selectedTags;
+        private TagsTree _tagsTree;
+        private AnnouncementTree _announcementTree;
 
         public ObservableCollection<TagsModel> Tags { get; private set; }
 
@@ -133,6 +137,32 @@ namespace ST10144453_PROG7312.MVVM.View_Model
             _searchFrequency = new Dictionary<string, int>();
             _tagWeights = new Dictionary<int, double>();
             _selectedTags = new List<TagsModel>();
+            _tagsTree = new TagsTree();
+            InitializeTagsHierarchy();
+            _announcementTree = new AnnouncementTree();
+            InitializeAnnouncements();
+        }
+
+        private void InitializeTagsHierarchy()
+        {
+            // Define tag relationships
+            var tagRelationships = new Dictionary<int, int?>
+            {
+                // Parent-child relationships for tags
+                // TagId -> ParentTagId (null for root level tags)
+                { 1, null },  // Cultural Festivals
+                { 2, null },  // Sports Events
+                { 3, null },  // Health and Wellness
+                { 4, 3 },     // Environmental Initiatives under Health
+                { 5, null },  // Public Safety
+                { 6, null },  // Education and Workshops
+                // Add more relationships as needed
+            };
+
+            foreach (var tag in Tags)
+            {
+                _tagsTree.AddTag(tag, tagRelationships.ContainsKey(tag.TagId) ? tagRelationships[tag.TagId] : null);
+            }
         }
 
         private void LoadEvents()
@@ -141,7 +171,6 @@ namespace ST10144453_PROG7312.MVVM.View_Model
             {
                 _eventTree.Insert(eventModel);
 
-                // Index events by tags
                 foreach (var tag in eventModel.eventTags)
                 {
                     if (!_eventsByTag.ContainsKey(tag.TagName))
@@ -153,7 +182,6 @@ namespace ST10144453_PROG7312.MVVM.View_Model
                 }
             }
 
-            // Initialize filtered and recommended events
             FilteredEvents = new ObservableCollection<EventModel>(_eventTree.InOrderTraversal());
             UpdateRecommendedEvents();
         }
@@ -161,13 +189,88 @@ namespace ST10144453_PROG7312.MVVM.View_Model
         private void UpdateRecommendedEvents()
         {
             var allEvents = _eventTree.InOrderTraversal();
-            var recommendedList = allEvents
-                .Where(e => e.eventDate >= DateTime.Now)
-                .OrderBy(e => e.eventDate)
+            var userPreferences = CalculateUserPreferences();
+            var futureEvents = allEvents.Where(e => e.eventDate >= DateTime.Now);
+
+            var recommendedEvents = futureEvents
+                .Select(e => new
+                {
+                    Event = e,
+                    Score = CalculateRecommendationScore(e, userPreferences)
+                })
+                .OrderByDescending(x => x.Score)
                 .Take(5)
+                .Select(x => x.Event)
                 .ToList();
 
-            RecommendedEvents = new ObservableCollection<EventModel>(recommendedList);
+            RecommendedEvents = new ObservableCollection<EventModel>(recommendedEvents);
+        }
+
+        private Dictionary<int, double> CalculateUserPreferences()
+        {
+            var preferences = new Dictionary<int, double>();
+
+            // Consider tag selection frequency
+            foreach (var weight in _tagWeights)
+            {
+                preferences[weight.Key] = weight.Value;
+            }
+
+            // Consider search history
+            foreach (var search in _searchFrequency)
+            {
+                var relatedTags = Tags.Where(t =>
+                t.TagName.IndexOf(search.Key, StringComparison.OrdinalIgnoreCase) >= 0);
+
+                foreach (var tag in relatedTags)
+                {
+                    if (!preferences.ContainsKey(tag.TagId))
+                        preferences[tag.TagId] = 0;
+
+                    preferences[tag.TagId] += search.Value * 0.5;
+                }
+            }
+
+            // Consider related tags from tag tree
+            foreach (var tagId in preferences.Keys.ToList())
+            {
+                var relatedTags = _tagsTree.GetRelatedTags(tagId);
+                foreach (var relatedTag in relatedTags)
+                {
+                    if (!preferences.ContainsKey(relatedTag.TagId))
+                        preferences[relatedTag.TagId] = 0;
+
+                    preferences[relatedTag.TagId] += preferences[tagId] * 0.3;
+                }
+            }
+
+            return preferences;
+        }
+
+        private double CalculateRecommendationScore(EventModel eventModel, Dictionary<int, double> preferences)
+        {
+            double score = 0;
+
+            // Tag preference score
+            foreach (var tag in eventModel.eventTags)
+            {
+                if (preferences.ContainsKey(tag.TagId))
+                    score += preferences[tag.TagId];
+            }
+
+            // Date proximity score
+            var daysUntilEvent = (eventModel.eventDate - DateTime.Now).TotalDays;
+            score += Math.Max(0, 30 - daysUntilEvent) / 30 * 5;
+
+            // Related events score
+            var closestEvent = _eventTree.FindClosestEvent(eventModel.eventDate);
+            if (closestEvent != null && closestEvent != eventModel)
+            {
+                var sharedTags = eventModel.eventTags.Intersect(closestEvent.eventTags).Count();
+                score += sharedTags * 0.5;
+            }
+
+            return score;
         }
 
         private void ApplyFilters()
@@ -203,6 +306,7 @@ namespace ST10144453_PROG7312.MVVM.View_Model
 
             // Update filtered events
             FilteredEvents = new ObservableCollection<EventModel>(filteredEvents.OrderBy(e => e.eventDate));
+            UpdateRecommendedEvents();
         }
 
         public void FilterEventsByTag(TagsModel tag)
@@ -214,15 +318,33 @@ namespace ST10144453_PROG7312.MVVM.View_Model
                 if (!_selectedTags.Contains(tag))
                 {
                     _selectedTags.Add(tag);
+                    // Add related tags with a depth of 1
+                    var relatedTags = _tagsTree.GetRelatedTags(tag.TagId, 1);
+                    foreach (var relatedTag in relatedTags)
+                    {
+                        if (!_selectedTags.Contains(relatedTag))
+                        {
+                            _selectedTags.Add(relatedTag);
+                            relatedTag.IsSelected = true;
+                        }
+                    }
                 }
             }
             else
             {
                 _selectedTags.Remove(tag);
+                // Remove related tags
+                var relatedTags = _tagsTree.GetRelatedTags(tag.TagId, 1);
+                foreach (var relatedTag in relatedTags)
+                {
+                    _selectedTags.Remove(relatedTag);
+                    relatedTag.IsSelected = false;
+                }
             }
 
             UpdateTagWeight(tag.TagId);
             ApplyFilters();
+            UpdateRecommendedEvents();
         }
 
         private void UpdateTagWeight(int tagId)
@@ -256,6 +378,7 @@ namespace ST10144453_PROG7312.MVVM.View_Model
                 .OrderBy(e => e.eventDate);
 
             FilteredEvents = new ObservableCollection<EventModel>(searchResults);
+            UpdateRecommendedEvents();
         }
 
         private void UpdateSearchFrequency(string searchTerm)
@@ -281,6 +404,7 @@ namespace ST10144453_PROG7312.MVVM.View_Model
             }
             _selectedTags.Clear();
             ApplyFilters();
+            UpdateRecommendedEvents();
         }
 
         private void InitializeCommands()
@@ -293,7 +417,14 @@ namespace ST10144453_PROG7312.MVVM.View_Model
 
         private void InitializeAnnouncements()
         {
-            Announcements = new ObservableCollection<AnnouncementModel>(AnnouncementModel.Announcements);
+            foreach (var announcement in AnnouncementModel.Announcements)
+            {
+                _announcementTree.Insert(announcement);
+            }
+
+            var orderedAnnouncements = _announcementTree.GetAnnouncementsInOrder();
+            Announcements = new ObservableCollection<AnnouncementModel>(orderedAnnouncements);
+
             if (Announcements.Count > 0)
             {
                 CurrentAnnouncement = Announcements[0];
@@ -410,5 +541,4 @@ namespace ST10144453_PROG7312.MVVM.View_Model
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
         }
     }
-
 }

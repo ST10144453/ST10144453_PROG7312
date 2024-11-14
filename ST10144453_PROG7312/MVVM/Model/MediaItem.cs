@@ -63,6 +63,8 @@ namespace ST10144453_PROG7312.MVVM.Model
         /// </summary>
         public long FileSize { get; set; }
 
+        public string Id;
+
         /// <summary>
         /// This method creates a MediaItem object from a file path.
         /// </summary>
