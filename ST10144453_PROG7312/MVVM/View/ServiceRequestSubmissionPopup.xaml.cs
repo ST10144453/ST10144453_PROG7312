@@ -12,31 +12,19 @@ using System.Windows.Documents;
 using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
 using System.Windows.Shapes;
 
 namespace ST10144453_PROG7312.MVVM.View
 {
     /// <summary>
-    /// Interaction logic for ServiceRequestUserControl.xaml
+    /// Interaction logic for ServiceRequestSubmissionPopup.xaml
     /// </summary>
-    public partial class ServiceRequestUserControl : UserControl
+    public partial class ServiceRequestSubmissionPopup : Window
     {
-        public ServiceRequestUserControl(ServiceRequestModel request)
+        public ServiceRequestSubmissionPopup(ServiceRequestModel request)
         {
             InitializeComponent();
-            DataContext = new ServiceRequestViewModel(request, (Window)this.Parent);
-        }
-
-
-        private void Button_Click(object sender, RoutedEventArgs e)
-        {
-
-        }
-
-        private void Button_Click_1(object sender, RoutedEventArgs e)
-        {
-
+            DataContext = new ServiceRequestViewModel(request, this);
         }
     }
 }
