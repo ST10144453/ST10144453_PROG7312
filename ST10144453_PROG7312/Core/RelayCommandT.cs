@@ -10,9 +10,15 @@ namespace ST10144453_PROG7312.Core
     public class RelayCommand<T> : ICommand
     {
         private readonly Action<T> _execute;
-        private readonly Predicate<T> _canExecute;
+        private readonly Func<T, bool> _canExecute;
 
-        public RelayCommand(Action<T> execute, Predicate<T> canExecute = null)
+        public event EventHandler CanExecuteChanged
+        {
+            add { CommandManager.RequerySuggested += value; }
+            remove { CommandManager.RequerySuggested -= value; }
+        }
+
+        public RelayCommand(Action<T> execute, Func<T, bool> canExecute = null)
         {
             _execute = execute ?? throw new ArgumentNullException(nameof(execute));
             _canExecute = canExecute;
@@ -28,10 +34,9 @@ namespace ST10144453_PROG7312.Core
             _execute((T)parameter);
         }
 
-        public event EventHandler CanExecuteChanged
+        public void NotifyCanExecuteChanged()
         {
-            add => CommandManager.RequerySuggested += value;
-            remove => CommandManager.RequerySuggested -= value;
+            CommandManager.InvalidateRequerySuggested();
         }
     }
 }

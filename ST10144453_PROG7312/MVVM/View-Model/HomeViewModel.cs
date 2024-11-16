@@ -39,6 +39,8 @@ namespace ST10144453_PROG7312.MVVM.View_Model
         public UserModel User { get; set; }
 
         public string Username => User?.userName;
+        public ICommand NavigateToServiceRequestCommand { get; }
+
 
         public HomeViewModel()
         {
@@ -46,6 +48,8 @@ namespace ST10144453_PROG7312.MVVM.View_Model
             NavigateReportCommand = new RelayCommand(NavigateReport);
             ShowUnderDevelopmentPopupCommand = new RelayCommand(ShowUnderDevelopmentPopup);
             NavigateEventCommand = new RelayCommand(NavigateEvent);
+            NavigateToServiceRequestCommand = new RelayCommand(NavigateToServiceRequest);
+
         }
 
 
@@ -89,7 +93,15 @@ namespace ST10144453_PROG7312.MVVM.View_Model
             }
         }
 
-
+        private void NavigateToServiceRequest()
+        {
+            var mainWindow = Application.Current.MainWindow as MainWindow;
+            if (mainWindow != null)
+            {
+                var serviceRequestView = new ServiceRequestUserControl();
+                mainWindow.MainContentControl.Content = serviceRequestView;
+            }
+        }
 
         protected void OnPropertyChanged([CallerMemberName] string propertyName = null)
         {

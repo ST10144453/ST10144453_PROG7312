@@ -371,6 +371,16 @@ namespace ST10144453_PROG7312.MVVM.View_Model
         /// </summary>
         public ICommand NavigateToHomeCommand { get; private set; }
 
+        public ObservableCollection<MediaItem> UploadedFiles
+        {
+            get => MediaItems;
+            set
+            {
+                MediaItems = value;
+                OnPropertyChanged();
+            }
+        }
+
         //~~~~~~~~~~~~~ Methods: Default Constructor ~~~~~~~~~~~~~//
         /// <summary>
         /// This constructor initializes the ReportViewModel class.
