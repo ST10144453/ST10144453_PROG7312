@@ -156,21 +156,33 @@
     <Compile Include="MVVM\Model\AnnouncementModel.cs" />
     <Compile Include="MVVM\Model\AnnouncementNode.cs" />
     <Compile Include="MVVM\Model\AnnouncementTree.cs" />
+    <Compile Include="MVVM\Model\BasicServiceRequestTree.cs" />
+    <Compile Include="MVVM\Model\BinarySearchServiceRequestTree.cs" />
     <Compile Include="MVVM\Model\EventAVLTree.cs" />
     <Compile Include="MVVM\Model\EventModel.cs" />
     <Compile Include="MVVM\Model\EventNode.cs" />
     <Compile Include="MVVM\Model\GuestUserModel.cs" />
+    <Compile Include="MVVM\Model\IServiceRequestTree.cs" />
     <Compile Include="MVVM\Model\MediaItem.cs" />
     <Compile Include="MVVM\Model\MediaNode.cs" />
     <Compile Include="MVVM\Model\MediaTree.cs" />
+    <Compile Include="MVVM\Model\RedBlackServiceRequestTree.cs" />
     <Compile Include="MVVM\Model\ReportManager.cs" />
     <Compile Include="MVVM\Model\ReportModel.cs" />
+    <Compile Include="MVVM\Model\ServiceRequestAVLTree.cs" />
     <Compile Include="MVVM\Model\ServiceRequestModel.cs" />
     <Compile Include="MVVM\Model\ServiceRequestNode.cs" />
     <Compile Include="MVVM\Model\ServiceRequestTree.cs" />
+    <Compile Include="MVVM\Model\ServiceRequestTreeFactory.cs" />
+    <Compile Include="MVVM\Model\SortingStrategy.cs" />
     <Compile Include="MVVM\Model\TagNode.cs" />
     <Compile Include="MVVM\Model\TagsModel.cs" />
     <Compile Include="MVVM\Model\TagsTree.cs" />
+    <Compile Include="MVVM\Model\TreeComparisonTool.cs" />
+    <Compile Include="MVVM\Model\TreeEducationalContent.cs" />
+    <Compile Include="MVVM\Model\TreePerformanceMetrics.cs" />
+    <Compile Include="MVVM\Model\TreeType.cs" />
+    <Compile Include="MVVM\Model\TreeVisualizationHelper.cs" />
     <Compile Include="MVVM\Model\UserModel.cs" />
     <Compile Include="MVVM\Model\UserSession.cs" />
     <Compile Include="MVVM\View-Model\CreateEventViewModel.cs" />
@@ -183,6 +195,8 @@
     <Compile Include="MVVM\View-Model\ServiceRequestDetailsViewModel.cs" />
     <Compile Include="MVVM\View-Model\ServiceRequestViewModel.cs" />
     <Compile Include="MVVM\View-Model\StaffMenuViewModel.cs" />
+    <Compile Include="MVVM\View-Model\TreeSelectionViewModel.cs" />
+    <Compile Include="MVVM\View-Model\UserDashboardHomeViewModel.cs" />
     <Compile Include="MVVM\View-Model\UserServiceRequestsViewModel.cs" />
     <Compile Include="MVVM\View\AllReportsUserControl.xaml.cs">
       <DependentUpon>AllReportsUserControl.xaml</DependentUpon>
@@ -229,6 +243,9 @@
     <Compile Include="MVVM\View\ServiceRequestSubmissionPopup.xaml.cs">
       <DependentUpon>ServiceRequestSubmissionPopup.xaml</DependentUpon>
     </Compile>
+    <Compile Include="MVVM\View\ServiceRequestTreeControl.xaml.cs">
+      <DependentUpon>ServiceRequestTreeControl.xaml</DependentUpon>
+    </Compile>
     <Compile Include="MVVM\View\ServiceRequestUserControl.xaml.cs">
       <DependentUpon>ServiceRequestUserControl.xaml</DependentUpon>
     </Compile>
@@ -237,6 +254,9 @@
     </Compile>
     <Compile Include="MVVM\View\StaffMenu.xaml.cs">
       <DependentUpon>StaffMenu.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="MVVM\View\TreeSelectionUserControl.xaml.cs">
+      <DependentUpon>TreeSelectionUserControl.xaml</DependentUpon>
     </Compile>
     <Compile Include="MVVM\View\UnderDevelopmentPopup.xaml.cs">
       <DependentUpon>UnderDevelopmentPopup.xaml</DependentUpon>
@@ -317,6 +337,10 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
+    <Page Include="MVVM\View\ServiceRequestTreeControl.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="MVVM\View\ServiceRequestUserControl.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
@@ -329,7 +353,15 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
+    <Page Include="MVVM\View\TreeSelectionUserControl.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="MVVM\View\UnderDevelopmentPopup.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="MVVM\View\UserDashboardHomeControl.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -362,6 +394,9 @@
     <Compile Include="MVVM\View-Model\HomeViewModel.cs" />
     <Compile Include="MVVM\View\HomeView.xaml.cs">
       <DependentUpon>HomeView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="MVVM\View\UserDashboardHomeControl.xaml.cs">
+      <DependentUpon>UserDashboardHomeControl.xaml</DependentUpon>
     </Compile>
     <Compile Include="MVVM\View\UserDashboardUserControl.xaml.cs">
       <DependentUpon>UserDashboardUserControl.xaml</DependentUpon>
@@ -597,6 +632,16 @@
     <Resource Include="Resources\Icons\traffic.png" />
     <Resource Include="Resources\Icons\volunteer.png" />
     <Resource Include="Resources\Icons\youth.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\Icons\home_icon.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\Images\empty-events.png" />
+    <Resource Include="Resources\Images\empty-requests.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\Images\empty-reports.png" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Import Project="..\packages\Syncfusion.PdfToImageConverter.WPF.26.2.14\build\net462\Syncfusion.PdfToImageConverter.WPF.targets" Condition="Exists('..\packages\Syncfusion.PdfToImageConverter.WPF.26.2.14\build\net462\Syncfusion.PdfToImageConverter.WPF.targets')" />

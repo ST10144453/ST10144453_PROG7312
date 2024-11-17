@@ -7,13 +7,15 @@ using System.Threading.Tasks;
 
 namespace ST10144453_PROG7312.MVVM.Model
 {
-    public class ServiceRequestTree
+    public class ServiceRequestTree : IServiceRequestTree
     {
         private ServiceRequestNode root;
+        private SortingStrategy currentStrategy;
 
         public ServiceRequestTree()
         {
             root = null;
+            currentStrategy = SortingStrategy.ByDate;
         }
 
         private int GetHeight(ServiceRequestNode node)
@@ -215,6 +217,112 @@ namespace ST10144453_PROG7312.MVVM.Model
             if (request.Status == "Pending") score += 2;
             
             return score;
+        }
+
+        public void SetSortingStrategy(SortingStrategy strategy)
+        {
+            if (currentStrategy != strategy)
+            {
+                currentStrategy = strategy;
+                RebuildTree();
+            }
+        }
+
+        private void RebuildTree()
+        {
+            var allRequests = GetAllRequests().ToList();
+            root = null;
+            foreach (var request in allRequests)
+            {
+                Insert(request);
+            }
+        }
+
+        public string GetTreeType() => "AVL Tree";
+
+        public string GetTreeDescription() => 
+            "A self-balancing binary search tree where the heights of two child " +
+            "subtrees of any node differ by at most one. This ensures O(log n) " +
+            "operations through automatic rebalancing.";
+
+        public void Delete(ServiceRequestModel request)
+        {
+            if (request == null)
+                throw new ArgumentNullException(nameof(request));
+
+            root = DeleteRec(root, request);
+        }
+
+        private ServiceRequestNode DeleteRec(ServiceRequestNode root, ServiceRequestModel request)
+        {
+            // Standard BST delete
+            if (root == null)
+                return root;
+
+            // Compare dates for navigation
+            if (request.RequestDate.CompareTo(root.Data.RequestDate) < 0)
+                root.Left = DeleteRec(root.Left, request);
+            else if (request.RequestDate.CompareTo(root.Data.RequestDate) > 0)
+                root.Right = DeleteRec(root.Right, request);
+            else
+            {
+                // Node with only one child or no child
+                if (root.Left == null)
+                    return root.Right;
+                else if (root.Right == null)
+                    return root.Left;
+
+                // Node with two children: Get the inorder successor (smallest in the right subtree)
+                root.Data = GetMinValue(root.Right);
+
+                // Delete the inorder successor
+                root.Right = DeleteRec(root.Right, root.Data);
+            }
+
+            // If tree had only one node
+            if (root == null)
+                return root;
+
+            // Update height
+            root.Height = Math.Max(GetHeight(root.Left), GetHeight(root.Right)) + 1;
+
+            // Get balance factor
+            int balance = GetBalance(root);
+
+            // Left Left Case
+            if (balance > 1 && GetBalance(root.Left) >= 0)
+                return RightRotate(root);
+
+            // Left Right Case
+            if (balance > 1 && GetBalance(root.Left) < 0)
+            {
+                root.Left = LeftRotate(root.Left);
+                return RightRotate(root);
+            }
+
+            // Right Right Case
+            if (balance < -1 && GetBalance(root.Right) <= 0)
+                return LeftRotate(root);
+
+            // Right Left Case
+            if (balance < -1 && GetBalance(root.Right) > 0)
+            {
+                root.Right = RightRotate(root.Right);
+                return LeftRotate(root);
+            }
+
+            return root;
+        }
+
+        private ServiceRequestModel GetMinValue(ServiceRequestNode node)
+        {
+            ServiceRequestModel minValue = node.Data;
+            while (node.Left != null)
+            {
+                minValue = node.Left.Data;
+                node = node.Left;
+            }
+            return minValue;
         }
     }
 }

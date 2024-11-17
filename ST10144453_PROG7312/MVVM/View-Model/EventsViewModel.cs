@@ -129,23 +129,23 @@ namespace ST10144453_PROG7312.MVVM.View_Model
             _searchFrequency = new Dictionary<string, int>();
             _tagWeights = new Dictionary<int, double>();
             _selectedTags = new List<TagsModel>();
-
+            
             // Initialize Tags collection
             Tags = new ObservableCollection<TagsModel>(TagsModel.Tags);
-
+            
             // Initialize trees
             _tagsTree = new TagsTree();
             _announcementTree = new AnnouncementTree();
-
+            
             // Initialize tag hierarchy
             InitializeTagsHierarchy();
-
+            
             // Load events
             LoadEvents();
-
+            
             // Initialize announcements
             InitializeAnnouncements();
-
+            
             // Initialize commands
             InitializeCommands();
         }

@@ -19,7 +19,12 @@ namespace ST10144453_PROG7312.MVVM.View_Model
         private ObservableCollection<ServiceRequestModel> _userServiceRequests;
         private readonly UserModel _currentUser;
         private bool _isStaff;
-        private readonly ServiceRequestTree _requestTree;
+        private readonly ServiceRequestViewModel _serviceRequestViewModel;
+        private TreeType _selectedTreeType;
+        private SortingStrategy _selectedSortStrategy;
+        private string _treeDescription;
+        private ObservableCollection<ServiceRequestModel> _displayedRequests;
+        public TreeSelectionViewModel TreeSelectionViewModel { get; }
 
         public ObservableCollection<ServiceRequestModel> UserServiceRequests
         {
@@ -51,18 +56,92 @@ namespace ST10144453_PROG7312.MVVM.View_Model
             "Rejected"
         };
 
+        public TreeType SelectedTreeType
+        {
+            get => _selectedTreeType;
+            set
+            {
+                _selectedTreeType = value;
+                OnPropertyChanged(nameof(SelectedTreeType));
+            }
+        }
+
+        public SortingStrategy SelectedSortStrategy
+        {
+            get => _selectedSortStrategy;
+            set
+            {
+                _selectedSortStrategy = value;
+                OnPropertyChanged(nameof(SelectedSortStrategy));
+            }
+        }
+
+        public string TreeDescription
+        {
+            get => _treeDescription;
+            set
+            {
+                _treeDescription = value;
+                OnPropertyChanged(nameof(TreeDescription));
+            }
+        }
+
+        public ObservableCollection<ServiceRequestModel> DisplayedRequests
+        {
+            get => _displayedRequests;
+            set
+            {
+                _displayedRequests = value;
+                OnPropertyChanged(nameof(DisplayedRequests));
+            }
+        }
+
         public UserServiceRequestsViewModel(UserModel currentUser)
         {
             _currentUser = currentUser;
             IsStaff = currentUser.isStaff;
-            _requestTree = new ServiceRequestTree();
+            _serviceRequestViewModel = new ServiceRequestViewModel(new ServiceRequestModel(), null, currentUser);
+
+            if (_isStaff)
+            {
+                _serviceRequestViewModel.SelectedTreeType = TreeType.AVL;
+                _serviceRequestViewModel.SelectedSortStrategy = SortingStrategy.ByDate;
+            }
+
             NewRequestCommand = new RelayCommand(CreateNewRequest);
-            
-            // Initialize the collection
             UserServiceRequests = new ObservableCollection<ServiceRequestModel>();
-            
-            // Load the requests
+            TreeSelectionViewModel = new TreeSelectionViewModel();
+            if (_isStaff)
+            {
+                TreeSelectionViewModel.SelectedTreeType = TreeType.AVL;
+                TreeSelectionViewModel.SelectedSortStrategy = SortingStrategy.ByDate;
+            }
+
+            // Add dummy data
+            AddDummyData();
             LoadServiceRequests();
+        }
+
+        private void AddDummyData()
+        {
+            var dummyRequests = new List<ServiceRequestModel>
+            {
+                new ServiceRequestModel { Category = "Water & Sanitation", Description = "Major water leak on Main Road", Status = "Pending", RequestDate = DateTime.Now.AddDays(-1), CreatedBy = "john.doe" },
+                new ServiceRequestModel { Category = "Electricity", Description = "Power outage in Central District", Status = "In Progress", RequestDate = DateTime.Now.AddDays(-5), CreatedBy = "jane.smith" },
+                new ServiceRequestModel { Category = "Roads", Description = "Pothole on Oak Avenue", Status = "Completed", RequestDate = DateTime.Now.AddDays(-10), CreatedBy = "bob.wilson" },
+                new ServiceRequestModel { Category = "Water & Sanitation", Description = "Blocked drain on Pine Street", Status = "Pending", RequestDate = DateTime.Now.AddDays(-2), CreatedBy = "sarah.jones" },
+                new ServiceRequestModel { Category = "Electricity", Description = "Street light malfunction", Status = "In Progress", RequestDate = DateTime.Now.AddDays(-3), CreatedBy = "mike.brown" },
+                new ServiceRequestModel { Category = "Parks", Description = "Overgrown vegetation in Community Park", Status = "Pending", RequestDate = DateTime.Now.AddDays(-7), CreatedBy = "lisa.green" },
+                new ServiceRequestModel { Category = "Roads", Description = "Traffic light not working", Status = "In Progress", RequestDate = DateTime.Now.AddDays(-4), CreatedBy = "tom.white" },
+                new ServiceRequestModel { Category = "Water & Sanitation", Description = "Sewage overflow", Status = "Completed", RequestDate = DateTime.Now.AddDays(-15), CreatedBy = "emma.black" },
+                new ServiceRequestModel { Category = "Electricity", Description = "Exposed electrical wires", Status = "Pending", RequestDate = DateTime.Now.AddDays(-6), CreatedBy = "david.gray" },
+                new ServiceRequestModel { Category = "Parks", Description = "Broken playground equipment", Status = "In Progress", RequestDate = DateTime.Now.AddDays(-8), CreatedBy = "amy.taylor" }
+            };
+
+            foreach (var request in dummyRequests)
+            {
+                ServiceRequestManager.Instance.AddRequest(request);
+            }
         }
 
         private void LoadServiceRequests()

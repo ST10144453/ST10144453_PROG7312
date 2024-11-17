@@ -178,8 +178,9 @@
                         <Button
                             Height="100"
                             Margin="0,10"
+                            Click="Register_Click"
                             FontSize="40"
-                            Style="{StaticResource ImageButtonStyle}" Click="Register_Click">
+                            Style="{StaticResource ImageButtonStyle}">
                             <StackPanel HorizontalAlignment="Left" Orientation="Horizontal">
                                 <!--  Icon Image  -->
                                 <Image

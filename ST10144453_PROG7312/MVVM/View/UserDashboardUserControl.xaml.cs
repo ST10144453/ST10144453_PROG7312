@@ -29,6 +29,9 @@ namespace ST10144453_PROG7312.MVVM.View
             InitializeComponent();
             _currentUser = user;
             _allReportsUserControl = new AllReportsUserControl(_currentUser);
+            
+            // Set default content to dashboard home
+            MainContentControl.Content = new UserDashboardHomeControl(_currentUser);
         }
 
         private void NavigateAllReports(object sender, RoutedEventArgs e)
@@ -58,6 +61,11 @@ namespace ST10144453_PROG7312.MVVM.View
         private void NavigateServiceRequests(object sender, RoutedEventArgs e)
         {
             MainContentControl.Content = new UserServiceRequestsDisplay(_currentUser);
+        }
+
+        private void NavigateHome(object sender, RoutedEventArgs e)
+        {
+            MainContentControl.Content = new UserDashboardHomeControl(_currentUser);
         }
     }
 }
