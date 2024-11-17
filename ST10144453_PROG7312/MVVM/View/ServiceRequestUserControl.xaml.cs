@@ -28,7 +28,7 @@ namespace ST10144453_PROG7312.MVVM.View
         {
             InitializeComponent();
             _currentUser = currentUser;
-            DataContext = new ServiceRequestViewModel(request, (Window)this.Parent);
+            DataContext = new ServiceRequestViewModel(request, (Window)this.Parent, _currentUser);
         }
 
 
@@ -52,14 +52,14 @@ namespace ST10144453_PROG7312.MVVM.View
 
         private void Button_Click_1(object sender, RoutedEventArgs e)
         {
-            var selectReportsWindow = new SelectReportsDialog
+            var viewModel = DataContext as ServiceRequestViewModel;
+            var selectReportsWindow = new SelectReportsDialog(viewModel?.CurrentUser)
             {
                 Owner = Window.GetWindow(this)
             };
 
             if (selectReportsWindow.ShowDialog() == true)
             {
-                var viewModel = DataContext as ServiceRequestViewModel;
                 foreach (var report in selectReportsWindow.SelectedReports)
                 {
                     viewModel?.LinkReport(report);

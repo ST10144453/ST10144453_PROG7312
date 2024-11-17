@@ -40,7 +40,7 @@ namespace ST10144453_PROG7312.MVVM.View_Model
         private ICommand _submitRequestCommand;
         private ServiceRequestModel _recentRequest;
         private readonly Window _popupWindow;
-
+        public UserModel CurrentUser { get; private set; }
 
         public ObservableCollection<string> Categories
         {
@@ -232,12 +232,12 @@ namespace ST10144453_PROG7312.MVVM.View_Model
               $"Submitted: {RecentRequest.RequestDate}"
             : string.Empty;
 
-        public ServiceRequestViewModel(ServiceRequestModel request, Window popupWindow)
+        public ServiceRequestViewModel(ServiceRequestModel request, Window popupWindow, UserModel user)
         {
             RecentRequest = request ?? new ServiceRequestModel();
             _popupWindow = popupWindow;
             _requestTree = new ServiceRequestTree();
-
+            CurrentUser = user;
 
             // Initialize categories
             Categories = new ObservableCollection<string>
@@ -349,13 +349,14 @@ namespace ST10144453_PROG7312.MVVM.View_Model
             OnPropertyChanged(nameof(RecentRequest));
 
             // Show submission popup
-            var submissionPopup = new ServiceRequestSubmissionPopup(request);
+            var submissionPopup = new ServiceRequestSubmissionPopup(request, CurrentUser);
             submissionPopup.Owner = _popupWindow;
             submissionPopup.ShowDialog();
 
             // Close the current window
             _popupWindow?.Close();
         }
+
 
         private bool CanExecuteSubmitRequest()
         {

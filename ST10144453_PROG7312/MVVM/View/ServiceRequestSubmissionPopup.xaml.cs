@@ -21,10 +21,14 @@ namespace ST10144453_PROG7312.MVVM.View
     /// </summary>
     public partial class ServiceRequestSubmissionPopup : Window
     {
-        public ServiceRequestSubmissionPopup(ServiceRequestModel request)
+        private readonly UserModel _user;
+
+        public ServiceRequestSubmissionPopup(ServiceRequestModel request, UserModel user)
         {
             InitializeComponent();
-            DataContext = new ServiceRequestViewModel(request, this);
+            _user = user;
+            DataContext = new ServiceRequestViewModel(request, this, _user);
         }
     }
+
 }
