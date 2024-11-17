@@ -1,18 +1,14 @@
 ﻿<UserControl
-    x:Class="ST10144453_PROG7312.MVVM.View.ReportSectionUserControl"
+    x:Class="ST10144453_PROG7312.MVVM.View.UserDashboardUserControl"
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:local="clr-namespace:ST10144453_PROG7312.MVVM.View"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-    xmlns:viewModel="clr-namespace:ST10144453_PROG7312.MVVM.View_Model"
     d:DesignHeight="1080"
     d:DesignWidth="1910"
-    Background="Transparent"
     mc:Ignorable="d">
-
     <UserControl.Resources>
-        <!--  Base Button Style  -->
         <Style x:Key="ImageButtonStyle" TargetType="Button">
             <Setter Property="Background">
                 <Setter.Value>
@@ -24,6 +20,7 @@
             <Setter Property="BorderThickness" Value="0" />
             <Setter Property="Padding" Value="10,5" />
             <Setter Property="FontWeight" Value="Bold" />
+            <Setter Property="FontSize" Value="24" />
             <Setter Property="HorizontalContentAlignment" Value="Center" />
             <Setter Property="VerticalContentAlignment" Value="Center" />
             <Setter Property="Height" Value="136" />
@@ -60,7 +57,6 @@
             </Style.Triggers>
         </Style>
 
-        <!--  Style for Button 4 (Different Design and Slimmer)  -->
         <Style
             x:Key="Button4Style"
             BasedOn="{StaticResource ImageButtonStyle}"
@@ -89,21 +85,18 @@
             </Style.Triggers>
         </Style>
     </UserControl.Resources>
-
-    <!--  Main Grid for the Layout  -->
     <Grid>
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="300" />
             <ColumnDefinition Width="*" />
         </Grid.ColumnDefinitions>
 
+        <!--  Main Content Area  -->
+        <ContentControl x:Name="MainContent" Grid.Column="0" />
 
-        <!--  Side Navigation Bar  -->
+        <!--  Navigation Bar  -->
         <Grid Grid.Column="0">
-            <!--  Rectangle with Curved Corners and Drop Shadow  -->
             <Rectangle
-                HorizontalAlignment="Stretch"
-                VerticalAlignment="Stretch"
                 Fill="#B3FFFFFF"
                 RadiusX="15"
                 RadiusY="15">
@@ -115,40 +108,72 @@
                 </Rectangle.Clip>
             </Rectangle>
 
-            <!--  StackPanel with content, placed above the Rectangle  -->
-            <StackPanel
-                x:Name="ContentPanel"
-                Width="300"
-                Margin="0,0,0,0"
-                HorizontalAlignment="Center"
-                VerticalAlignment="Center"
-                Panel.ZIndex="1">
+            <StackPanel Margin="20">
+                <TextBlock
+                    Margin="0,0,0,20"
+                    FontSize="24"
+                    FontWeight="Bold"
+                    Text="My Dashboard" />
 
-                <StackPanel x:Name="ButtonStack" Margin="0,0,0,0">
-                    <TextBlock
-                        Margin="0,20,0,0"
-                        HorizontalAlignment="Center"
-                        FontSize="30"
-                        FontWeight="Bold"
-                        Text="Manage Mzansi" />
+                <Button
+                    Margin="0,5"
+                    Click="NavigateAllReports"
+                    FontSize="30"
+                    Style="{StaticResource ImageButtonStyle}">
+                    <StackPanel HorizontalAlignment="Left" Orientation="Horizontal">
+                        <Image
+                            Width="24"
+                            Height="24"
+                            Margin="5,0,10,0"
+                            Source="pack://application:,,,/Resources/Icons/report_Icon.png" />
+                        <TextBlock VerticalAlignment="Center" Text="Your Reports" />
+                    </StackPanel>
+                </Button>
 
-                    <Button
-                        Width="280"
-                        Height="180"
-                        Margin="0,5"
-                        Click="NavigateHome_Click"
-                        Content="Back"
-                        FontSize="30"
-                        Style="{StaticResource Button4Style}" />
-                </StackPanel>
+                <Button
+                    Margin="0,5"
+                    Click="NavigateToEvents"
+                    FontSize="30"
+                    Style="{StaticResource ImageButtonStyle}">
+                    <StackPanel HorizontalAlignment="Left" Orientation="Horizontal">
+                        <Image
+                            Width="24"
+                            Height="24"
+                            Margin="5,0,10,0"
+                            Source="pack://application:,,,/Resources/Icons/event_icon.png" />
+                        <TextBlock VerticalAlignment="Center" Text="Your Events" />
+                    </StackPanel>
+                </Button>
+
+
+                <Button
+                    Margin="0,5"
+                    Click="NavigateServiceRequests"
+                    FontSize="30"
+                    Style="{StaticResource ImageButtonStyle}">
+                    <StackPanel HorizontalAlignment="Left" Orientation="Horizontal">
+                        <Image
+                            Width="24"
+                            Height="24"
+                            Margin="5,0,10,0"
+                            Source="pack://application:,,,/Resources/Icons/request_Icon.png" />
+                        <TextBlock VerticalAlignment="Center" Text="Your Service Reports" />
+                    </StackPanel>
+                </Button>
+                <Button
+                    Margin="0,5"
+                    Click="NavigateHome_Click"
+                    Content="Back"
+                    FontSize="30"
+                    Style="{StaticResource Button4Style}" />
             </StackPanel>
         </Grid>
-
-        <!--  Content Area  -->
         <ContentControl
             x:Name="MainContentControl"
             Grid.Column="1"
             Margin="0,30,0,0"
             Content="{Binding CurrentView}" />
     </Grid>
+
+
 </UserControl>

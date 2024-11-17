@@ -1,0 +1,53 @@
+﻿<Window
+    x:Class="ST10144453_PROG7312.MVVM.View.ServiceRequestSubmissionPopup"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    Title="Request Submitted"
+    Width="600"
+    Height="400"
+    AllowsTransparency="True"
+    Background="Transparent"
+    WindowStartupLocation="CenterScreen"
+    WindowStyle="None">
+
+    <Border
+        Margin="10"
+        Background="White"
+        CornerRadius="15">
+        <Grid Margin="20">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="*" />
+                <RowDefinition Height="Auto" />
+            </Grid.RowDefinitions>
+
+            <TextBlock
+                Margin="0,0,0,20"
+                HorizontalAlignment="Center"
+                FontSize="24"
+                FontWeight="Bold"
+                Text="Service Request Submitted Successfully!" />
+
+            <StackPanel Grid.Row="1" Margin="0,0,0,20">
+                <TextBlock
+                    Margin="0,0,0,10"
+                    FontWeight="Bold"
+                    Text="Request Details:" />
+                <TextBlock Margin="0,2" Text="{Binding RecentRequest.Category, StringFormat='Category: {0}'}" />
+                <TextBlock
+                    Margin="0,2"
+                    Text="{Binding RecentRequest.Description, StringFormat='Description: {0}'}"
+                    TextWrapping="Wrap" />
+                <TextBlock Margin="0,2" Text="{Binding RecentRequest.RequestDate, StringFormat='Date: {0:g}'}" />
+                <TextBlock Margin="0,2" Text="{Binding RecentRequest.Status, StringFormat='Status: {0}'}" />
+            </StackPanel>
+
+            <Button
+                Grid.Row="2"
+                Width="150"
+                Height="40"
+                Command="{Binding NavigateToDashboardCommand}"
+                Content="View My Requests" />
+        </Grid>
+    </Border>
+</Window>

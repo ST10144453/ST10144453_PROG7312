@@ -699,7 +699,7 @@ namespace ST10144453_PROG7312.MVVM.View_Model
                 }
             }
 
-            ReportManager.Instance.AddReport(newReport);
+            ReportService.Instance.AddReport(newReport); 
             OnPropertyChanged(nameof(Reports));
 
             Debug.WriteLine($"New report added by user: {CurrentUser?.userName}");

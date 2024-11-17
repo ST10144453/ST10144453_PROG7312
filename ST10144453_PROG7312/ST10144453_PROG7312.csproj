@@ -130,6 +130,7 @@
     </ApplicationDefinition>
     <Compile Include="Core\NavigationService.cs" />
     <Compile Include="Core\PriorityQueueManager.cs" />
+    <Compile Include="Core\PriorityQueueT.cs" />
     <Compile Include="Core\RelayCommand.cs" />
     <Compile Include="Core\RelayCommandT.cs" />
     <Compile Include="Core\ServiceRequestManager.cs" />
@@ -139,6 +140,7 @@
     <Compile Include="FrontendLogic\Base64ToImageSourceConverter.cs" />
     <Compile Include="FrontendLogic\Base64ToPdfStreamConverter.cs" />
     <Compile Include="FrontendLogic\Base64ToTextConverter.cs" />
+    <Compile Include="FrontendLogic\BoolToHeaderConverter.cs" />
     <Compile Include="FrontendLogic\BoolToVisibilityConverter.cs" />
     <Compile Include="FrontendLogic\EventPhotoConverter.cs" />
     <Compile Include="FrontendLogic\FilePathToImageSourceConverter.cs" />
@@ -149,6 +151,7 @@
     <Compile Include="FrontendLogic\PasswordBoxHelper.cs" />
     <Compile Include="FrontendLogic\PriorityToBrushConverter.cs" />
     <Compile Include="FrontendLogic\ScaleConverter.cs" />
+    <Compile Include="FrontendLogic\StatusToColorConverter.cs" />
     <Compile Include="FrontendLogic\TagSelectionConverter.cs" />
     <Compile Include="MVVM\Model\AnnouncementModel.cs" />
     <Compile Include="MVVM\Model\AnnouncementNode.cs" />
@@ -163,6 +166,8 @@
     <Compile Include="MVVM\Model\ReportManager.cs" />
     <Compile Include="MVVM\Model\ReportModel.cs" />
     <Compile Include="MVVM\Model\ServiceRequestModel.cs" />
+    <Compile Include="MVVM\Model\ServiceRequestNode.cs" />
+    <Compile Include="MVVM\Model\ServiceRequestTree.cs" />
     <Compile Include="MVVM\Model\TagNode.cs" />
     <Compile Include="MVVM\Model\TagsModel.cs" />
     <Compile Include="MVVM\Model\TagsTree.cs" />
@@ -172,10 +177,13 @@
     <Compile Include="MVVM\View-Model\EventsViewModel.cs" />
     <Compile Include="MVVM\View-Model\LoginRegisterViewModel.cs" />
     <Compile Include="MVVM\View-Model\MainWindowViewModel.cs" />
+    <Compile Include="MVVM\View-Model\ReportDetailsViewModel.cs" />
     <Compile Include="MVVM\View-Model\ReportService.cs" />
     <Compile Include="MVVM\View-Model\ReportViewModel.cs" />
+    <Compile Include="MVVM\View-Model\ServiceRequestDetailsViewModel.cs" />
     <Compile Include="MVVM\View-Model\ServiceRequestViewModel.cs" />
     <Compile Include="MVVM\View-Model\StaffMenuViewModel.cs" />
+    <Compile Include="MVVM\View-Model\UserServiceRequestsViewModel.cs" />
     <Compile Include="MVVM\View\AllReportsUserControl.xaml.cs">
       <DependentUpon>AllReportsUserControl.xaml</DependentUpon>
     </Compile>
@@ -200,6 +208,9 @@
     <Compile Include="MVVM\View\RegisterUserControl.xaml.cs">
       <DependentUpon>RegisterUserControl.xaml</DependentUpon>
     </Compile>
+    <Compile Include="MVVM\View\ReportDetailsWindow.xaml.cs">
+      <DependentUpon>ReportDetailsWindow.xaml</DependentUpon>
+    </Compile>
     <Compile Include="MVVM\View\ReportSectionUserControl.xaml.cs">
       <DependentUpon>ReportSectionUserControl.xaml</DependentUpon>
     </Compile>
@@ -208,6 +219,12 @@
     </Compile>
     <Compile Include="MVVM\View\SelectReportDialogue.xaml.cs">
       <DependentUpon>SelectReportDialogue.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="MVVM\View\ServiceRequestDetailsPopup.xaml.cs">
+      <DependentUpon>ServiceRequestDetailsPopup.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="MVVM\View\ServiceRequestSubmissionPopup.xaml.cs">
+      <DependentUpon>ServiceRequestSubmissionPopup.xaml</DependentUpon>
     </Compile>
     <Compile Include="MVVM\View\ServiceRequestUserControl.xaml.cs">
       <DependentUpon>ServiceRequestUserControl.xaml</DependentUpon>
@@ -269,6 +286,10 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
+    <Page Include="MVVM\View\ReportDetailsWindow.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="MVVM\View\ReportSectionUserControl.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
@@ -278,6 +299,14 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="MVVM\View\SelectReportDialogue.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="MVVM\View\ServiceRequestDetailsPopup.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="MVVM\View\ServiceRequestSubmissionPopup.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -297,6 +326,18 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
+    <Page Include="MVVM\View\UserDashboardUserControl.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="MVVM\View\UserServiceRequestsDisplay.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="MVVM\View\UserServiceRequestView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="ResourceDictionaries\ComboBoxStyles.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
@@ -306,6 +347,15 @@
     <Compile Include="MVVM\View-Model\HomeViewModel.cs" />
     <Compile Include="MVVM\View\HomeView.xaml.cs">
       <DependentUpon>HomeView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="MVVM\View\UserDashboardUserControl.xaml.cs">
+      <DependentUpon>UserDashboardUserControl.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="MVVM\View\UserServiceRequestsDisplay.xaml.cs">
+      <DependentUpon>UserServiceRequestsDisplay.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="MVVM\View\UserServiceRequestView.xaml.cs">
+      <DependentUpon>UserServiceRequestView.xaml</DependentUpon>
     </Compile>
     <Compile Include="Properties\AssemblyInfo.cs">
       <SubType>Code</SubType>

@@ -1,4 +1,5 @@
-﻿using ST10144453_PROG7312.MVVM.View_Model;
+﻿using ST10144453_PROG7312.MVVM.Model;
+using ST10144453_PROG7312.MVVM.View_Model;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -21,21 +22,46 @@ namespace ST10144453_PROG7312.MVVM.View
     /// </summary>
     public partial class ServiceRequestUserControl : UserControl
     {
-        public ServiceRequestUserControl()
+        public ServiceRequestUserControl(ServiceRequestModel request)
         {
             InitializeComponent();
-            DataContext = new ServiceRequestViewModel();
+            DataContext = new ServiceRequestViewModel(request, (Window)this.Parent);
         }
 
 
         private void Button_Click(object sender, RoutedEventArgs e)
         {
+            var openFileDialog = new Microsoft.Win32.OpenFileDialog
+            {
+                Multiselect = true,
+                Filter = "All Files|*.pdf;*.doc;*.docx;*.txt;*.jpg;*.jpeg;*.png|PDF Files|*.pdf|Word Documents|*.doc;*.docx|Text Files|*.txt|Image Files|*.jpg;*.jpeg;*.png"
+            };
 
+            if (openFileDialog.ShowDialog() == true)
+            {
+                var viewModel = DataContext as ServiceRequestViewModel;
+                foreach (string filename in openFileDialog.FileNames)
+                {
+                    viewModel?.AttachFile(filename);
+                }
+            }
         }
 
         private void Button_Click_1(object sender, RoutedEventArgs e)
         {
+            var selectReportsWindow = new SelectReportsDialog
+            {
+                Owner = Window.GetWindow(this)
+            };
 
+            if (selectReportsWindow.ShowDialog() == true)
+            {
+                var viewModel = DataContext as ServiceRequestViewModel;
+                foreach (var report in selectReportsWindow.SelectedReports)
+                {
+                    viewModel?.LinkReport(report);
+                }
+            }
         }
     }
 }

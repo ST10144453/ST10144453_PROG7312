@@ -93,6 +93,9 @@
                 Source="pack://application:,,,/Resources/Images/Blobs/yellowBlob.png" />
         </Canvas>
 
-        <ContentControl x:Name="MainContentControl" Margin="0,40,0,0" Grid.ZIndex="1" />
+        <ContentControl
+            x:Name="MainContentControl"
+            Margin="0,40,0,0"
+            Grid.ZIndex="1" />
     </Grid>
 </Window>

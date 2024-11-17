@@ -34,6 +34,8 @@ namespace ST10144453_PROG7312.MVVM.View_Model
 
         public ICommand NavigateEventCommand { get; private set; }
 
+        public ICommand NavigateToDashboardCommand { get; private set; }
+
         private UserModel _user;
 
         public UserModel User { get; set; }
@@ -49,6 +51,7 @@ namespace ST10144453_PROG7312.MVVM.View_Model
             ShowUnderDevelopmentPopupCommand = new RelayCommand(ShowUnderDevelopmentPopup);
             NavigateEventCommand = new RelayCommand(NavigateEvent);
             NavigateToServiceRequestCommand = new RelayCommand(NavigateToServiceRequest);
+            NavigateToDashboardCommand = new RelayCommand(NavigateToDashboard);
 
         }
 
@@ -98,11 +101,20 @@ namespace ST10144453_PROG7312.MVVM.View_Model
             var mainWindow = Application.Current.MainWindow as MainWindow;
             if (mainWindow != null)
             {
-                var serviceRequestView = new ServiceRequestUserControl();
+                var serviceRequestView = new ServiceRequestUserControl(new ServiceRequestModel());
                 mainWindow.MainContentControl.Content = serviceRequestView;
             }
         }
 
+        private void NavigateToDashboard()
+        {
+            var mainWindow = Application.Current.MainWindow as MainWindow;
+            if (mainWindow != null)
+            {
+                var dashboardView = new UserDashboardUserControl(User);
+                mainWindow.MainContentControl.Content = dashboardView;
+            }
+        }
         protected void OnPropertyChanged([CallerMemberName] string propertyName = null)
         {
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));

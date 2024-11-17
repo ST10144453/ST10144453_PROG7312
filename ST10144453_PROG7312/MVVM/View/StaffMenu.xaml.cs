@@ -23,6 +23,8 @@ namespace ST10144453_PROG7312.MVVM.View
     public partial class StaffMenu : UserControl
     {
         private StaffEventsDisplayUserControl _staffEventsDisplayUserControl;
+        private AllReportsUserControl _allReportsUserControl;
+        private UserServiceRequestsDisplay _serviceRequestsDisplay;
         private CreateEventUserControl _createEventUserControl;
 
         public StaffMenu(UserModel user)
@@ -30,13 +32,33 @@ namespace ST10144453_PROG7312.MVVM.View
             InitializeComponent();
             DataContext = new StaffMenuViewModel(user);
 
+            // Initialize all user controls
             _staffEventsDisplayUserControl = new StaffEventsDisplayUserControl();
+            _allReportsUserControl = new AllReportsUserControl();
+            _serviceRequestsDisplay = new UserServiceRequestsDisplay(user);
             _createEventUserControl = new CreateEventUserControl();
 
+            // Wire up events
             _staffEventsDisplayUserControl.CreateEventRequested += StaffEventsDisplayUserControl_CreateEventRequested;
             _createEventUserControl.EventCreated += CreateEventUserControl_EventCreated;
 
+            // Set initial content
+            ContentArea.Content = _allReportsUserControl;
+        }
+
+        private void ShowReports_Click(object sender, RoutedEventArgs e)
+        {
+            ContentArea.Content = _allReportsUserControl;
+        }
+
+        private void ManageEvents_Click(object sender, RoutedEventArgs e)
+        {
             ContentArea.Content = _staffEventsDisplayUserControl;
+        }
+
+        private void ShowServiceRequests_Click(object sender, RoutedEventArgs e)
+        {
+            ContentArea.Content = _serviceRequestsDisplay;
         }
 
         private void StaffEventsDisplayUserControl_CreateEventRequested(object sender, EventArgs e)
@@ -49,14 +71,19 @@ namespace ST10144453_PROG7312.MVVM.View
             ContentArea.Content = _staffEventsDisplayUserControl;
         }
 
-        private void ShowReports_Click(object sender, RoutedEventArgs e)
+        private void Button_Click(object sender, RoutedEventArgs e)
         {
-            // Handle showing reports
-        }
+            // Clear the current user session
+            UserSession.CurrentUser = null;
 
-        private void ManageEvents_Click(object sender, RoutedEventArgs e)
-        {
-            ContentArea.Content = _staffEventsDisplayUserControl;
+            // Get the main window
+            var mainWindow = Application.Current.MainWindow as MainWindow;
+            if (mainWindow != null)
+            {
+                // Navigate to the login/register menu using the MainContentControl
+                var loginRegisterMenu = new LoginRegisterMenu();
+                mainWindow.MainContentControl.Content = loginRegisterMenu;
+            }
         }
     }
 

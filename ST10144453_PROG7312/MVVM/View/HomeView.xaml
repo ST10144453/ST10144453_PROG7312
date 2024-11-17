@@ -208,7 +208,7 @@
                         <Button
                             Height="80"
                             Margin="0,10"
-                            Command="{Binding ShowUnderDevelopmentPopupCommand}"
+                            Command="{Binding NavigateToDashboardCommand}"
                             FontSize="24"
                             Style="{StaticResource ImageButtonStyle}">
                             <StackPanel HorizontalAlignment="Left" Orientation="Horizontal">
@@ -227,7 +227,7 @@
                             Height="80"
                             Margin="0,10"
                             Click="CloseButton_Click"
-                            Content="Quit"
+                            Content="Log Out"
                             FontSize="24"
                             Style="{StaticResource Button4Style}" />
                     </StackPanel>
