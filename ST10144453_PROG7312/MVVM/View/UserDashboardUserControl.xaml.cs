@@ -27,16 +27,13 @@ namespace ST10144453_PROG7312.MVVM.View
         public UserDashboardUserControl(UserModel user)
         {
             InitializeComponent();
-            _allReportsUserControl = new AllReportsUserControl();
             _currentUser = user;
-
-
+            _allReportsUserControl = new AllReportsUserControl(_currentUser);
         }
 
         private void NavigateAllReports(object sender, RoutedEventArgs e)
         {
-            MainContentControl.Content = _allReportsUserControl;
-
+            MainContentControl.Content = new AllReportsUserControl(_currentUser);
         }
 
         private void NavigateHome_Click(object sender, RoutedEventArgs e)

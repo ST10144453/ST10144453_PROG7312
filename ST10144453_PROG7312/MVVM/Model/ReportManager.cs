@@ -23,7 +23,7 @@ namespace ST10144453_PROG7312.MVVM.Model
         /// <summary>
         /// This collection holds the reports.
         /// </summary>
-        public ObservableCollection<ReportModel> Reports { get; private set; }
+        private ObservableCollection<ReportModel> _reports;
 
         //~~~~~~~~~~~~~ Methods: Default Constructor ~~~~~~~~~~~~~//
         /// <summary>
@@ -31,7 +31,7 @@ namespace ST10144453_PROG7312.MVVM.Model
         /// </summary>
         private ReportManager()
         {
-            Reports = new ObservableCollection<ReportModel>();
+            _reports = new ObservableCollection<ReportModel>();
         }
 
         //~~~~~~~~~~~~~ Properties: Instance ~~~~~~~~~~~~~//
@@ -44,13 +44,7 @@ namespace ST10144453_PROG7312.MVVM.Model
             {
                 if (_instance == null)
                 {
-                    lock (_lock)
-                    {
-                        if (_instance == null)
-                        {
-                            _instance = new ReportManager();
-                        }
-                    }
+                    _instance = new ReportManager();
                 }
                 return _instance;
             }
@@ -63,7 +57,24 @@ namespace ST10144453_PROG7312.MVVM.Model
         /// <param name="report"></param>
         public void AddReport(ReportModel report)
         {
-            Reports.Add(report);
+            if (_reports == null)
+            {
+                _reports = new ObservableCollection<ReportModel>();
+            }
+            _reports.Add(report);
+        }
+
+        //++++++++++++++ Properties: Reports ++++++++++++++//
+        /// <summary>
+        /// This property gets the collection of reports.
+        /// </summary>
+        public ObservableCollection<ReportModel> Reports
+        {
+            get => _reports;
+            set
+            {
+                _reports = value;
+            }
         }
     }
 }

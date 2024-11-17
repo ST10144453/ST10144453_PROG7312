@@ -19,7 +19,7 @@
 
     <Grid>
         <ScrollViewer VerticalScrollBarVisibility="Auto">
-            <ItemsControl x:Name="ReportListBox" ItemsSource="{Binding Reports}">
+            <ItemsControl x:Name="ReportListBox" ItemsSource="{Binding FilteredReports}">
                 <ItemsControl.ItemTemplate>
                     <DataTemplate>
                         <Border

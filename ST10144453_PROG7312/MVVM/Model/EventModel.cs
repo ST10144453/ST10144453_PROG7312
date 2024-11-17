@@ -15,6 +15,37 @@ namespace ST10144453_PROG7312.MVVM.Model
         public List<string> eventPhotos { get; set; }
         public List<TagsModel> eventTags { get; set; }
 
+        // Add static Events list
+        public static List<EventModel> Events = new List<EventModel>
+        {
+            new EventModel
+            {
+                eventDate = DateTime.Now.AddDays(7),
+                eventTitle = "Community Cleanup Day",
+                eventLocation = "Langa Community Center",
+                eventDescription = "Join us for a community-wide cleanup initiative to make our neighborhood cleaner and safer.",
+                eventPhotos = new List<string> { "pack://application:,,,/Resources/Hardcoded/Cleanup/cleanup1.jpg", "pack://application:,,,/Resources/Hardcoded/Cleanup/cleanup2.jpg" },
+                eventTags = new List<TagsModel> { TagsModel.Tags[0], TagsModel.Tags[3] } // Community Engagement, Environmental
+            },
+            new EventModel
+            {
+                eventDate = DateTime.Now.AddDays(14),
+                eventTitle = "Heritage Day Festival",
+                eventLocation = "V&A Waterfront, Cape Town",
+                eventDescription = "Celebrate South Africa's rich cultural heritage with traditional food, music, and performances.",
+                eventPhotos = new List<string> { "pack://application:,,,/Resources/Hardcoded/Heritage/heritage1.jpg", "pack://application:,,,/Resources/Hardcoded/Heritage/heritage2.jpg", "pack://application:,,,/Resources/Hardcoded/Heritage/heritage3.jpg" },
+                eventTags = new List<TagsModel> { TagsModel.Tags[1], TagsModel.Tags[10] } // Cultural Festivals, Music and Entertainment
+            },
+            new EventModel
+            {
+                eventDate = DateTime.Now.AddDays(12),
+                eventTitle = "Two Oceans Marathon",
+                eventLocation = "Newlands, Cape Town",
+                eventDescription = "An ultra-marathon held annually, offering participants the chance to run one of the most scenic routes in the world.",
+                eventPhotos = new List<string> { "pack://application:,,,/Resources/Hardcoded/Marathon/marathon1.jpg", "pack://application:,,,/Resources/Hardcoded/Marathon/marathon2.jpg" },
+                eventTags = new List<TagsModel> { TagsModel.Tags[2], TagsModel.Tags[15] } // Sports Events, Health and Wellness
+            }
+        };
 
         public string Title => eventTitle;
         public DateTime Date => eventDate;

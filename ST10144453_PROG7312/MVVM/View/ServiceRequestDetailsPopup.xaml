@@ -10,6 +10,13 @@
     <Window.Resources>
         <converters:StatusToColorConverter x:Key="StatusToColorConverter"/>
         <converters:BoolToVisibilityConverter x:Key="BoolToVisibilityConverter"/>
+
+        <ResourceDictionary x:Key="Styles">
+            <ResourceDictionary.MergedDictionaries>
+                <ResourceDictionary Source="/ResourceDictionaries/GlobalStyles.xaml" />
+                <ResourceDictionary Source="/ResourceDictionaries/ComboBoxStyles.xaml" />
+            </ResourceDictionary.MergedDictionaries>
+        </ResourceDictionary>
     </Window.Resources>
 
     <ScrollViewer>

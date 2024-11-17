@@ -34,7 +34,7 @@ namespace ST10144453_PROG7312.MVVM.View
 
             // Initialize all user controls
             _staffEventsDisplayUserControl = new StaffEventsDisplayUserControl();
-            _allReportsUserControl = new AllReportsUserControl();
+            _allReportsUserControl = new AllReportsUserControl(null);
             _serviceRequestsDisplay = new UserServiceRequestsDisplay(user);
             _createEventUserControl = new CreateEventUserControl();
 

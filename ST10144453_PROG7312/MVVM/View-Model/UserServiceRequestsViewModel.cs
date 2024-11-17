@@ -88,8 +88,8 @@ namespace ST10144453_PROG7312.MVVM.View_Model
                 CreatedBy = _currentUser.userName,
                 Status = "Pending"
             };
-            
-            var serviceRequestView = new ServiceRequestUserControl(newRequest);
+
+            var serviceRequestView = new ServiceRequestUserControl(newRequest, _currentUser);
             var mainWindow = Application.Current.MainWindow as MainWindow;
             if (mainWindow != null)
             {

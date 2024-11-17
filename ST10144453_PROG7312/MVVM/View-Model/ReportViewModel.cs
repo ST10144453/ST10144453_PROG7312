@@ -1,5 +1,4 @@
-﻿//0000000000oooooooooo..........Start Of File..........ooooooooooo00000000000//
-using Microsoft.Win32;
+﻿using Microsoft.Win32;
 using ST10144453_PROG7312.Core;
 using ST10144453_PROG7312.MVVM.Model;
 using ST10144453_PROG7312.MVVM.View;
@@ -385,43 +384,57 @@ namespace ST10144453_PROG7312.MVVM.View_Model
         /// <summary>
         /// This constructor initializes the ReportViewModel class.
         /// </summary>
-        public ReportViewModel()
+        public ReportViewModel(UserModel currentUser = null)
         {
+            CurrentUser = currentUser;
+            Categories = new ObservableCollection<string>
+            {
+                "Infrastructure",
+                "Safety",
+                "Environmental",
+                "Community",
+                "Other"
+            };
+            MediaItems = new ObservableCollection<MediaItem>();
+            
+            // Initialize Reports from ReportManager
+            Reports = ReportManager.Instance.Reports ?? new ObservableCollection<ReportModel>();
+            Debug.WriteLine($"ReportViewModel initialized with {Reports.Count} reports");
+            
+            FilterReportsByCurrentUser();
+
             AttachMediaCommand = new RelayCommand(AttachMedia);
             SubmitCommand = new RelayCommand(Submit);
             NavigateToHomeCommand = new RelayCommand(NavigateToHome);
-            MediaItems = new ObservableCollection<MediaItem>();
-            Reports = ReportManager.Instance.Reports;
+        }
 
-            CurrentUser = UserSession.CurrentUser; // Get the current user
-
-            if (CurrentUser == null)
+        private void FilterReportsByCurrentUser()
+        {
+            Debug.WriteLine($"Filtering reports for user: {CurrentUser?.userName}");
+            Debug.WriteLine($"Total reports available: {Reports?.Count ?? 0}");
+            
+            if (Reports == null)
             {
-                Debug.WriteLine("CurrentUser is null in ReportViewModel constructor");
+                FilteredReports = new ObservableCollection<ReportModel>();
+                return;
+            }
+
+            if (CurrentUser != null)
+            {
+                var filteredList = Reports.Where(r => 
+                {
+                    Debug.WriteLine($"Comparing report creator: {r.CreatedBy} with current user: {CurrentUser.userName}");
+                    return r.CreatedBy == CurrentUser.userName;
+                }).ToList();
+                
+                FilteredReports = new ObservableCollection<ReportModel>(filteredList);
+                Debug.WriteLine($"Filtered reports count after filtering: {FilteredReports.Count}");
             }
             else
             {
-                Debug.WriteLine($"CurrentUser is set in ReportViewModel constructor: {CurrentUser.userName}");
-
+                FilteredReports = new ObservableCollection<ReportModel>(Reports);
+                Debug.WriteLine("No user provided, showing all reports");
             }
-            Categories = new ObservableCollection<string>
-            {
-                "Roads and Traffic",
-                "Public Utilities",
-                "Waste Management",
-                "Parks and Recreation",
-                "Public Safety",
-                "Housing and Buildings",
-                "Environmental Concerns",
-                "Public Transportation",
-                "Health and Sanitation",
-                "Community Services",
-                "Economic Development",
-                "Education and Youth Services"
-            };
-
-            Console.WriteLine($"ReportViewModel initialized with user: {CurrentUser?.userName}");
-
         }
 
         //++++++++++++++ Methods: NavigateToHome ++++++++++++++//
@@ -654,18 +667,22 @@ namespace ST10144453_PROG7312.MVVM.View_Model
                 return;
             }
 
-            // Create new report model
+            Debug.WriteLine($"Creating report with user: {CurrentUser?.userName}");
             var newReport = new ReportModel
             {
                 reportName = IssueName,
                 reportLocation = Location,
-                reportDescription = Description,
                 reportCategory = SelectedCategory,
-                Media = new List<Model.MediaItem>(),
+                reportDescription = Description,
                 reportDate = DateTime.Now,
-                CreatedBy = CurrentUser.userName // Link the report to the current user
-
+                CreatedBy = CurrentUser?.userName,
+Media = new List<MediaItem>(MediaItems)
             };
+            Debug.WriteLine($"New report CreatedBy: {newReport.CreatedBy}");
+
+            // Add the report using ReportManager
+            ReportManager.Instance.AddReport(newReport);
+            Debug.WriteLine($"Added report to ReportManager. Current count: {ReportManager.Instance.Reports.Count}");
 
             string reportGuid = Guid.NewGuid().ToString();
             string reportFolder = Path.Combine("Files", reportGuid);
@@ -701,6 +718,7 @@ namespace ST10144453_PROG7312.MVVM.View_Model
 
             ReportService.Instance.AddReport(newReport); 
             OnPropertyChanged(nameof(Reports));
+    RefreshReports();
 
             Debug.WriteLine($"New report added by user: {CurrentUser?.userName}");
 
@@ -724,6 +742,10 @@ namespace ST10144453_PROG7312.MVVM.View_Model
             Description = string.Empty;
             SelectedCategory = string.Empty;
             MediaItems.Clear();
+
+            // Refresh the reports
+            Reports = ReportManager.Instance.Reports;
+            FilterReportsByCurrentUser();
         }
 
         //++++++++++++++ Methods: UpdateProgress ++++++++++++++//
@@ -742,7 +764,12 @@ namespace ST10144453_PROG7312.MVVM.View_Model
             Progress = newProgress;
         }
 
-      
+      public void RefreshReports()
+{
+    Reports = ReportManager.Instance.Reports;
+    Debug.WriteLine($"Reports refreshed. Total count: {Reports.Count}");
+    FilterReportsByCurrentUser();
+}
 
 
         //++++++++++++++ Methods: OnPropertyChanged ++++++++++++++//
@@ -756,4 +783,3 @@ namespace ST10144453_PROG7312.MVVM.View_Model
         }
     }
 }
-//0000000000oooooooooo...........End Of File...........ooooooooooo00000000000//

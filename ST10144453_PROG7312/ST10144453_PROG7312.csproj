@@ -193,6 +193,9 @@
     <Compile Include="MVVM\View\CreateEventView.xaml.cs">
       <DependentUpon>CreateEventView.xaml</DependentUpon>
     </Compile>
+    <Compile Include="MVVM\View\EventDetailsPopup.xaml.cs">
+      <DependentUpon>EventDetailsPopup.xaml</DependentUpon>
+    </Compile>
     <Compile Include="MVVM\View\EventsViewUserControl.xaml.cs">
       <DependentUpon>EventsViewUserControl.xaml</DependentUpon>
     </Compile>
@@ -259,6 +262,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="MVVM\View\CreateEventView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="MVVM\View\EventDetailsPopup.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -330,6 +337,10 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
+    <Page Include="MVVM\View\UserReportsUserControl.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="MVVM\View\UserServiceRequestsDisplay.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
@@ -342,6 +353,10 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
+    <Page Include="ResourceDictionaries\GlobalStyles.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
   </ItemGroup>
   <ItemGroup>
     <Compile Include="MVVM\View-Model\HomeViewModel.cs" />
@@ -350,6 +365,9 @@
     </Compile>
     <Compile Include="MVVM\View\UserDashboardUserControl.xaml.cs">
       <DependentUpon>UserDashboardUserControl.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="MVVM\View\UserReportsUserControl.xaml.cs">
+      <DependentUpon>UserReportsUserControl.xaml</DependentUpon>
     </Compile>
     <Compile Include="MVVM\View\UserServiceRequestsDisplay.xaml.cs">
       <DependentUpon>UserServiceRequestsDisplay.xaml</DependentUpon>

@@ -22,9 +22,12 @@ namespace ST10144453_PROG7312.MVVM.View
     /// </summary>
     public partial class ServiceRequestUserControl : UserControl
     {
-        public ServiceRequestUserControl(ServiceRequestModel request)
+        private readonly UserModel _currentUser;
+
+        public ServiceRequestUserControl(ServiceRequestModel request, UserModel currentUser)
         {
             InitializeComponent();
+            _currentUser = currentUser;
             DataContext = new ServiceRequestViewModel(request, (Window)this.Parent);
         }
 
@@ -63,5 +66,23 @@ namespace ST10144453_PROG7312.MVVM.View
                 }
             }
         }
+
+        private void NavigateHome_Click(object sender, RoutedEventArgs e)
+        {
+            // Assuming MainContentControl is the container in the parent window or control
+            var parentWindow = Window.GetWindow(this);
+            if (parentWindow != null)
+            {
+                var mainContentControl = parentWindow.FindName("MainContentControl") as ContentControl;
+                if (mainContentControl != null)
+                {
+                    mainContentControl.Content = new HomeView(_currentUser);
+                }
+            }
+        }
     }
 }
+
+
+    
+      
