@@ -111,6 +111,18 @@ namespace ST10144453_PROG7312.MVVM.Model
                 return null;
             }
         }
+
+        public string IconPath
+        {
+            get
+            {
+                if (IsImage) return "/Resources/Images/image-icon.png";
+                if (IsPdf) return "/Resources/Images/pdf-icon.png";
+                if (IsWord) return "/Resources/Images/word-icon.png";
+                if (IsText) return "/Resources/Images/text-icon.png";
+                return "/Resources/Images/file-icon.png";
+            }
+        }
     }
 }
 //0000000000oooooooooo...........End Of File...........ooooooooooo00000000000//

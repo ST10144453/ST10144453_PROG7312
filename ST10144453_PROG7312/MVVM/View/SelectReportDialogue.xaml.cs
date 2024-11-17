@@ -1,32 +1,37 @@
 ﻿using ST10144453_PROG7312.MVVM.Model;
+using ST10144453_PROG7312.MVVM.View_Model;
+using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.Linq;
 using System.Windows;
 
 namespace ST10144453_PROG7312.MVVM.View
 {
     public partial class SelectReportsDialog : Window
     {
-        public ObservableCollection<ReportModel> AvailableReports { get; private set; }
-        public ObservableCollection<ReportModel> SelectedReports { get; private set; }
+        public List<ReportModel> SelectedReports { get; private set; }
 
-        public SelectReportsDialog(ObservableCollection<ReportModel> availableReports,
-                                 ObservableCollection<ReportModel> currentlySelected)
+        public SelectReportsDialog()
         {
             InitializeComponent();
-            AvailableReports = availableReports;
-            SelectedReports = new ObservableCollection<ReportModel>(currentlySelected);
-            DataContext = this;
+            LoadReports();
         }
 
-        private void OkButton_Click(object sender, RoutedEventArgs e)
+        private void LoadReports()
         {
-            foreach (ReportModel report in ReportsListView.SelectedItems)
-            {
-                if (!SelectedReports.Contains(report))
-                {
-                    SelectedReports.Add(report);
-                }
-            }
+            // Get reports from the ReportService
+            var reports = ReportService.Instance.Reports.ToList();
+            
+            // Sort by date descending to show newest first
+            reports = reports.OrderByDescending(r => r.reportDate).ToList();
+            
+            // Update the ListView
+            ReportsListBox.ItemsSource = reports;
+        }
+
+        private void SelectButton_Click(object sender, RoutedEventArgs e)
+        {
+            SelectedReports = ReportsListBox.SelectedItems.Cast<ReportModel>().ToList();
             DialogResult = true;
             Close();
         }

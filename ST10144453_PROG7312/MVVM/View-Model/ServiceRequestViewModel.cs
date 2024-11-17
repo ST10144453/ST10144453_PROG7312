@@ -41,6 +41,7 @@ namespace ST10144453_PROG7312.MVVM.View_Model
         private ServiceRequestModel _recentRequest;
         private readonly Window _popupWindow;
 
+
         public ObservableCollection<string> Categories
         {
             get => _categories;
@@ -208,9 +209,9 @@ namespace ST10144453_PROG7312.MVVM.View_Model
             "SMS"
         };
 
-        public ICommand AddMediaCommand => _addMediaCommand ?? (_addMediaCommand = new RelayCommand(ExecuteAddMedia));
-        public ICommand SelectReportsCommand => _selectReportsCommand ?? (_selectReportsCommand = new RelayCommand(ExecuteSelectReports));
-        public ICommand SubmitRequestCommand => _submitRequestCommand ?? (_submitRequestCommand = new RelayCommand(ExecuteSubmitRequest, CanExecuteSubmitRequest));
+        public ICommand AddMediaCommand { get; private set; }
+        public ICommand SelectReportsCommand { get; private set; }
+        public ICommand SubmitRequestCommand { get; private set; }
         public ICommand NavigateToDashboardCommand { get; private set; }
 
         public ServiceRequestModel RecentRequest
@@ -233,17 +234,35 @@ namespace ST10144453_PROG7312.MVVM.View_Model
 
         public ServiceRequestViewModel(ServiceRequestModel request, Window popupWindow)
         {
+            RecentRequest = request ?? new ServiceRequestModel();
             _popupWindow = popupWindow;
-            RecentRequest = request;
-            NavigateToDashboardCommand = new RelayCommand(NavigateToDashboard);
             _requestTree = new ServiceRequestTree();
-            Categories = new ObservableCollection<string>(ServiceRequestManager.Instance.GetAllCategories());
-            InitializeData();
+
+
+            // Initialize categories
+            Categories = new ObservableCollection<string>
+            {
+                "Roads and Traffic",
+                "Public Utilities",
+                "Waste Management",
+                "Parks and Recreation",
+                "Public Safety",
+                "Housing and Buildings",
+                "Environmental Concerns",
+                "Public Transportation",
+                "Health and Sanitation",
+                "Community Services",
+                "Economic Development",
+                "Education and Youth Services"
+            };
+
+            // Initialize commands
+            AddMediaCommand = new RelayCommand(ExecuteAddMedia);
+            SelectReportsCommand = new RelayCommand(ExecuteSelectReports);
+            SubmitRequestCommand = new RelayCommand(ExecuteSubmitRequest, CanExecuteSubmitRequest);
+            NavigateToDashboardCommand = new RelayCommand(NavigateToDashboard);
             SupportingEvidence = new ObservableCollection<MediaItem>();
-            InitializeCommands();
-            _addMediaCommand = new RelayCommand(ExecuteAddMedia);
-            _selectReportsCommand = new RelayCommand(ExecuteSelectReports);
-            _submitRequestCommand = new RelayCommand(ExecuteSubmitRequest, CanExecuteSubmitRequest);
+
         }
 
         private void InitializeData()
@@ -315,17 +334,27 @@ namespace ST10144453_PROG7312.MVVM.View_Model
                 PreferredFeedbackMethod = PreferredFeedbackMethod,
                 RequestDate = DateTime.Now,
                 Status = "Pending",
-                CreatedBy = UserSession.CurrentUser?.userName
+                CreatedBy = UserSession.CurrentUser?.userName,
+                AttachedFiles = RecentRequest.AttachedFiles ?? new List<AttachedFile>(),
+                LinkedReports = RecentRequest.LinkedReports ?? new List<ReportModel>()
             };
 
+            // Save the request
             ServiceRequestManager.Instance.AddRequest(request);
+            _requestTree.Insert(request);
+            ApplyFilters();
+
+            // Update RecentRequest
             RecentRequest = request;
+            OnPropertyChanged(nameof(RecentRequest));
 
-            var popup = new ServiceRequestSubmissionPopup(request);
-            popup.Owner = Application.Current.MainWindow;
-            popup.ShowDialog();
+            // Show submission popup
+            var submissionPopup = new ServiceRequestSubmissionPopup(request);
+            submissionPopup.Owner = _popupWindow;
+            submissionPopup.ShowDialog();
 
-            ClearForm();
+            // Close the current window
+            _popupWindow?.Close();
         }
 
         private bool CanExecuteSubmitRequest()
@@ -364,6 +393,45 @@ namespace ST10144453_PROG7312.MVVM.View_Model
                 _popupWindow?.Close();
                 var dashboardView = new UserDashboardUserControl(UserSession.CurrentUser);
                 mainWindow.MainContentControl.Content = dashboardView;
+            }
+        }
+
+        public void AttachFile(string filePath)
+        {
+            try
+            {
+                var fileInfo = new FileInfo(filePath);
+                var fileBytes = File.ReadAllBytes(filePath);
+                var base64Content = Convert.ToBase64String(fileBytes);
+
+                var attachedFile = new AttachedFile
+                {
+                    FileName = fileInfo.Name,
+                    FileContent = base64Content,
+                    FileType = fileInfo.Extension
+                };
+
+                if (RecentRequest.AttachedFiles == null)
+                    RecentRequest.AttachedFiles = new List<AttachedFile>();
+                    
+                RecentRequest.AttachedFiles.Add(attachedFile);
+                OnPropertyChanged(nameof(RecentRequest));
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"Error attaching file: {ex.Message}", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+            }
+        }
+
+        public void LinkReport(ReportModel report)
+        {
+            if (RecentRequest.LinkedReports == null)
+                RecentRequest.LinkedReports = new List<ReportModel>();
+                
+            if (!RecentRequest.LinkedReports.Contains(report))
+            {
+                RecentRequest.LinkedReports.Add(report);
+                OnPropertyChanged(nameof(RecentRequest));
             }
         }
 

@@ -18,6 +18,9 @@ namespace ST10144453_PROG7312.MVVM.Model
         private string _additionalAddress;
         private string _preferredFeedbackMethod;
 
+        private List<AttachedFile> _attachedFiles = new List<AttachedFile>();
+        private List<ReportModel> _linkedReports = new List<ReportModel>();
+
         public string Status
         {
             get => _status;
@@ -94,11 +97,37 @@ namespace ST10144453_PROG7312.MVVM.Model
         public DateTime RequestDate { get; set; }
         public Guid RequestID { get; set; }
 
-    
+        public List<AttachedFile> AttachedFiles
+        {
+            get => _attachedFiles;
+            set
+            {
+                _attachedFiles = value;
+                OnPropertyChanged();
+            }
+        }
+
+        public List<ReportModel> LinkedReports
+        {
+            get => _linkedReports;
+            set
+            {
+                _linkedReports = value;
+                OnPropertyChanged();
+            }
+        }
+
         public event PropertyChangedEventHandler PropertyChanged;
         protected virtual void OnPropertyChanged([CallerMemberName] string propertyName = null)
         {
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
         }
+    }
+
+    public class AttachedFile
+    {
+        public string FileName { get; set; }
+        public string FileContent { get; set; } // Base64 encoded file content
+        public string FileType { get; set; }
     }
 }

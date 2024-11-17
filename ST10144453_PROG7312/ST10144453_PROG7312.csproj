@@ -177,6 +177,7 @@
     <Compile Include="MVVM\View-Model\EventsViewModel.cs" />
     <Compile Include="MVVM\View-Model\LoginRegisterViewModel.cs" />
     <Compile Include="MVVM\View-Model\MainWindowViewModel.cs" />
+    <Compile Include="MVVM\View-Model\ReportDetailsViewModel.cs" />
     <Compile Include="MVVM\View-Model\ReportService.cs" />
     <Compile Include="MVVM\View-Model\ReportViewModel.cs" />
     <Compile Include="MVVM\View-Model\ServiceRequestDetailsViewModel.cs" />
@@ -206,6 +207,9 @@
     </Compile>
     <Compile Include="MVVM\View\RegisterUserControl.xaml.cs">
       <DependentUpon>RegisterUserControl.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="MVVM\View\ReportDetailsWindow.xaml.cs">
+      <DependentUpon>ReportDetailsWindow.xaml</DependentUpon>
     </Compile>
     <Compile Include="MVVM\View\ReportSectionUserControl.xaml.cs">
       <DependentUpon>ReportSectionUserControl.xaml</DependentUpon>
@@ -279,6 +283,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="MVVM\View\RegisterUserControl.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="MVVM\View\ReportDetailsWindow.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

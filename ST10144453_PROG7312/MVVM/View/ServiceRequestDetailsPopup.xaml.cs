@@ -13,6 +13,9 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
 using ST10144453_PROG7312.MVVM.View_Model;
+using ST10144453_PROG7312.MVVM.View;
+using System.Diagnostics;
+using System.IO;
 
 namespace ST10144453_PROG7312.MVVM.View
 {
@@ -41,6 +44,41 @@ namespace ST10144453_PROG7312.MVVM.View
         private void CloseButton_Click(object sender, RoutedEventArgs e)
         {
             Close();
+        }
+
+        private void OpenFile_Click(object sender, RoutedEventArgs e)
+        {
+            if (sender is Button button && button.DataContext is AttachedFile file)
+            {
+                try
+                {
+                    string tempFilePath = System.IO.Path.Combine(System.IO.Path.GetTempPath(), file.FileName);
+                    System.IO.File.WriteAllBytes(tempFilePath, Convert.FromBase64String(file.FileContent));
+
+                    Process.Start(new ProcessStartInfo
+                    {
+                        FileName = tempFilePath,
+                        UseShellExecute = true
+                    });
+                }
+                catch (Exception ex)
+                {
+                    MessageBox.Show($"Error opening file: {ex.Message}", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+                }
+            }
+        }
+
+        private void OpenReport_Click(object sender, RoutedEventArgs e)
+        {
+            if (sender is Button button && button.DataContext is ReportModel report)
+            {
+                var reportDetailsWindow = new ReportDetailsWindow(report)
+                {
+                    Owner = this,
+                    DataContext = new ReportDetailsViewModel(report)
+                };
+                reportDetailsWindow.ShowDialog();
+            }
         }
     }
 }
