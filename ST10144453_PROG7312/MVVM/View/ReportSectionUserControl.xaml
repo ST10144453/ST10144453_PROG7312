@@ -131,7 +131,7 @@
                         FontSize="30"
                         FontWeight="Bold"
                         Text="Manage Mzansi" />
-                  
+
                     <Button
                         Width="280"
                         Height="180"

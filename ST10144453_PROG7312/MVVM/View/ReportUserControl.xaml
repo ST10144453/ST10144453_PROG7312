@@ -8,12 +8,12 @@
     xmlns:viewModel="clr-namespace:ST10144453_PROG7312.MVVM.View_Model"
     d:DesignHeight="1080"
     d:DesignWidth="1710"
-    Background="Transparent"
-    mc:Ignorable="d"
     AllowDrop="True"
+    Background="Transparent"
     DragEnter="OnMediaDragEnter"
     DragLeave="OnMediaDragLeave"
-    Drop="OnMediaDrop">
+    Drop="OnMediaDrop"
+    mc:Ignorable="d">
     <UserControl.Resources>
         <ResourceDictionary>
             <!--  Merging external resource dictionaries  -->

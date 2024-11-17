@@ -1,4 +1,5 @@
-﻿using ST10144453_PROG7312.MVVM.Model;
+﻿using ST10144453_PROG7312.Core;
+using ST10144453_PROG7312.MVVM.Model;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
@@ -15,6 +16,28 @@ namespace ST10144453_PROG7312.MVVM.View_Model
         private string _username;
         private string _email;
         private string _profilePhoto;
+        private ObservableCollection<ReportModel> _allReports;
+        private ObservableCollection<ServiceRequestModel> _serviceRequests;
+
+        public ObservableCollection<ReportModel> AllReports
+        {
+            get => _allReports;
+            set
+            {
+                _allReports = value;
+                OnPropertyChanged();
+            }
+        }
+
+        public ObservableCollection<ServiceRequestModel> ServiceRequests
+        {
+            get => _serviceRequests;
+            set
+            {
+                _serviceRequests = value;
+                OnPropertyChanged();
+            }
+        }
 
         public string Username
         {
@@ -46,25 +69,36 @@ namespace ST10144453_PROG7312.MVVM.View_Model
             }
         }
 
-
-        public event PropertyChangedEventHandler PropertyChanged;
-
-        protected void OnPropertyChanged([CallerMemberName] string propertyName = null)
-        {
-            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
-        }
-
-        // Parameterless constructor
+        // Public parameterless constructor
         public StaffMenuViewModel()
         {
         }
 
-        // Constructor to initialize with user data
         public StaffMenuViewModel(UserModel user)
         {
             Username = user.userName;
             Email = user.email;
             ProfilePhoto = user.profilePhoto;
+
+            // Load all reports and service requests
+            LoadAllReports();
+            LoadAllServiceRequests();
+        }
+
+        private void LoadAllReports()
+        {
+            AllReports = new ObservableCollection<ReportModel>(ReportManager.Instance.Reports);
+        }
+
+        private void LoadAllServiceRequests()
+        {
+            ServiceRequests = new ObservableCollection<ServiceRequestModel>(ServiceRequestManager.Instance.GetAllRequests());
+        }
+
+        public event PropertyChangedEventHandler PropertyChanged;
+        protected void OnPropertyChanged([CallerMemberName] string propertyName = null)
+        {
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
         }
     }
 

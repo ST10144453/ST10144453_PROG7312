@@ -60,7 +60,7 @@ namespace ST10144453_PROG7312.MVVM.View
 
         private void NavigateServiceRequests(object sender, RoutedEventArgs e)
         {
-
+            MainContentControl.Content = new UserServiceRequestsDisplay(_currentUser);
         }
     }
 }

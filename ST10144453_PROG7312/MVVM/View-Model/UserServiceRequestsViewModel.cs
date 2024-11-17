@@ -8,6 +8,9 @@ using System.ComponentModel;
 using System.Runtime.CompilerServices;
 using ST10144453_PROG7312.MVVM.Model;
 using ST10144453_PROG7312.Core;
+using System.Windows.Input;
+using ST10144453_PROG7312.MVVM.View;
+using System.Windows;
 
 namespace ST10144453_PROG7312.MVVM.View_Model
 {
@@ -15,9 +18,8 @@ namespace ST10144453_PROG7312.MVVM.View_Model
     {
         private ObservableCollection<ServiceRequestModel> _userServiceRequests;
         private readonly UserModel _currentUser;
-        private bool _isEmployee;
+        private bool _isStaff;
         private readonly ServiceRequestTree _requestTree;
-        private readonly string _currentUsername;
 
         public ObservableCollection<ServiceRequestModel> UserServiceRequests
         {
@@ -29,15 +31,17 @@ namespace ST10144453_PROG7312.MVVM.View_Model
             }
         }
 
-        public bool IsEmployee
+        public bool IsStaff
         {
-            get => _isEmployee;
+            get => _isStaff;
             set
             {
-                _isEmployee = value;
-                OnPropertyChanged(nameof(IsEmployee));
+                _isStaff = value;
+                OnPropertyChanged(nameof(IsStaff));
             }
         }
+
+        public ICommand NewRequestCommand { get; }
 
         public List<string> AvailableStatuses { get; } = new List<string>
         {
@@ -50,16 +54,57 @@ namespace ST10144453_PROG7312.MVVM.View_Model
         public UserServiceRequestsViewModel(UserModel currentUser)
         {
             _currentUser = currentUser;
-            IsEmployee = currentUser.isStaff == false;
-            _currentUsername = currentUser.userName;
+            IsStaff = currentUser.isStaff;
             _requestTree = new ServiceRequestTree();
-            LoadUserServiceRequests();
+            NewRequestCommand = new RelayCommand(CreateNewRequest);
+            
+            // Initialize the collection
+            UserServiceRequests = new ObservableCollection<ServiceRequestModel>();
+            
+            // Load the requests
+            LoadServiceRequests();
         }
 
-        private void LoadUserServiceRequests()
+        private void LoadServiceRequests()
         {
-            var userRequests = _requestTree.GetRequestsByUser(_currentUsername);
-            UserServiceRequests = new ObservableCollection<ServiceRequestModel>(userRequests);
+            var allRequests = ServiceRequestManager.Instance.ServiceRequests;
+            
+            // If staff, show all requests, otherwise filter for current user
+            var filteredRequests = IsStaff 
+                ? allRequests 
+                : allRequests.Where(r => r.CreatedBy == _currentUser.userName);
+            
+            UserServiceRequests.Clear();
+            foreach (var request in filteredRequests)
+            {
+                UserServiceRequests.Add(request);
+            }
+        }
+
+        private void CreateNewRequest()
+        {
+            var newRequest = new ServiceRequestModel
+            {
+                CreatedBy = _currentUser.userName,
+                Status = "Pending"
+            };
+            
+            var serviceRequestView = new ServiceRequestUserControl(newRequest);
+            var mainWindow = Application.Current.MainWindow as MainWindow;
+            if (mainWindow != null)
+            {
+                mainWindow.MainContentControl.Content = serviceRequestView;
+            }
+        }
+
+        public void UpdateRequestStatus(ServiceRequestModel request, string newStatus)
+        {
+            if (request != null && !string.IsNullOrEmpty(newStatus))
+            {
+                request.Status = newStatus;
+                ServiceRequestManager.Instance.UpdateRequest(request);
+                LoadServiceRequests(); // Refresh the list
+            }
         }
 
         public event PropertyChangedEventHandler PropertyChanged;

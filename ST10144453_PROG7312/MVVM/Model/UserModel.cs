@@ -35,9 +35,19 @@ namespace ST10144453_PROG7312.MVVM.Model
         /// There is only 1 staff member as I feel like that any more would be redundant. 
         /// </summary>
         public static List<UserModel> Users => new List<UserModel>
-{
-   
-};
+            {
+                new UserModel
+                {
+                    userID = Guid.NewGuid(),
+                    userName = "StaffUser",
+                    password = "StaffPassword",
+                    email = "staffuser@example.com",
+                    isStaff = true,
+                    profilePhoto = "pack://application:,,,/Resources/Hardcoded/ProfilePhoto/koos_pfp.jpeg",
+                    SelectedTags = TagsModel.Tags // Assuming TagsModel.Tags is already populated with the available tags
+
+                }
+            };
 
     }
 }

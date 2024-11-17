@@ -123,7 +123,17 @@ namespace ST10144453_PROG7312.MVVM.View
         /// <param name="e"></param>
         private void CloseButton_Click(object sender, RoutedEventArgs e)
         {
-            Window.GetWindow(this)?.Close();
+            // Clear the current user session
+            UserSession.CurrentUser = null;
+
+            // Get the main window
+            var mainWindow = Application.Current.MainWindow as MainWindow;
+            if (mainWindow != null)
+            {
+                // Navigate to the login/register menu using the MainContentControl
+                var loginRegisterMenu = new LoginRegisterMenu();
+                mainWindow.MainContentControl.Content = loginRegisterMenu;
+            }
         }
     }
 }

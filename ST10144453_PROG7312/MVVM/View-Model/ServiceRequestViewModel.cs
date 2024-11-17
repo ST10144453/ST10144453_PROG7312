@@ -237,7 +237,7 @@ namespace ST10144453_PROG7312.MVVM.View_Model
             RecentRequest = request;
             NavigateToDashboardCommand = new RelayCommand(NavigateToDashboard);
             _requestTree = new ServiceRequestTree();
-            Categories = new ObservableCollection<string>(ServiceRequestModel.GetAllCategories());
+            Categories = new ObservableCollection<string>(ServiceRequestManager.Instance.GetAllCategories());
             InitializeData();
             SupportingEvidence = new ObservableCollection<MediaItem>();
             InitializeCommands();
@@ -249,7 +249,7 @@ namespace ST10144453_PROG7312.MVVM.View_Model
         private void InitializeData()
         {
             // Load existing service requests into the tree
-            foreach (var request in ServiceRequestModel.GetAllRequests())
+            foreach (var request in ServiceRequestManager.Instance.GetAllRequests())
             {
                 _requestTree.Insert(request);
             }
@@ -278,7 +278,7 @@ namespace ST10144453_PROG7312.MVVM.View_Model
 
         public void SubmitRequest(ServiceRequestModel request)
         {
-            ServiceRequestModel.AddRequest(request);
+            ServiceRequestManager.Instance.AddRequest(request);
             _requestTree.Insert(request);
             ApplyFilters(); // Refresh the filtered list
         }
@@ -318,7 +318,7 @@ namespace ST10144453_PROG7312.MVVM.View_Model
                 CreatedBy = UserSession.CurrentUser?.userName
             };
 
-            ServiceRequestManager.Instance.AddServiceRequest(request);
+            ServiceRequestManager.Instance.AddRequest(request);
             RecentRequest = request;
 
             var popup = new ServiceRequestSubmissionPopup(request);

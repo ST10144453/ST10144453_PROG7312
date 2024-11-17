@@ -271,7 +271,7 @@
                                 Foreground="#2c2c2c"
                                 Text="Create your Account"
                                 TextAlignment="Center" />
-                            
+
 
                         </StackPanel>
 
@@ -429,7 +429,7 @@
                                 </Grid>
                             </StackPanel>
 
-                            
+
                             <Button
                                 Width="300"
                                 Height="60"

@@ -140,6 +140,7 @@
     <Compile Include="FrontendLogic\Base64ToImageSourceConverter.cs" />
     <Compile Include="FrontendLogic\Base64ToPdfStreamConverter.cs" />
     <Compile Include="FrontendLogic\Base64ToTextConverter.cs" />
+    <Compile Include="FrontendLogic\BoolToHeaderConverter.cs" />
     <Compile Include="FrontendLogic\BoolToVisibilityConverter.cs" />
     <Compile Include="FrontendLogic\EventPhotoConverter.cs" />
     <Compile Include="FrontendLogic\FilePathToImageSourceConverter.cs" />
@@ -178,6 +179,7 @@
     <Compile Include="MVVM\View-Model\MainWindowViewModel.cs" />
     <Compile Include="MVVM\View-Model\ReportService.cs" />
     <Compile Include="MVVM\View-Model\ReportViewModel.cs" />
+    <Compile Include="MVVM\View-Model\ServiceRequestDetailsViewModel.cs" />
     <Compile Include="MVVM\View-Model\ServiceRequestViewModel.cs" />
     <Compile Include="MVVM\View-Model\StaffMenuViewModel.cs" />
     <Compile Include="MVVM\View-Model\UserServiceRequestsViewModel.cs" />
@@ -213,6 +215,9 @@
     </Compile>
     <Compile Include="MVVM\View\SelectReportDialogue.xaml.cs">
       <DependentUpon>SelectReportDialogue.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="MVVM\View\ServiceRequestDetailsPopup.xaml.cs">
+      <DependentUpon>ServiceRequestDetailsPopup.xaml</DependentUpon>
     </Compile>
     <Compile Include="MVVM\View\ServiceRequestSubmissionPopup.xaml.cs">
       <DependentUpon>ServiceRequestSubmissionPopup.xaml</DependentUpon>
@@ -289,6 +294,10 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
+    <Page Include="MVVM\View\ServiceRequestDetailsPopup.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="MVVM\View\ServiceRequestSubmissionPopup.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
@@ -313,6 +322,10 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
+    <Page Include="MVVM\View\UserServiceRequestsDisplay.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="MVVM\View\UserServiceRequestView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
@@ -329,6 +342,9 @@
     </Compile>
     <Compile Include="MVVM\View\UserDashboardUserControl.xaml.cs">
       <DependentUpon>UserDashboardUserControl.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="MVVM\View\UserServiceRequestsDisplay.xaml.cs">
+      <DependentUpon>UserServiceRequestsDisplay.xaml</DependentUpon>
     </Compile>
     <Compile Include="MVVM\View\UserServiceRequestView.xaml.cs">
       <DependentUpon>UserServiceRequestView.xaml</DependentUpon>
