@@ -121,26 +121,33 @@ namespace ST10144453_PROG7312.MVVM.View_Model
 
         public EventsViewModel()
         {
-            InitializeCollections();
-            InitializeCommands();
-            LoadEvents();
-            InitializeAnnouncements();
-        }
-
-        private void InitializeCollections()
-        {
+            // Initialize all collections and objects first
             _eventTree = new EventAVLTree();
-            Tags = new ObservableCollection<TagsModel>(TagsModel.Tags);
             _eventsByTag = new Dictionary<string, HashSet<EventModel>>();
             _uniqueCategories = new HashSet<string>();
             _searchHistory = new Stack<string>();
             _searchFrequency = new Dictionary<string, int>();
             _tagWeights = new Dictionary<int, double>();
             _selectedTags = new List<TagsModel>();
+
+            // Initialize Tags collection
+            Tags = new ObservableCollection<TagsModel>(TagsModel.Tags);
+
+            // Initialize trees
             _tagsTree = new TagsTree();
-            InitializeTagsHierarchy();
             _announcementTree = new AnnouncementTree();
+
+            // Initialize tag hierarchy
+            InitializeTagsHierarchy();
+
+            // Load events
+            LoadEvents();
+
+            // Initialize announcements
             InitializeAnnouncements();
+
+            // Initialize commands
+            InitializeCommands();
         }
 
         private void InitializeTagsHierarchy()
@@ -167,18 +174,32 @@ namespace ST10144453_PROG7312.MVVM.View_Model
 
         private void LoadEvents()
         {
+            if (_eventTree == null || _eventsByTag == null)
+            {
+                throw new InvalidOperationException("Event collections not properly initialized");
+            }
+
             foreach (var eventModel in EventList.Instance.Events)
             {
-                _eventTree.Insert(eventModel);
-
-                foreach (var tag in eventModel.eventTags)
+                if (eventModel != null)
                 {
-                    if (!_eventsByTag.ContainsKey(tag.TagName))
+                    _eventTree.Insert(eventModel);
+
+                    if (eventModel.eventTags != null)
                     {
-                        _eventsByTag[tag.TagName] = new HashSet<EventModel>();
+                        foreach (var tag in eventModel.eventTags)
+                        {
+                            if (tag != null && !string.IsNullOrEmpty(tag.TagName))
+                            {
+                                if (!_eventsByTag.ContainsKey(tag.TagName))
+                                {
+                                    _eventsByTag[tag.TagName] = new HashSet<EventModel>();
+                                }
+                                _eventsByTag[tag.TagName].Add(eventModel);
+                                _uniqueCategories.Add(tag.TagName);
+                            }
+                        }
                     }
-                    _eventsByTag[tag.TagName].Add(eventModel);
-                    _uniqueCategories.Add(tag.TagName);
                 }
             }
 
@@ -190,16 +211,36 @@ namespace ST10144453_PROG7312.MVVM.View_Model
         {
             var allEvents = _eventTree.InOrderTraversal();
             var userPreferences = CalculateUserPreferences();
-            var futureEvents = allEvents.Where(e => e.eventDate >= DateTime.Now);
 
-            var recommendedEvents = futureEvents
+            // First filter by date range
+            var filteredEvents = allEvents.Where(e => e.eventDate >= DateTime.Now);
+            if (StartDate.HasValue)
+            {
+                filteredEvents = filteredEvents.Where(e => e.eventDate >= StartDate.Value);
+            }
+            if (EndDate.HasValue)
+            {
+                filteredEvents = filteredEvents.Where(e => e.eventDate <= EndDate.Value);
+            }
+
+            // Apply search query filter if exists
+            if (!string.IsNullOrWhiteSpace(SearchQuery))
+            {
+                filteredEvents = filteredEvents.Where(e =>
+                    e.eventTitle.IndexOf(SearchQuery, StringComparison.OrdinalIgnoreCase) >= 0 ||
+                    e.eventDescription.IndexOf(SearchQuery, StringComparison.OrdinalIgnoreCase) >= 0 ||
+                    e.eventLocation.IndexOf(SearchQuery, StringComparison.OrdinalIgnoreCase) >= 0);
+            }
+
+            // Calculate scores for filtered events
+            var recommendedEvents = filteredEvents
                 .Select(e => new
                 {
                     Event = e,
                     Score = CalculateRecommendationScore(e, userPreferences)
                 })
                 .OrderByDescending(x => x.Score)
-                .Take(5)
+                .Take(4)
                 .Select(x => x.Event)
                 .ToList();
 
@@ -261,6 +302,21 @@ namespace ST10144453_PROG7312.MVVM.View_Model
             // Date proximity score
             var daysUntilEvent = (eventModel.eventDate - DateTime.Now).TotalDays;
             score += Math.Max(0, 30 - daysUntilEvent) / 30 * 5;
+
+            // Search relevance score
+            if (!string.IsNullOrWhiteSpace(SearchQuery))
+            {
+                var searchTerms = SearchQuery.ToLower().Split(' ');
+                foreach (var term in searchTerms)
+                {
+                    if (eventModel.eventTitle.IndexOf(term, StringComparison.OrdinalIgnoreCase) >= 0)
+                        score += 3;
+                    if (eventModel.eventDescription.IndexOf(term, StringComparison.OrdinalIgnoreCase) >= 0)
+                        score += 2;
+                    if (eventModel.eventLocation.IndexOf(term, StringComparison.OrdinalIgnoreCase) >= 0)
+                        score += 1;
+                }
+            }
 
             // Related events score
             var closestEvent = _eventTree.FindClosestEvent(eventModel.eventDate);
@@ -419,6 +475,17 @@ namespace ST10144453_PROG7312.MVVM.View_Model
         {
             foreach (var announcement in AnnouncementModel.Announcements)
             {
+                if (announcement.relatedEvent?.eventTags != null && announcement.relatedEvent.eventTags.Any())
+                {
+                    var iconPath = GetAnnouncementIcon(announcement.relatedEvent.eventTags);
+                    Debug.WriteLine($"Setting icon path for announcement {announcement.announcementId}: {iconPath}");
+                    announcement.announcementIcon = iconPath;
+                }
+                else
+                {
+                    Debug.WriteLine($"Setting default icon for announcement {announcement.announcementId}");
+                    announcement.announcementIcon = "pack://application:,,,/Resources/Icons/default.png";
+                }
                 _announcementTree.Insert(announcement);
             }
 
@@ -428,6 +495,7 @@ namespace ST10144453_PROG7312.MVVM.View_Model
             if (Announcements.Count > 0)
             {
                 CurrentAnnouncement = Announcements[0];
+                Debug.WriteLine($"Current announcement icon path: {CurrentAnnouncement.announcementIcon}");
             }
 
             _announcementTimer = new DispatcherTimer();
@@ -457,7 +525,11 @@ namespace ST10144453_PROG7312.MVVM.View_Model
 
         private string GetAnnouncementIcon(List<TagsModel> tags)
         {
-            // Map tags to appropriate icons
+            if (tags == null || !tags.Any())
+            {
+                return "pack://application:,,,/Resources/Icons/default.png";
+            }
+
             var primaryTag = tags.FirstOrDefault();
             string iconPath = "pack://application:,,,/Resources/Icons/default.png";
 
