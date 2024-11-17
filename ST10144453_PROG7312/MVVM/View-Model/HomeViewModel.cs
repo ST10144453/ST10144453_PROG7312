@@ -101,7 +101,7 @@ namespace ST10144453_PROG7312.MVVM.View_Model
             var mainWindow = Application.Current.MainWindow as MainWindow;
             if (mainWindow != null)
             {
-                var serviceRequestView = new ServiceRequestUserControl(new ServiceRequestModel());
+                var serviceRequestView = new ServiceRequestUserControl(new ServiceRequestModel(), User);
                 mainWindow.MainContentControl.Content = serviceRequestView;
             }
         }

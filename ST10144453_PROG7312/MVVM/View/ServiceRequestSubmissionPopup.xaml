@@ -9,7 +9,14 @@
     Background="Transparent"
     WindowStartupLocation="CenterScreen"
     WindowStyle="None">
-
+    <Window.Resources>
+        <ResourceDictionary>
+            <ResourceDictionary.MergedDictionaries>
+                <ResourceDictionary Source="/ResourceDictionaries/GlobalStyles.xaml" />
+                <ResourceDictionary Source="/ResourceDictionaries/ComboBoxStyles.xaml" />
+            </ResourceDictionary.MergedDictionaries>
+        </ResourceDictionary>
+    </Window.Resources>
     <Border
         Margin="10"
         Background="White"
@@ -47,7 +54,8 @@
                 Width="150"
                 Height="40"
                 Command="{Binding NavigateToDashboardCommand}"
-                Content="View My Requests" />
+                Content="View My Requests" 
+                Style="{StaticResource StandardButtonStyle}"/>
         </Grid>
     </Border>
 </Window>

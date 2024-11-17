@@ -7,6 +7,7 @@ using System.Windows.Controls;
 using System.Windows;
 using System;
 using System.Collections.ObjectModel;
+using System.Windows.Input;
 
 namespace ST10144453_PROG7312.MVVM.View
 {
@@ -21,7 +22,17 @@ namespace ST10144453_PROG7312.MVVM.View
             DataContext = new EventsViewModel(); // Set the DataContext
         }
 
-       
+        private void Event_Click(object sender, MouseButtonEventArgs e)
+        {
+            if (sender is FrameworkElement element && element.DataContext is EventModel eventModel)
+            {
+                var popup = new EventDetailsPopup(eventModel)
+                {
+                    Owner = Window.GetWindow(this)
+                };
+                popup.ShowDialog();
+            }
+        }
 
         private void NavigateToReportIssue_Click(object sender, RoutedEventArgs e)
         {

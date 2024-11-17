@@ -1,0 +1,141 @@
+﻿<Window x:Class="ST10144453_PROG7312.MVVM.View.EventDetailsPopup"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:converters="clr-namespace:ST10144453_PROG7312.FrontendLogic"
+        Title="Event Details"
+        Height="700" 
+        Width="900"
+        WindowStartupLocation="CenterOwner"
+        AllowsTransparency="True"
+        Background="Transparent"
+        WindowStyle="None">
+
+    <Border Background="White" 
+            CornerRadius="30" 
+            Margin="10">
+        <Border.Effect>
+            <DropShadowEffect BlurRadius="15" 
+                            Opacity="0.2" 
+                            ShadowDepth="5"/>
+        </Border.Effect>
+
+        <Grid Margin="30">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="*"/>
+                <RowDefinition Height="Auto"/>
+            </Grid.RowDefinitions>
+
+            <!-- Header -->
+            <Grid Grid.Row="0">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="Auto"/>
+                </Grid.ColumnDefinitions>
+
+                <TextBlock Text="{Binding EventTitle}" 
+                         FontSize="32" 
+                         FontWeight="Bold"
+                         Margin="0,0,0,20"/>
+
+                <Button Grid.Column="1" 
+                        Click="CloseButton_Click"
+                        Width="30" 
+                        Height="30">
+                    <Button.Template>
+                        <ControlTemplate TargetType="Button">
+                            <Image Source="pack://application:,,,/Resources/Icons/exitIcon.png"/>
+                        </ControlTemplate>
+                    </Button.Template>
+                </Button>
+            </Grid>
+
+            <!-- Content -->
+            <ScrollViewer Grid.Row="1" 
+                         VerticalScrollBarVisibility="Auto">
+                <StackPanel>
+                    <!-- Image Gallery -->
+                    <Border Margin="0,0,0,30">
+                        <ScrollViewer HorizontalScrollBarVisibility="Visible" 
+                                      VerticalScrollBarVisibility="Disabled">
+                            <ItemsControl ItemsSource="{Binding EventPhotos}">
+                                <ItemsControl.ItemsPanel>
+                                    <ItemsPanelTemplate>
+                                        <WrapPanel/>
+                                    </ItemsPanelTemplate>
+                                </ItemsControl.ItemsPanel>
+                                <ItemsControl.ItemTemplate>
+                                    <DataTemplate>
+                                        <Border Margin="5" 
+                                                Width="250" 
+                                                Height="250"
+                                                CornerRadius="15"
+                                                Background="#f0f0f0">
+                                            <Border.Effect>
+                                                <DropShadowEffect BlurRadius="10" 
+                                                        Opacity="0.2" 
+                                                        ShadowDepth="3"/>
+                                            </Border.Effect>
+                                            <Border CornerRadius="15" 
+                                                    ClipToBounds="True">
+                                                <Image Source="{Binding}"
+                                                       Stretch="UniformToFill"
+                                                       RenderOptions.BitmapScalingMode="HighQuality"/>
+                                            </Border>
+                                        </Border>
+                                    </DataTemplate>
+                                </ItemsControl.ItemTemplate>
+                            </ItemsControl>
+                        </ScrollViewer>
+                    </Border>
+
+                    <!-- Event Details -->
+                    <StackPanel Margin="0,20">
+                        <TextBlock Text="Date:" 
+                                 FontWeight="Bold" 
+                                 FontSize="18"/>
+                        <TextBlock Text="{Binding EventDate, StringFormat='{}{0:d MMMM yyyy}'}" 
+                                 Margin="0,0,0,15"
+                                 FontSize="16"/>
+
+                        <TextBlock Text="Location:" 
+                                 FontWeight="Bold"
+                                 FontSize="18"/>
+                        <TextBlock Text="{Binding EventLocation}" 
+                                 Margin="0,0,0,15"
+                                 FontSize="16"/>
+
+                        <TextBlock Text="Description:" 
+                                 FontWeight="Bold"
+                                 FontSize="18"/>
+                        <TextBlock Text="{Binding EventDescription}" 
+                                 TextWrapping="Wrap"
+                                 Margin="0,0,0,15"
+                                 FontSize="16"/>
+
+                        <!-- Tags -->
+                        <ItemsControl ItemsSource="{Binding EventTags}" 
+                                    Margin="0,10">
+                            <ItemsControl.ItemsPanel>
+                                <ItemsPanelTemplate>
+                                    <WrapPanel/>
+                                </ItemsPanelTemplate>
+                            </ItemsControl.ItemsPanel>
+                            <ItemsControl.ItemTemplate>
+                                <DataTemplate>
+                                    <Border Background="{Binding TagBgColour}"
+                                            Padding="10,5"
+                                            Margin="0,0,10,10"
+                                            CornerRadius="15">
+                                        <TextBlock Text="{Binding TagName}"
+                                                 Foreground="{Binding TagFontColour}"/>
+                                    </Border>
+                                </DataTemplate>
+                            </ItemsControl.ItemTemplate>
+                        </ItemsControl>
+                    </StackPanel>
+                </StackPanel>
+            </ScrollViewer>
+        </Grid>
+    </Border>
+</Window>

@@ -11,125 +11,330 @@
     d:DesignWidth="1000"
     mc:Ignorable="d">
 
-    <ScrollViewer>
-        <Grid Margin="20">
-            <Grid.RowDefinitions>
-                <RowDefinition Height="Auto" />
-                <RowDefinition Height="*" />
-            </Grid.RowDefinitions>
+    <UserControl.Resources>
+        <ResourceDictionary>
+            <ResourceDictionary.MergedDictionaries>
+                <ResourceDictionary Source="/ResourceDictionaries/GlobalStyles.xaml" />
+                <ResourceDictionary Source="/ResourceDictionaries/ComboBoxStyles.xaml" />
+            </ResourceDictionary.MergedDictionaries>
 
-            <!--  Header  -->
-            <TextBlock
-                Margin="0,0,0,20"
-                FontSize="24"
-                FontWeight="Bold"
-                Text="Service Request Form" />
+            <!-- Base Button Style -->
+            <Style x:Key="ImageButtonStyle" TargetType="Button">
+                <Setter Property="Background" Value="Transparent"/>
+                <Setter Property="Foreground" Value="Black" />
+                <Setter Property="BorderBrush" Value="Transparent" />
+                <Setter Property="BorderThickness" Value="0" />
+                <Setter Property="Padding" Value="10,5" />
+                <Setter Property="FontWeight" Value="Bold" />
+                <Setter Property="HorizontalContentAlignment" Value="Center" />
+                <Setter Property="VerticalContentAlignment" Value="Center" />
+                <Setter Property="Height" Value="136" />
+                <Setter Property="Template">
+                    <Setter.Value>
+                        <ControlTemplate TargetType="Button">
+                            <Border
+                            Background="{TemplateBinding Background}"
+                            BorderBrush="{TemplateBinding BorderBrush}"
+                            BorderThickness="{TemplateBinding BorderThickness}">
+                                <ContentPresenter
+                                HorizontalAlignment="Center"
+                                VerticalAlignment="Center"
+                                TextElement.FontSize="30" />
+                            </Border>
+                        </ControlTemplate>
+                    </Setter.Value>
+                </Setter>
+                <Style.Triggers>
+                    <Trigger Property="IsMouseOver" Value="True">
+                        <Setter Property="Background">
+                            <Setter.Value>
+                                <ImageBrush ImageSource="pack://application:,,,/Resources/Images/Report/reportBtnHover.png" Stretch="Fill" />
+                            </Setter.Value>
+                        </Setter>
+                    </Trigger>
+                    <Trigger Property="IsPressed" Value="True">
+                        <Setter Property="Background">
+                            <Setter.Value>
+                                <ImageBrush ImageSource="pack://application:,,,/Resources/Images/Report/reportBtnClcik.png" Stretch="UniformToFill" />
+                            </Setter.Value>
+                        </Setter>
+                    </Trigger>
+                </Style.Triggers>
+            </Style>
 
-            <!--  Form Content  -->
-            <StackPanel Grid.Row="1" Margin="0,10">
-                <!--  Personal Information Section  -->
-                <GroupBox Margin="0,0,0,20" Header="Personal Information">
-                    <Grid Margin="10">
-                        <Grid.ColumnDefinitions>
-                            <ColumnDefinition Width="*" />
-                            <ColumnDefinition Width="*" />
-                        </Grid.ColumnDefinitions>
-                        <Grid.RowDefinitions>
-                            <RowDefinition Height="Auto" />
-                            <RowDefinition Height="Auto" />
-                            <RowDefinition Height="Auto" />
-                        </Grid.RowDefinitions>
+            <Style x:Key="TagButtonStyle" TargetType="ToggleButton">
+                <Setter Property="Margin" Value="10,5" />
+                <Setter Property="Padding" Value="5" />
+                <Setter Property="BorderThickness" Value="5" />
+                <Setter Property="Template">
+                    <Setter.Value>
+                        <ControlTemplate TargetType="ToggleButton">
+                            <Border
+                            Background="{TemplateBinding Background}"
+                            BorderBrush="{Binding TagBgColour}"
+                            BorderThickness="{TemplateBinding BorderThickness}"
+                            CornerRadius="5">
+                                <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center" />
+                            </Border>
+                        </ControlTemplate>
+                    </Setter.Value>
+                </Setter>
+                <Style.Triggers>
+                    <Trigger Property="IsChecked" Value="True">
+                        <Setter Property="Opacity" Value="1" />
+                    </Trigger>
+                    <Trigger Property="IsChecked" Value="False">
+                        <Setter Property="Opacity" Value="0.6" />
+                    </Trigger>
+                </Style.Triggers>
+            </Style>
 
-                        <StackPanel Grid.Column="0" Margin="0,0,10,0">
-                            <Label Content="First Name:" />
-                            <TextBox Margin="0,0,0,10" Text="{Binding FirstName, UpdateSourceTrigger=PropertyChanged}" />
+            <!-- Style for Button 4 (Different Design and Slimmer) -->
+            <Style
+            x:Key="Button4Style"
+            BasedOn="{StaticResource ImageButtonStyle}"
+            TargetType="Button">
+                <Setter Property="Background">
+                    <Setter.Value>
+                        <ImageBrush ImageSource="pack://application:,,,/Resources/Images/Report/quitReportDefautBtn.png" Stretch="Uniform" />
+                    </Setter.Value>
+                </Setter>
+                <Setter Property="Foreground" Value="White" />
+                <Style.Triggers>
+                    <Trigger Property="IsMouseOver" Value="True">
+                        <Setter Property="Background">
+                            <Setter.Value>
+                                <ImageBrush ImageSource="pack://application:,,,/Resources/Images/Report/quitReportHoverBtn.png" Stretch="Uniform" />
+                            </Setter.Value>
+                        </Setter>
+                    </Trigger>
+                    <Trigger Property="IsPressed" Value="True">
+                        <Setter Property="Background">
+                            <Setter.Value>
+                                <ImageBrush ImageSource="pack://application:,,,/Resources/Images/Report/quitReportClickBtn.png" Stretch="Uniform" />
+                            </Setter.Value>
+                        </Setter>
+                    </Trigger>
+                </Style.Triggers>
+            </Style>
+        </ResourceDictionary>
+    </UserControl.Resources>
 
-                            <Label Content="Email:" />
-                            <TextBox Margin="0,0,0,10" Text="{Binding Email, UpdateSourceTrigger=PropertyChanged}" />
-                        </StackPanel>
+    <Grid>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="300" />
+            <ColumnDefinition Width="*" />
+        </Grid.ColumnDefinitions>
 
-                        <StackPanel Grid.Column="1">
-                            <Label Content="Surname:" />
-                            <TextBox Margin="0,0,0,10" Text="{Binding Surname, UpdateSourceTrigger=PropertyChanged}" />
+        <!--  Side Navigation Bar  -->
+        <Grid Grid.Column="0">
+            <!--  Rectangle with Curved Corners and Drop Shadow  -->
+            <Rectangle
+          HorizontalAlignment="Stretch"
+          VerticalAlignment="Stretch"
+          Fill="#B3FFFFFF"
+          RadiusX="15"
+          RadiusY="15">
+                <Rectangle.Clip>
+                    <RectangleGeometry
+                  RadiusX="15"
+                  RadiusY="15"
+                  Rect="0,0,300,1080" />
+                </Rectangle.Clip>
+            </Rectangle>
 
-                            <Label Content="Phone Number:" />
-                            <TextBox Margin="0,0,0,10" Text="{Binding PhoneNumber, UpdateSourceTrigger=PropertyChanged}" />
-                        </StackPanel>
-                    </Grid>
-                </GroupBox>
+            <!--  StackPanel with content, placed above the Rectangle  -->
+            <StackPanel
+       x:Name="ContentPanel"
+       Width="300"
+       Margin="0,0,0,0"
+       HorizontalAlignment="Center"
+       VerticalAlignment="Center"
+       Panel.ZIndex="1">
 
-                <!--  Request Details Section  -->
-                <GroupBox Margin="0,0,0,20" Header="Request Details">
-                    <StackPanel Margin="10">
-                        <Label Content="Category:" />
-                        <ComboBox
-                            Margin="0,0,0,10"
-                            ItemsSource="{Binding Categories}"
-                            SelectedItem="{Binding Category, UpdateSourceTrigger=PropertyChanged}" />
-
-                        <Label Content="Description:" />
-                        <TextBox
-                            Height="100"
-                            Margin="0,0,0,10"
-                            AcceptsReturn="True"
-                            Text="{Binding Description, UpdateSourceTrigger=PropertyChanged}"
-                            TextWrapping="Wrap" />
-
-
-                        <Label Content="Address:" />
-                        <TextBox Margin="0,0,0,10" Text="{Binding AdditionalAddress, UpdateSourceTrigger=PropertyChanged}" />
-
-                        <Label Content="Preferred Feedback Method:" />
-                        <ComboBox
-                            Margin="0,0,0,10"
-                            ItemsSource="{Binding FeedbackMethods}"
-                            SelectedItem="{Binding PreferredFeedbackMethod, UpdateSourceTrigger=PropertyChanged}" />
-                    </StackPanel>
-                </GroupBox>
-
-                <!--  Supporting Documents Section  -->
-                <GroupBox Margin="0,0,0,20" Header="Supporting Documents">
-                    <StackPanel Margin="10">
-                        <Button
-                            Margin="0,0,0,10"
-                            Click="Button_Click"
-                            Command="{Binding AddMediaCommand}"
-                            Content="Attach Evidence" />
-
-                        <Button
-                            Margin="0,0,0,10"
-                            Click="Button_Click_1"
-                            Command="{Binding SelectReportsCommand}"
-                            Content="Select Related Reports" />
-
-                        <!-- Display Attached Files -->
-                        <ItemsControl ItemsSource="{Binding RecentRequest.AttachedFiles}">
-                            <ItemsControl.ItemTemplate>
-                                <DataTemplate>
-                                    <TextBlock Text="{Binding FileName}" Margin="0,5"/>
-                                </DataTemplate>
-                            </ItemsControl.ItemTemplate>
-                        </ItemsControl>
-
-                        <!-- Display Linked Reports -->
-                        <ItemsControl ItemsSource="{Binding RecentRequest.LinkedReports}">
-                            <ItemsControl.ItemTemplate>
-                                <DataTemplate>
-                                    <TextBlock Text="{Binding reportName}" Margin="0,5"/>
-                                </DataTemplate>
-                            </ItemsControl.ItemTemplate>
-                        </ItemsControl>
-                    </StackPanel>
-                </GroupBox>
-
-                <!--  Submit Button  -->
-                <Button
-                    Height="40"
-                    Margin="0,20,0,0"
-                    Command="{Binding SubmitRequestCommand}"
-                    Content="Submit Request"
-                    IsEnabled="{Binding IsFormValid}" />
+                <StackPanel x:Name="ButtonStack" Margin="0,0,0,0">
+                    <TextBlock
+               Margin="0,20,0,0"
+               HorizontalAlignment="Center"
+               FontSize="30"
+               FontWeight="Bold"
+               Text="Manage Mzanzi" />
+                    <Button
+               Width="280"
+               Height="180"
+               Margin="0,5"
+               Click="NavigateHome_Click"
+               Content="Back"
+               FontSize="30"
+               Style="{StaticResource Button4Style}" />
+                </StackPanel>
             </StackPanel>
         </Grid>
-    </ScrollViewer>
+
+        <!--  Main Content  -->
+        <ScrollViewer Grid.Column="1">
+            <Grid Margin="20">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto" />
+                    <RowDefinition Height="*" />
+                </Grid.RowDefinitions>
+
+                <!--  Header  -->
+                <TextBlock
+                    Margin="0,0,0,20"
+                    FontSize="24"
+                    FontWeight="Bold"
+                    Text="Service Request Form" />
+
+                <!--  Form Content  -->
+                <StackPanel Grid.Row="1" Margin="0,10">
+                    <!--  Personal Information Section  -->
+                    <GroupBox Margin="0,0,0,20" Header="Personal Information">
+                        <Grid Margin="10">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="*" />
+                                <ColumnDefinition Width="*" />
+                            </Grid.ColumnDefinitions>
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="Auto" />
+                                <RowDefinition Height="Auto" />
+                                <RowDefinition Height="Auto" />
+                            </Grid.RowDefinitions>
+
+                            <StackPanel Grid.Column="0" Margin="0,0,10,0">
+                                <Label Content="First Name:" />
+                                <TextBox
+                                    Margin="0,0,0,10"
+                                    Style="{StaticResource StandardTextBoxStyle}"
+                                    Text="{Binding FirstName, UpdateSourceTrigger=PropertyChanged}" />
+
+                                <Label Content="Email:" />
+                                <TextBox
+                                    Margin="0,0,0,10"
+                                    Style="{StaticResource StandardTextBoxStyle}"
+                                    Text="{Binding Email, UpdateSourceTrigger=PropertyChanged}" />
+                            </StackPanel>
+
+                            <StackPanel Grid.Column="1">
+                                <Label Content="Surname:" />
+                                <TextBox
+                                    Margin="0,0,0,10"
+                                    Style="{StaticResource StandardTextBoxStyle}"
+                                    Text="{Binding Surname, UpdateSourceTrigger=PropertyChanged}" />
+
+                                <Label Content="Phone Number:" />
+                                <TextBox
+                                    Margin="0,0,0,10"
+                                    Style="{StaticResource StandardTextBoxStyle}"
+                                    Text="{Binding PhoneNumber, UpdateSourceTrigger=PropertyChanged}" />
+                            </StackPanel>
+                        </Grid>
+                    </GroupBox>
+
+                    <!--  Request Details Section  -->
+                    <GroupBox Margin="0,0,0,20" Header="Request Details">
+                        <Grid Margin="10">
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="Auto" />
+                                <RowDefinition Height="Auto" />
+                                <RowDefinition Height="Auto" />
+                            </Grid.RowDefinitions>
+
+                            <!-- Title Field -->
+                            <StackPanel Grid.Row="0" Margin="0,0,0,10">
+                                <TextBlock Text="Title" FontWeight="Bold" />
+                                <TextBox Text="{Binding Title, UpdateSourceTrigger=PropertyChanged}"
+                                         Margin="0,5,0,0"
+                                         Padding="5"/>
+                            </StackPanel>
+
+                            <!-- Category Field -->
+                            <StackPanel Grid.Row="1" Margin="0,0,0,10">
+                                <TextBlock Text="Category" FontWeight="Bold" />
+                                <ComboBox ItemsSource="{Binding Categories}"
+                                         SelectedItem="{Binding Category}"
+                                         Margin="0,5,0,0"
+                                         Padding="5"/>
+                            </StackPanel>
+
+                            <!-- Description Field -->
+                            <StackPanel Grid.Row="2">
+                                <TextBlock Text="Description" FontWeight="Bold" />
+                                <TextBox Text="{Binding Description, UpdateSourceTrigger=PropertyChanged}"
+                                         TextWrapping="Wrap"
+                                         AcceptsReturn="True"
+                                         Height="100"
+                                         Margin="0,5,0,0"
+                                         Padding="5"/>
+                            </StackPanel>
+                        </Grid>
+                    </GroupBox>
+
+                    <!--  Supporting Documents Section  -->
+                    <GroupBox Margin="0,0,0,20" Header="Supporting Documents">
+                        <Grid Margin="10">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="*" />
+                                <ColumnDefinition Width="*" />
+                            </Grid.ColumnDefinitions>
+
+                            <Button
+                                Grid.Column="0"
+                                Width="200"
+                                Height="40"
+                                Margin="10"
+                                HorizontalAlignment="Center"
+                                Background="#2C2F80"
+                                Click="Button_Click"
+                                Command="{Binding AddMediaCommand}"
+                                Content="Attach Evidence"
+                                Style="{StaticResource StandardButtonStyle}" />
+
+                            <Button
+                                Grid.Column="1"
+                                Width="200"
+                                Height="40"
+                                Margin="10"
+                                HorizontalAlignment="Center"
+                                Background="#2C2F80"
+                                Click="Button_Click_1"
+                                Command="{Binding SelectReportsCommand}"
+                                Content="Select Related Reports"
+                                Style="{StaticResource StandardButtonStyle}" />
+                        </Grid>
+                    </GroupBox>
+
+                    <!--  Submit Button  -->
+                    <Button
+                        Width="200"
+                        Height="40"
+                        Margin="0,20,0,0"
+                        HorizontalAlignment="Center"
+                        Command="{Binding SubmitRequestCommand}"
+                        Content="Submit Request"
+                        IsEnabled="{Binding IsFormValid}">
+                        <Button.Style>
+                            <Style BasedOn="{StaticResource StandardButtonStyle}" TargetType="Button">
+                                <Setter Property="Background" Value="#007646" />
+                                <Setter Property="Foreground" Value="White" />
+                                <Style.Triggers>
+                                    <Trigger Property="IsEnabled" Value="False">
+                                        <Setter Property="Background" Value="#CCCCCC" />
+                                        <Setter Property="Foreground" Value="#666666" />
+                                        <Setter Property="Opacity" Value="0.7" />
+                                    </Trigger>
+                                    <Trigger Property="IsMouseOver" Value="True">
+                                        <Setter Property="Background" Value="#005b35" />
+                                    </Trigger>
+                                    <Trigger Property="IsPressed" Value="True">
+                                        <Setter Property="Background" Value="#004025" />
+                                    </Trigger>
+                                </Style.Triggers>
+                            </Style>
+                        </Button.Style>
+                    </Button>
+                </StackPanel>
+            </Grid>
+        </ScrollViewer>
+    </Grid>
 </UserControl>

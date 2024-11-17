@@ -38,11 +38,11 @@ namespace ST10144453_PROG7312.MVVM.View
             InitializeComponent();
 
             _reportIssueView = new ReportUserControl();
-            _allReportsUserControl = new AllReportsUserControl();
+            _allReportsUserControl = new AllReportsUserControl(_currentUser);
 
             MainContentControl.Content = _reportIssueView;
 
-            DataContext = new ReportViewModel(); // Pass the currentUser instance to the ReportViewModel constructor
+            DataContext = new ReportViewModel(_currentUser);
         }
 
         //++++++++++++++ Methods: NavigateToReportIssue_Click ++++++++++++++//

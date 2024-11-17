@@ -5,6 +5,8 @@ using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
 using System.Windows.Media.Imaging;
+using System.IO;
+using System.Linq;
 
 namespace ST10144453_PROG7312.MVVM.View
 {
@@ -37,11 +39,34 @@ namespace ST10144453_PROG7312.MVVM.View
                 if (files.Length > 0)
                 {
                     string filePath = files[0];
-                    ((LoginRegisterViewModel)DataContext).ProfilePhoto = filePath;
+                    if (ValidateImageFile(filePath))
+                    {
+                        try
+                        {
+                            // Convert the image to a BitmapImage
+                            BitmapImage bitmap = new BitmapImage();
+                            bitmap.BeginInit();
+                            bitmap.UriSource = new Uri(filePath);
+                            bitmap.CacheOption = BitmapCacheOption.OnLoad;
+                            bitmap.EndInit();
+
+                            // Update the UI
+                            ProfilePhotoImage.ImageSource = bitmap;
+                            
+                            // Hide the upload instructions
+                            UploadInstructionsPanel.Visibility = Visibility.Collapsed;
+
+                            // Update the ViewModel
+                            ((LoginRegisterViewModel)DataContext).ProfilePhoto = filePath;
+                        }
+                        catch (Exception ex)
+                        {
+                            MessageBox.Show($"Error loading image: {ex.Message}", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+                        }
+                    }
                 }
             }
         }
-
 
         private void ProfilePhotoBorder_DragOver(object sender, DragEventArgs e)
         {
@@ -114,7 +139,6 @@ namespace ST10144453_PROG7312.MVVM.View
             }
         }
 
-
         private void BackButton_Click(object sender, RoutedEventArgs e)
         {
             var parent = Window.GetWindow(this) as MainWindow;
@@ -124,17 +148,69 @@ namespace ST10144453_PROG7312.MVVM.View
             }
         }
 
-        private void UploadImageButton_Click(object sender, RoutedEventArgs e)
+        private void UploadImageButton_Click(object sender, MouseButtonEventArgs e)
         {
-            OpenFileDialog openFileDialog = new OpenFileDialog();
-            openFileDialog.Filter = "Image files (*.jpg, *.jpeg, *.png) | *.jpg; *.jpeg; *.png";
+            OpenFileDialog openFileDialog = new OpenFileDialog
+            {
+                Filter = "Image files (*.jpg, *.jpeg, *.png) | *.jpg; *.jpeg; *.png"
+            };
+
             if (openFileDialog.ShowDialog() == true)
             {
                 string filePath = openFileDialog.FileName;
-                ((LoginRegisterViewModel)DataContext).ProfilePhoto = filePath;
+                if (ValidateImageFile(filePath))
+                {
+                    try
+                    {
+                        // Convert the image to a BitmapImage
+                        BitmapImage bitmap = new BitmapImage();
+                        bitmap.BeginInit();
+                        bitmap.UriSource = new Uri(filePath);
+                        bitmap.CacheOption = BitmapCacheOption.OnLoad;
+                        bitmap.EndInit();
+
+                        // Update the UI
+                        ProfilePhotoImage.ImageSource = bitmap;
+                        
+                        // Hide the upload instructions
+                        UploadInstructionsPanel.Visibility = Visibility.Collapsed;
+
+                        // Update the ViewModel
+                        ((LoginRegisterViewModel)DataContext).ProfilePhoto = filePath;
+                    }
+                    catch (Exception ex)
+                    {
+                        MessageBox.Show($"Error loading image: {ex.Message}", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+                    }
+                }
             }
         }
 
+        private bool ValidateImageFile(string filePath)
+        {
+            try
+            {
+                string extension = Path.GetExtension(filePath).ToLower();
+                if (!new[] { ".jpg", ".jpeg", ".png" }.Contains(extension))
+                {
+                    MessageBox.Show("Please select a valid image file (JPG, JPEG, or PNG)", "Invalid File", MessageBoxButton.OK, MessageBoxImage.Warning);
+                    return false;
+                }
 
+                var fileInfo = new FileInfo(filePath);
+                if (fileInfo.Length > 5 * 1024 * 1024) // 5MB limit
+                {
+                    MessageBox.Show("Image size must be less than 5MB", "File Too Large", MessageBoxButton.OK, MessageBoxImage.Warning);
+                    return false;
+                }
+
+                return true;
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"Error validating image: {ex.Message}", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+                return false;
+            }
+        }
     }
 }

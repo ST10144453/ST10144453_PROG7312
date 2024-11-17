@@ -21,8 +21,7 @@ namespace ST10144453_PROG7312.MVVM.View
         public ReportUserControl()
         {
             InitializeComponent();
-            UserModel currentUser = new UserModel(); // Create a new instance of UserModel
-            DataContext = new ReportViewModel(); // Pass the currentUser instance to the ReportViewModel constructor
+            DataContext = new ReportViewModel(UserSession.CurrentUser);
         }
 
         //++++++++++++++ Methods: OnIssueNameTextChanged ++++++++++++++//

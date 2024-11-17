@@ -117,6 +117,21 @@
 
                 <Button
                     Margin="0,5"
+                    Click="NavigateHome"
+                    FontSize="30"
+                    Style="{StaticResource ImageButtonStyle}">
+                    <StackPanel HorizontalAlignment="Left" Orientation="Horizontal">
+                        <Image
+                            Width="24"
+                            Height="24"
+                            Margin="5,0,10,0"
+                            Source="pack://application:,,,/Resources/Icons/home_Icon.png" />
+                        <TextBlock VerticalAlignment="Center" Text="Home" />
+                    </StackPanel>
+                </Button>
+
+                <Button
+                    Margin="0,5"
                     Click="NavigateAllReports"
                     FontSize="30"
                     Style="{StaticResource ImageButtonStyle}">
@@ -132,22 +147,6 @@
 
                 <Button
                     Margin="0,5"
-                    Click="NavigateToEvents"
-                    FontSize="30"
-                    Style="{StaticResource ImageButtonStyle}">
-                    <StackPanel HorizontalAlignment="Left" Orientation="Horizontal">
-                        <Image
-                            Width="24"
-                            Height="24"
-                            Margin="5,0,10,0"
-                            Source="pack://application:,,,/Resources/Icons/event_icon.png" />
-                        <TextBlock VerticalAlignment="Center" Text="Your Events" />
-                    </StackPanel>
-                </Button>
-
-
-                <Button
-                    Margin="0,5"
                     Click="NavigateServiceRequests"
                     FontSize="30"
                     Style="{StaticResource ImageButtonStyle}">
@@ -157,7 +156,7 @@
                             Height="24"
                             Margin="5,0,10,0"
                             Source="pack://application:,,,/Resources/Icons/request_Icon.png" />
-                        <TextBlock VerticalAlignment="Center" Text="Your Service Reports" />
+                        <TextBlock VerticalAlignment="Center" Text="Your Requests" />
                     </StackPanel>
                 </Button>
                 <Button

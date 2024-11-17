@@ -9,36 +9,36 @@ namespace ST10144453_PROG7312.MVVM.View
 {
     public partial class SelectReportsDialog : Window
     {
-        public List<ReportModel> SelectedReports { get; private set; }
+        public ObservableCollection<ReportModel> SelectedReports { get; } = new ObservableCollection<ReportModel>();
+        private readonly UserModel _currentUser;
 
-        public SelectReportsDialog()
+        public SelectReportsDialog(UserModel currentUser)
         {
             InitializeComponent();
+            _currentUser = currentUser;
             LoadReports();
         }
 
         private void LoadReports()
         {
-            // Get reports from the ReportService
-            var reports = ReportService.Instance.Reports.ToList();
-            
-            // Sort by date descending to show newest first
-            reports = reports.OrderByDescending(r => r.reportDate).ToList();
-            
-            // Update the ListView
-            ReportsListBox.ItemsSource = reports;
-        }
-
-        private void SelectButton_Click(object sender, RoutedEventArgs e)
-        {
-            SelectedReports = ReportsListBox.SelectedItems.Cast<ReportModel>().ToList();
-            DialogResult = true;
-            Close();
+            var allReports = ReportManager.Instance.Reports;
+            var filteredReports = allReports.Where(r => r.CreatedBy == _currentUser?.userName).ToList();
+            ReportsListBox.ItemsSource = filteredReports; // Ensure ReportsListView is defined in XAML
         }
 
         private void CancelButton_Click(object sender, RoutedEventArgs e)
         {
             DialogResult = false;
+            Close();
+        }
+
+        private void SelectButton_Click(object sender, RoutedEventArgs e)
+        {
+            foreach (ReportModel report in ReportsListBox.SelectedItems)
+            {
+                SelectedReports.Add(report);
+            }
+            DialogResult = true;
             Close();
         }
     }

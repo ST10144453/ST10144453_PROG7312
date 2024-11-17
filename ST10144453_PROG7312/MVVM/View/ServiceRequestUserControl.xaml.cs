@@ -22,10 +22,13 @@ namespace ST10144453_PROG7312.MVVM.View
     /// </summary>
     public partial class ServiceRequestUserControl : UserControl
     {
-        public ServiceRequestUserControl(ServiceRequestModel request)
+        private readonly UserModel _currentUser;
+
+        public ServiceRequestUserControl(ServiceRequestModel request, UserModel currentUser)
         {
             InitializeComponent();
-            DataContext = new ServiceRequestViewModel(request, (Window)this.Parent);
+            _currentUser = currentUser;
+            DataContext = new ServiceRequestViewModel(request, (Window)this.Parent, _currentUser);
         }
 
 
@@ -49,19 +52,37 @@ namespace ST10144453_PROG7312.MVVM.View
 
         private void Button_Click_1(object sender, RoutedEventArgs e)
         {
-            var selectReportsWindow = new SelectReportsDialog
+            var viewModel = DataContext as ServiceRequestViewModel;
+            var selectReportsWindow = new SelectReportsDialog(viewModel?.CurrentUser)
             {
                 Owner = Window.GetWindow(this)
             };
 
             if (selectReportsWindow.ShowDialog() == true)
             {
-                var viewModel = DataContext as ServiceRequestViewModel;
                 foreach (var report in selectReportsWindow.SelectedReports)
                 {
                     viewModel?.LinkReport(report);
                 }
             }
         }
+
+        private void NavigateHome_Click(object sender, RoutedEventArgs e)
+        {
+            // Assuming MainContentControl is the container in the parent window or control
+            var parentWindow = Window.GetWindow(this);
+            if (parentWindow != null)
+            {
+                var mainContentControl = parentWindow.FindName("MainContentControl") as ContentControl;
+                if (mainContentControl != null)
+                {
+                    mainContentControl.Content = new HomeView(_currentUser);
+                }
+            }
+        }
     }
 }
+
+
+    
+      

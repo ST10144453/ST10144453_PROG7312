@@ -203,8 +203,12 @@ namespace ST10144453_PROG7312
         protected override void OnMouseLeftButtonDown(System.Windows.Input.MouseButtonEventArgs e)
         {
             base.OnMouseLeftButtonDown(e);
-            Window.GetWindow(this)?.DragMove();
+            if (e.ButtonState == System.Windows.Input.MouseButtonState.Pressed)
+            {
+                Window.GetWindow(this)?.DragMove();
+            }
         }
+
 
         public void Navigate(UserControl nextPage)
         {

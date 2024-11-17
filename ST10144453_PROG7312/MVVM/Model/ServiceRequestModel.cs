@@ -96,6 +96,7 @@ namespace ST10144453_PROG7312.MVVM.Model
         public string CreatedBy { get; set; }
         public DateTime RequestDate { get; set; }
         public Guid RequestID { get; set; }
+    public string Title { get; set; }
 
         public List<AttachedFile> AttachedFiles
         {

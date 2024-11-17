@@ -19,8 +19,11 @@ namespace ST10144453_PROG7312.MVVM.View_Model
 {
     public class ServiceRequestViewModel : INotifyPropertyChanged
     {
-        private readonly ServiceRequestTree _requestTree;
+        private IServiceRequestTree _currentTree;
+        private TreeType _selectedTreeType;
+        private SortingStrategy _selectedSortStrategy;
         private ObservableCollection<ServiceRequestModel> _filteredRequests;
+        private string _treeDescription;
         private string _selectedCategory;
         private DateTime? _startDate;
         private DateTime? _endDate;
@@ -40,7 +43,47 @@ namespace ST10144453_PROG7312.MVVM.View_Model
         private ICommand _submitRequestCommand;
         private ServiceRequestModel _recentRequest;
         private readonly Window _popupWindow;
+        public UserModel CurrentUser { get; private set; }
+        private string _title;
 
+        public ObservableCollection<TreeType> AvailableTreeTypes { get; }
+        public ObservableCollection<SortingStrategy> AvailableSortStrategies { get; }
+
+        public TreeType SelectedTreeType
+        {
+            get => _selectedTreeType;
+            set
+            {
+                _selectedTreeType = value;
+                UpdateTreeImplementation();
+                OnPropertyChanged(nameof(SelectedTreeType));
+            }
+        }
+
+        public SortingStrategy SelectedSortStrategy
+        {
+            get => _selectedSortStrategy;
+            set
+            {
+                _selectedSortStrategy = value;
+                if (_currentTree != null)
+                {
+                    _currentTree.SetSortingStrategy(value);
+                    RefreshRequests();
+                }
+                OnPropertyChanged(nameof(SelectedSortStrategy));
+            }
+        }
+
+        public string TreeDescription
+        {
+            get => _treeDescription;
+            set
+            {
+                _treeDescription = value;
+                OnPropertyChanged(nameof(TreeDescription));
+            }
+        }
 
         public ObservableCollection<string> Categories
         {
@@ -232,12 +275,22 @@ namespace ST10144453_PROG7312.MVVM.View_Model
               $"Submitted: {RecentRequest.RequestDate}"
             : string.Empty;
 
-        public ServiceRequestViewModel(ServiceRequestModel request, Window popupWindow)
+        public string Title
+        {
+            get => _title;
+            set
+            {
+                _title = value;
+                OnPropertyChanged(nameof(Title));
+            }
+        }
+
+        public ServiceRequestViewModel(ServiceRequestModel request, Window popupWindow, UserModel user)
         {
             RecentRequest = request ?? new ServiceRequestModel();
             _popupWindow = popupWindow;
-            _requestTree = new ServiceRequestTree();
-
+            _currentTree = new ServiceRequestTree();
+            CurrentUser = user;
 
             // Initialize categories
             Categories = new ObservableCollection<string>
@@ -263,6 +316,26 @@ namespace ST10144453_PROG7312.MVVM.View_Model
             NavigateToDashboardCommand = new RelayCommand(NavigateToDashboard);
             SupportingEvidence = new ObservableCollection<MediaItem>();
 
+            // Initialize collections
+            AvailableTreeTypes = new ObservableCollection<TreeType>
+            {
+                TreeType.Basic,
+                TreeType.BinarySearch,
+                TreeType.AVL,
+                TreeType.RedBlack
+            };
+
+            AvailableSortStrategies = new ObservableCollection<SortingStrategy>
+            {
+                SortingStrategy.ByDate,
+                SortingStrategy.ByPriority,
+                SortingStrategy.ByCategory,
+                SortingStrategy.ByStatus
+            };
+
+            // Set defaults
+            SelectedTreeType = TreeType.AVL;
+            SelectedSortStrategy = SortingStrategy.ByDate;
         }
 
         private void InitializeData()
@@ -270,26 +343,26 @@ namespace ST10144453_PROG7312.MVVM.View_Model
             // Load existing service requests into the tree
             foreach (var request in ServiceRequestManager.Instance.GetAllRequests())
             {
-                _requestTree.Insert(request);
+                _currentTree.Insert(request);
             }
             
-            FilteredRequests = new ObservableCollection<ServiceRequestModel>(_requestTree.GetAllRequests());
+            FilteredRequests = new ObservableCollection<ServiceRequestModel>(_currentTree.GetAllRequests());
         }
 
         private void ApplyFilters()
         {
-            IEnumerable<ServiceRequestModel> requests = _requestTree.GetAllRequests();
+            IEnumerable<ServiceRequestModel> requests = _currentTree.GetAllRequests();
 
             if (!string.IsNullOrEmpty(SelectedCategory))
             {
-                requests = _requestTree.GetRequestsByCategory(SelectedCategory);
+                requests = _currentTree.GetRequestsByCategory(SelectedCategory);
             }
 
             if (StartDate.HasValue || EndDate.HasValue)
             {
                 var start = StartDate ?? DateTime.MinValue;
                 var end = EndDate ?? DateTime.MaxValue;
-                requests = _requestTree.GetRequestsByDateRange(start, end);
+                requests = _currentTree.GetRequestsByDateRange(start, end);
             }
 
             FilteredRequests = new ObservableCollection<ServiceRequestModel>(requests);
@@ -298,7 +371,7 @@ namespace ST10144453_PROG7312.MVVM.View_Model
         public void SubmitRequest(ServiceRequestModel request)
         {
             ServiceRequestManager.Instance.AddRequest(request);
-            _requestTree.Insert(request);
+            _currentTree.Insert(request);
             ApplyFilters(); // Refresh the filtered list
         }
 
@@ -323,15 +396,9 @@ namespace ST10144453_PROG7312.MVVM.View_Model
         {
             var request = new ServiceRequestModel
             {
-                RequestID = Guid.NewGuid(),
-                FirstName = FirstName,
-                Surname = Surname,
-                Email = Email,
-                PhoneNumber = PhoneNumber,
+                Title = Title,
                 Category = Category,
                 Description = Description,
-                AdditionalAddress = AdditionalAddress,
-                PreferredFeedbackMethod = PreferredFeedbackMethod,
                 RequestDate = DateTime.Now,
                 Status = "Pending",
                 CreatedBy = UserSession.CurrentUser?.userName,
@@ -341,7 +408,7 @@ namespace ST10144453_PROG7312.MVVM.View_Model
 
             // Save the request
             ServiceRequestManager.Instance.AddRequest(request);
-            _requestTree.Insert(request);
+            _currentTree.Insert(request);
             ApplyFilters();
 
             // Update RecentRequest
@@ -349,13 +416,14 @@ namespace ST10144453_PROG7312.MVVM.View_Model
             OnPropertyChanged(nameof(RecentRequest));
 
             // Show submission popup
-            var submissionPopup = new ServiceRequestSubmissionPopup(request);
+            var submissionPopup = new ServiceRequestSubmissionPopup(request, CurrentUser);
             submissionPopup.Owner = _popupWindow;
             submissionPopup.ShowDialog();
 
             // Close the current window
             _popupWindow?.Close();
         }
+
 
         private bool CanExecuteSubmitRequest()
         {
@@ -433,6 +501,35 @@ namespace ST10144453_PROG7312.MVVM.View_Model
                 RecentRequest.LinkedReports.Add(report);
                 OnPropertyChanged(nameof(RecentRequest));
             }
+        }
+
+        private void UpdateTreeImplementation()
+        {
+            // Store existing requests
+            var existingRequests = _currentTree?.GetAllRequests().ToList() ?? new List<ServiceRequestModel>();
+
+            // Create new tree
+            _currentTree = ServiceRequestTreeFactory.CreateTree(SelectedTreeType);
+            
+            // Set sorting strategy
+            _currentTree.SetSortingStrategy(SelectedSortStrategy);
+            
+            // Repopulate tree
+            foreach (var request in existingRequests)
+            {
+                _currentTree.Insert(request);
+            }
+
+            // Update description
+            TreeDescription = _currentTree.GetTreeDescription();
+
+            // Refresh display
+            RefreshRequests();
+        }
+
+        private void RefreshRequests()
+        {
+            FilteredRequests = new ObservableCollection<ServiceRequestModel>(_currentTree.GetAllRequests());
         }
 
         // INotifyPropertyChanged implementation

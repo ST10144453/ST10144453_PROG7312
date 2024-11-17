@@ -14,10 +14,10 @@ namespace ST10144453_PROG7312.MVVM.View
     /// </summary>
     public partial class AllReportsUserControl : UserControl
     {
-        public AllReportsUserControl()
+        public AllReportsUserControl(UserModel currentUser = null)
         {
             InitializeComponent();
-            DataContext = new ReportViewModel(); // Pass the currentUser instance to the ReportViewModel constructor
+            DataContext = new ReportViewModel(currentUser);
         }
 
         //++++++++++++++ Methods: ViewMediaButton_Click ++++++++++++++//

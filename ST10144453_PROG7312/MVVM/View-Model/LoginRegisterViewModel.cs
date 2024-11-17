@@ -86,8 +86,11 @@ namespace ST10144453_PROG7312.MVVM.View_Model
             get => _profilePhoto;
             set
             {
-                _profilePhoto = value;
-                OnPropertyChanged();
+                if (_profilePhoto != value)
+                {
+                    _profilePhoto = value;
+                    OnPropertyChanged(nameof(ProfilePhoto));
+                }
             }
         }
 
@@ -193,8 +196,24 @@ namespace ST10144453_PROG7312.MVVM.View_Model
             if (string.IsNullOrEmpty(imagePath) || !File.Exists(imagePath))
                 return null;
 
-            byte[] imageBytes = File.ReadAllBytes(imagePath);
-            return Convert.ToBase64String(imageBytes);
+            try
+            {
+                byte[] imageBytes = File.ReadAllBytes(imagePath);
+                string base64String = Convert.ToBase64String(imageBytes);
+                
+                // Validate image size (e.g., 5MB limit)
+                if (imageBytes.Length > 5 * 1024 * 1024)
+                {
+                    throw new Exception("Image size must be less than 5MB");
+                }
+                
+                return base64String;
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"Error processing image: {ex.Message}", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+                return null;
+            }
         }
 
         private void OnRegistrationSuccessful()

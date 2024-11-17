@@ -220,10 +220,10 @@
                     <Button
                         Width="150"
                         Height="50"
+                        Click="CreateEvent_Click"
                         Command="{Binding CreateEventCommand}"
                         Content="Create Event"
-                        Style="{StaticResource ActionButtonStyle}"
-                        Click="CreateEvent_Click"/>
+                        Style="{StaticResource ActionButtonStyle}" />
                 </StackPanel>
             </Grid>
         </Border>

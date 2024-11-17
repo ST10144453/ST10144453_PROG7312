@@ -3,8 +3,8 @@
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
-    xmlns:local="clr-namespace:ST10144453_PROG7312.MVVM.View"
     xmlns:helper="clr-namespace:ST10144453_PROG7312.FrontendLogic"
+    xmlns:local="clr-namespace:ST10144453_PROG7312.MVVM.View"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:viewModel="clr-namespace:ST10144453_PROG7312.MVVM.View_Model"
     d:DesignHeight="1080"
@@ -304,13 +304,13 @@
                                     Text="Password" />
                                 <Grid>
                                     <PasswordBox
-                                     x:Name="PasswordBox"
-                                     Height="50"
-                                     FontFamily="Roboto"
-                                     Foreground="#2e2e2e"
-                                     Style="{StaticResource RegisterPasswordBoxStyle}" 
-                                     helper:PasswordBoxHelper.BindPassword="True"
-                                     helper:PasswordBoxHelper.BoundPassword="{Binding LoginPassword, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
+                                        x:Name="PasswordBox"
+                                        Height="50"
+                                        helper:PasswordBoxHelper.BindPassword="True"
+                                        helper:PasswordBoxHelper.BoundPassword="{Binding LoginPassword, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                                        FontFamily="Roboto"
+                                        Foreground="#2e2e2e"
+                                        Style="{StaticResource RegisterPasswordBoxStyle}" />
                                     <TextBox
                                         x:Name="PlainTextPasswordBox"
                                         Height="50"

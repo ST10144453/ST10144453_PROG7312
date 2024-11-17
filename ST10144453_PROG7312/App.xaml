@@ -5,5 +5,10 @@
              StartupUri="MainWindow.xaml">
     <Application.Resources>
         <local:FilePathToImageSourceConverter x:Key="FilePathToImageSourceConverter" />
+        <ResourceDictionary x:Key="DefaultStyles">
+            <ResourceDictionary.MergedDictionaries>
+                <ResourceDictionary Source="ResourceDictionaries/GlobalStyles.xaml"/>
+            </ResourceDictionary.MergedDictionaries>
+        </ResourceDictionary>
     </Application.Resources>
 </Application>
