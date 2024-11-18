@@ -163,6 +163,7 @@
     <Compile Include="MVVM\Model\EventNode.cs" />
     <Compile Include="MVVM\Model\GuestUserModel.cs" />
     <Compile Include="MVVM\Model\IServiceRequestHeap.cs" />
+    <Compile Include="MVVM\Model\IServiceRequestTraversal.cs" />
     <Compile Include="MVVM\Model\IServiceRequestTree.cs" />
     <Compile Include="MVVM\Model\MediaItem.cs" />
     <Compile Include="MVVM\Model\MediaNode.cs" />
@@ -174,6 +175,7 @@
     <Compile Include="MVVM\Model\ServiceRequestGraph.cs" />
     <Compile Include="MVVM\Model\ServiceRequestGraphHelper.cs" />
     <Compile Include="MVVM\Model\ServiceRequestGraphNode.cs" />
+    <Compile Include="MVVM\Model\ServiceRequestGraphTraversal1.cs" />
     <Compile Include="MVVM\Model\ServiceRequestMiniHeap.cs" />
     <Compile Include="MVVM\Model\ServiceRequestModel.cs" />
     <Compile Include="MVVM\Model\ServiceRequestNode.cs" />
@@ -188,6 +190,7 @@
     <Compile Include="MVVM\Model\TreePerformanceMetrics.cs" />
     <Compile Include="MVVM\Model\TreeType.cs" />
     <Compile Include="MVVM\Model\TreeVisualizationHelper.cs" />
+    <Compile Include="MVVM\Model\UserManager.cs" />
     <Compile Include="MVVM\Model\UserModel.cs" />
     <Compile Include="MVVM\Model\UserSession.cs" />
     <Compile Include="MVVM\View-Model\CreateEventViewModel.cs" />

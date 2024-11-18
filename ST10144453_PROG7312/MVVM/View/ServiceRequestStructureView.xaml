@@ -57,5 +57,30 @@
                 </DataTemplate>
             </ListView.ItemTemplate>
         </ListView>
+
+        <StackPanel Grid.Column="1" Margin="10">
+            <TextBlock Text="Related Requests" 
+                       FontWeight="Bold" 
+                       Margin="0,0,0,5"/>
+            <ListView ItemsSource="{Binding RelatedRequests}"
+                      MaxHeight="200"
+                      BorderThickness="1"
+                      BorderBrush="#3F3F3F">
+                <ListView.ItemTemplate>
+                    <DataTemplate>
+                        <StackPanel Margin="5">
+                            <TextBlock Text="{Binding Category}" 
+                                     FontWeight="SemiBold"/>
+                            <TextBlock Text="{Binding Status}" 
+                                     Foreground="{Binding Status, 
+                                     Converter={StaticResource StatusToColorConverter}}"/>
+                            <TextBlock Text="{Binding RequestDate, 
+                                     StringFormat='Created: {0:d}'}" 
+                                     Foreground="Gray"/>
+                        </StackPanel>
+                    </DataTemplate>
+                </ListView.ItemTemplate>
+            </ListView>
+        </StackPanel>
     </Grid>
 </UserControl>

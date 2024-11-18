@@ -55,9 +55,13 @@
 
                                             <!--  Request Info  -->
                                             <StackPanel>
-                                                <TextBlock FontWeight="Bold" Text="{Binding Category}" />
+                                                <TextBlock FontWeight="Bold" Text="{Binding Title}" />
+                                                <TextBlock Text="{Binding Category}" Foreground="Gray" />
                                                 <TextBlock Text="{Binding Description}" TextTrimming="CharacterEllipsis" />
-                                                <TextBlock Text="{Binding CreatedBy}" Visibility="{Binding DataContext.IsStaff, ElementName=UserServiceRequestsDisplayControl, Converter={StaticResource BoolToVisibilityConverter}}" />
+                                                <TextBlock Text="{Binding CreatedBy}" 
+                                                          Visibility="{Binding DataContext.IsStaff, 
+                                                          ElementName=UserServiceRequestsDisplayControl, 
+                                                          Converter={StaticResource BoolToVisibilityConverter}}" />
                                             </StackPanel>
 
                                             <!--  Status Display  -->

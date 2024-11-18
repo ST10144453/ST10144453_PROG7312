@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace ST10144453_PROG7312.MVVM.Model
 {
-    public class ServiceRequestTraversal
+    public class ServiceRequestTraversal : IServiceRequestTraversal
     {
         private readonly Dictionary<Guid, List<(Guid TargetId, double Weight)>> adjacencyList;
         private readonly Dictionary<Guid, ServiceRequestModel> requests;
@@ -15,6 +15,56 @@ namespace ST10144453_PROG7312.MVVM.Model
         {
             adjacencyList = new Dictionary<Guid, List<(Guid TargetId, double Weight)>>();
             requests = new Dictionary<Guid, ServiceRequestModel>();
+        }
+
+        public IEnumerable<ServiceRequestModel> GetRelatedRequests(
+            ServiceRequestModel selectedRequest, 
+            bool isStaffUser,
+            int maxDepth = 2)
+        {
+            if (selectedRequest == null) return Enumerable.Empty<ServiceRequestModel>();
+
+            var relatedRequests = new HashSet<ServiceRequestModel>();
+            var visited = new HashSet<Guid>();
+            var queue = new Queue<(ServiceRequestModel Request, int Depth)>();
+
+            queue.Enqueue((selectedRequest, 0));
+            visited.Add(selectedRequest.RequestID);
+
+            while (queue.Count > 0)
+            {
+                var (currentRequest, depth) = queue.Dequeue();
+
+                // Add to related requests if user has permission
+                if (isStaffUser || currentRequest.CreatedBy == selectedRequest.CreatedBy)
+                {
+                    relatedRequests.Add(currentRequest);
+                }
+
+                if (depth >= maxDepth) continue;
+
+                // Find related requests based on various criteria
+                var related = FindRelatedRequests(currentRequest)
+                    .Where(r => !visited.Contains(r.RequestID));
+
+                foreach (var request in related)
+                {
+                    visited.Add(request.RequestID);
+                    queue.Enqueue((request, depth + 1));
+                }
+            }
+
+            return relatedRequests.Where(r => r.RequestID != selectedRequest.RequestID);
+        }
+
+        private IEnumerable<ServiceRequestModel> FindRelatedRequests(ServiceRequestModel request)
+        {
+            return requests.Values.Where(r =>
+                r.RequestID != request.RequestID &&
+                (r.Category == request.Category ||
+                 r.CreatedBy == request.CreatedBy ||
+                 Math.Abs((r.RequestDate - request.RequestDate).TotalDays) <= 2 ||
+                 r.Status == request.Status));
         }
 
         public void AddRequest(ServiceRequestModel request)
@@ -95,6 +145,46 @@ namespace ST10144453_PROG7312.MVVM.Model
                     }
                 }
             }
+        }
+
+        public IEnumerable<ServiceRequestModel> GetRelatedRequests(
+            ServiceRequestModel selectedRequest, 
+            bool isStaffUser,
+            int maxDepth = 2)
+        {
+            var relatedRequests = new HashSet<ServiceRequestModel>();
+            var queue = new Queue<(Guid Id, int Depth)>();
+            var visited = new HashSet<Guid>();
+
+            queue.Enqueue((selectedRequest.RequestID, 0));
+            visited.Add(selectedRequest.RequestID);
+
+            while (queue.Count > 0)
+            {
+                var (currentId, depth) = queue.Dequeue();
+                var currentRequest = requests[currentId];
+
+                // Staff can see all related requests, non-staff only see their own
+                if (isStaffUser || currentRequest.CreatedBy == selectedRequest.CreatedBy)
+                {
+                    relatedRequests.Add(currentRequest);
+                }
+
+                if (depth < maxDepth && adjacencyList.ContainsKey(currentId))
+                {
+                    foreach (var (targetId, weight) in adjacencyList[currentId]
+                        .OrderByDescending(x => x.Weight))
+                    {
+                        if (!visited.Contains(targetId))
+                        {
+                            visited.Add(targetId);
+                            queue.Enqueue((targetId, depth + 1));
+                        }
+                    }
+                }
+            }
+
+            return relatedRequests;
         }
     }
 }

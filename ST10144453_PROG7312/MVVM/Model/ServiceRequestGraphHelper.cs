@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -154,10 +154,10 @@ namespace ST10144453_PROG7312.MVVM.Model
                     fy -= gravity * (node.Y - height / 2);
 
                     // Update position with boundary checks
-                    node.X = Math.Max(nodeRadius + padding, Math.Min(width - nodeRadius - padding, 
+                    node.X = Math.Max(nodeRadius + padding, Math.Min(width - nodeRadius - padding,
                         node.X + Math.Max(-5, Math.Min(5, fx))));
-                    
-                    node.Y = Math.Max(nodeRadius + padding, Math.Min(height - nodeRadius - padding, 
+
+                    node.Y = Math.Max(nodeRadius + padding, Math.Min(height - nodeRadius - padding,
                         node.Y + Math.Max(-5, Math.Min(5, fy))));
                 }
             }

@@ -24,42 +24,30 @@ namespace ST10144453_PROG7312.MVVM.View
     /// </summary>
     public partial class ServiceRequestDetailsPopup : Window
     {
-        private readonly ServiceRequestDetailsViewModel _viewModel;
+        private readonly ServiceRequestDetailsViewModel viewModel;
 
         public ServiceRequestDetailsPopup(ServiceRequestModel request)
         {
             InitializeComponent();
-            _viewModel = new ServiceRequestDetailsViewModel(request, UserSession.CurrentUser);
-            DataContext = _viewModel;
+            viewModel = new ServiceRequestDetailsViewModel(request, UserSession.CurrentUser);
+            DataContext = viewModel;
         }
 
         private void StatusComboBox_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
-            if (sender is ComboBox comboBox)
+            if (sender is ComboBox comboBox && comboBox.SelectedItem is string newStatus)
             {
-                _viewModel.UpdateStatus(comboBox.SelectedItem as string);
+                viewModel.UpdateStatus(newStatus);
             }
-        }
-
-        private void CloseButton_Click(object sender, RoutedEventArgs e)
-        {
-            Close();
         }
 
         private void OpenFile_Click(object sender, RoutedEventArgs e)
         {
-            if (sender is Button button && button.DataContext is AttachedFile file)
+            if (sender is Button button && button.Tag is string filePath)
             {
                 try
                 {
-                    string tempFilePath = System.IO.Path.Combine(System.IO.Path.GetTempPath(), file.FileName);
-                    System.IO.File.WriteAllBytes(tempFilePath, Convert.FromBase64String(file.FileContent));
-
-                    Process.Start(new ProcessStartInfo
-                    {
-                        FileName = tempFilePath,
-                        UseShellExecute = true
-                    });
+                    Process.Start(new ProcessStartInfo(filePath) { UseShellExecute = true });
                 }
                 catch (Exception ex)
                 {
@@ -72,13 +60,30 @@ namespace ST10144453_PROG7312.MVVM.View
         {
             if (sender is Button button && button.DataContext is ReportModel report)
             {
-                var reportDetailsWindow = new ReportDetailsWindow(report)
+                var reportDetails = new Window
                 {
-                    Owner = this,
-                    DataContext = new ReportDetailsViewModel(report)
+                    Title = "Report Details",
+                    Width = 400,
+                    Height = 300,
+                    WindowStartupLocation = WindowStartupLocation.CenterOwner,
+                    Owner = this
                 };
-                reportDetailsWindow.ShowDialog();
+
+                var content = new TextBlock
+                {
+                    Text = $"Report Name: {report.reportName}\nDate: {report.reportDate}",
+                    Margin = new Thickness(10),
+                    TextWrapping = TextWrapping.Wrap
+                };
+
+                reportDetails.Content = content;
+                reportDetails.ShowDialog();
             }
+        }
+
+        private void CloseButton_Click(object sender, RoutedEventArgs e)
+        {
+            Close();
         }
     }
 }

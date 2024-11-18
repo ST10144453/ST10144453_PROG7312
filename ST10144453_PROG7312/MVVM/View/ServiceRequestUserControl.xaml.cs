@@ -80,6 +80,15 @@ namespace ST10144453_PROG7312.MVVM.View
                 }
             }
         }
+
+        private void OnTitleTextChanged(object sender, TextChangedEventArgs e)
+        {
+            var viewModel = DataContext as ServiceRequestViewModel;
+            if (viewModel != null)
+            {
+                viewModel.IsTitleFilled = !string.IsNullOrEmpty(viewModel.Title);
+            }
+        }
     }
 }
 

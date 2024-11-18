@@ -242,10 +242,16 @@
 
                             <!-- Title Field -->
                             <StackPanel Grid.Row="0" Margin="0,0,0,10">
-                                <TextBlock Text="Title" FontWeight="Bold" />
-                                <TextBox Text="{Binding Title, UpdateSourceTrigger=PropertyChanged}"
-                                         Margin="0,5,0,0"
-                                         Padding="5"/>
+                                <Label Content="Title:" />
+                                <TextBox
+                                    x:Name="TitleTextBox"
+                                    MinWidth="200"
+                                    MinHeight="30"
+                                    Margin="0,5,0,10"
+                                    Text="{Binding Title, Mode=TwoWay}"
+                                     Style="{StaticResource StandardTextBoxStyle}"
+                                    TextChanged="OnTitleTextChanged"
+                                    ToolTip="Enter a title for your service request" />
                             </StackPanel>
 
                             <!-- Category Field -->
@@ -254,7 +260,8 @@
                                 <ComboBox ItemsSource="{Binding Categories}"
                                          SelectedItem="{Binding Category}"
                                          Margin="0,5,0,0"
-                                         Padding="5"/>
+                                         Padding="5"
+                                          Height="40"/>
                             </StackPanel>
 
                             <!-- Description Field -->
@@ -265,7 +272,8 @@
                                          AcceptsReturn="True"
                                          Height="100"
                                          Margin="0,5,0,0"
-                                         Padding="5"/>
+                                         Padding="5"
+                                          Style="{StaticResource StandardTextBoxStyle}"/>
                             </StackPanel>
                         </Grid>
                     </GroupBox>
@@ -306,33 +314,14 @@
 
                     <!--  Submit Button  -->
                     <Button
+                        Content="Submit Request"
+                        Command="{Binding SubmitRequestCommand}"
+                        IsEnabled="{Binding IsFormValid}"
+                        Style="{StaticResource StandardButtonStyle}"
                         Width="200"
                         Height="40"
-                        Margin="0,20,0,0"
                         HorizontalAlignment="Center"
-                        Command="{Binding SubmitRequestCommand}"
-                        Content="Submit Request"
-                        IsEnabled="{Binding IsFormValid}">
-                        <Button.Style>
-                            <Style BasedOn="{StaticResource StandardButtonStyle}" TargetType="Button">
-                                <Setter Property="Background" Value="#007646" />
-                                <Setter Property="Foreground" Value="White" />
-                                <Style.Triggers>
-                                    <Trigger Property="IsEnabled" Value="False">
-                                        <Setter Property="Background" Value="#CCCCCC" />
-                                        <Setter Property="Foreground" Value="#666666" />
-                                        <Setter Property="Opacity" Value="0.7" />
-                                    </Trigger>
-                                    <Trigger Property="IsMouseOver" Value="True">
-                                        <Setter Property="Background" Value="#005b35" />
-                                    </Trigger>
-                                    <Trigger Property="IsPressed" Value="True">
-                                        <Setter Property="Background" Value="#004025" />
-                                    </Trigger>
-                                </Style.Triggers>
-                            </Style>
-                        </Button.Style>
-                    </Button>
+                        Margin="0,20"/>
                 </StackPanel>
             </Grid>
         </ScrollViewer>

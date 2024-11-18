@@ -44,7 +44,7 @@
 
                                 <!--  Request Header  -->
                                 <StackPanel Margin="0,0,0,10" Orientation="Horizontal">
-                                    <TextBlock FontWeight="Bold" Text="{Binding Category}" />
+                                    <TextBlock FontWeight="Bold" Text="{Binding Title}" />
                                     <TextBlock Text=" - " />
                                     <TextBlock Foreground="{Binding Status, Converter={StaticResource StatusToColorConverter}}" Text="{Binding Status}" />
                                 </StackPanel>
