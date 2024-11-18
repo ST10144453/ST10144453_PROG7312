@@ -669,12 +669,6 @@
     <Resource Include="Resources\Images\empty-reports.png" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\..\..\..\Downloads\MinimumSpanningTreeLibrary\MinimumSpanningTreeLibrary\MinimumSpanningTreeLibrary.csproj">
-      <Project>{a6122578-18d4-4346-82c5-786f221b89f6}</Project>
-      <Name>MinimumSpanningTreeLibrary</Name>
-    </ProjectReference>
-  </ItemGroup>
-  <ItemGroup>
     <Resource Include="Resources\Images\default_pfp.jpg" />
   </ItemGroup>
   <ItemGroup>
