@@ -382,8 +382,8 @@ namespace ST10144453_PROG7312.MVVM.View_Model
             
             // Initialize properties
             Title = request.Title;
-            FirstName = CurrentUser.firstName;
-            Surname = CurrentUser.surname;
+            FirstName = request.FirstName;
+            Surname = request.Surname;
             Email = CurrentUser.email;
             // ... other initializations
         }

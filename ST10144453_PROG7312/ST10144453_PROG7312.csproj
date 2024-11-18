@@ -135,7 +135,6 @@
     <Compile Include="Core\RelayCommandT.cs" />
     <Compile Include="Core\ServiceRequestManager.cs" />
     <Compile Include="Core\TimeSpanToNullableConverter.cs" />
-    <Compile Include="Core\WebScraperService.cs" />
     <Compile Include="FrontendLogic\AnyTrueInCollectionConverter.cs" />
     <Compile Include="FrontendLogic\Base64ToImageSourceConverter.cs" />
     <Compile Include="FrontendLogic\Base64ToPdfStreamConverter.cs" />
