@@ -170,6 +170,9 @@
     <Compile Include="MVVM\Model\ReportManager.cs" />
     <Compile Include="MVVM\Model\ReportModel.cs" />
     <Compile Include="MVVM\Model\ServiceRequestAVLTree.cs" />
+    <Compile Include="MVVM\Model\ServiceRequestGraph.cs" />
+    <Compile Include="MVVM\Model\ServiceRequestGraphHelper.cs" />
+    <Compile Include="MVVM\Model\ServiceRequestGraphNode.cs" />
     <Compile Include="MVVM\Model\ServiceRequestModel.cs" />
     <Compile Include="MVVM\Model\ServiceRequestNode.cs" />
     <Compile Include="MVVM\Model\ServiceRequestTree.cs" />
@@ -239,6 +242,9 @@
     </Compile>
     <Compile Include="MVVM\View\ServiceRequestDetailsPopup.xaml.cs">
       <DependentUpon>ServiceRequestDetailsPopup.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="MVVM\View\ServiceRequestGraphControl.xaml.cs">
+      <DependentUpon>ServiceRequestGraphControl.xaml</DependentUpon>
     </Compile>
     <Compile Include="MVVM\View\ServiceRequestSubmissionPopup.xaml.cs">
       <DependentUpon>ServiceRequestSubmissionPopup.xaml</DependentUpon>
@@ -330,6 +336,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="MVVM\View\ServiceRequestDetailsPopup.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="MVVM\View\ServiceRequestGraphControl.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

@@ -56,7 +56,7 @@
                 Height="30"
                 HorizontalAlignment="Left"/>
 
-        <!-- Service Requests List -->
+        <!-- Service Requests Display -->
         <ScrollViewer Grid.Row="4">
             <ItemsControl ItemsSource="{Binding DisplayedRequests}">
                 <ItemsControl.ItemTemplate>
