@@ -671,6 +671,9 @@
       <Name>MinimumSpanningTreeLibrary</Name>
     </ProjectReference>
   </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\Images\default_pfp.jpg" />
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Import Project="..\packages\Syncfusion.PdfToImageConverter.WPF.26.2.14\build\net462\Syncfusion.PdfToImageConverter.WPF.targets" Condition="Exists('..\packages\Syncfusion.PdfToImageConverter.WPF.26.2.14\build\net462\Syncfusion.PdfToImageConverter.WPF.targets')" />
   <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">

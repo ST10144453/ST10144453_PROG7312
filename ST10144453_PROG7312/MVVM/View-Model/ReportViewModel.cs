@@ -636,34 +636,55 @@ namespace ST10144453_PROG7312.MVVM.View_Model
         /// </summary>
         private void Submit()
         {
-            // Validate input fields
+            bool isValid = true;
+
+            // Reset all error states
+            ShowIssueNameError = false;
+            ShowLocationError = false;
+            ShowCategoryError = false;
+            ShowDescriptionError = false;
+
+            // Validate Issue Name
             if (string.IsNullOrWhiteSpace(IssueName))
             {
-                MessageBox.Show("Please enter a report name.", "Validation Error", MessageBoxButton.OK, MessageBoxImage.Warning);
-                return;
+                IssueNameError = "Please enter a report name";
+                ShowIssueNameError = true;
+                isValid = false;
             }
 
+            // Validate Location
             if (string.IsNullOrWhiteSpace(Location))
             {
-                MessageBox.Show("Please enter a location.", "Validation Error", MessageBoxButton.OK, MessageBoxImage.Warning);
-                return;
+                LocationError = "Please enter a location";
+                ShowLocationError = true;
+                isValid = false;
             }
 
+            // Validate Category
             if (string.IsNullOrWhiteSpace(SelectedCategory))
             {
-                MessageBox.Show("Please select a category.", "Validation Error", MessageBoxButton.OK, MessageBoxImage.Warning);
-                return;
+                CategoryError = "Please select a category";
+                ShowCategoryError = true;
+                isValid = false;
             }
 
+            // Validate Description
             if (string.IsNullOrWhiteSpace(Description))
             {
-                MessageBox.Show("Please enter a description.", "Validation Error", MessageBoxButton.OK, MessageBoxImage.Warning);
-                return;
+                DescriptionError = "Please enter a description";
+                ShowDescriptionError = true;
+                isValid = false;
             }
 
+            // Check if user is logged in
             if (CurrentUser == null)
             {
                 MessageBox.Show("Error: No user is currently logged in.", "User Error", MessageBoxButton.OK, MessageBoxImage.Error);
+                return;
+            }
+
+            if (!isValid)
+            {
                 return;
             }
 
@@ -676,9 +697,8 @@ namespace ST10144453_PROG7312.MVVM.View_Model
                 reportDescription = Description,
                 reportDate = DateTime.Now,
                 CreatedBy = CurrentUser?.userName,
-Media = new List<MediaItem>(MediaItems)
+                Media = new List<MediaItem>(MediaItems)
             };
-            Debug.WriteLine($"New report CreatedBy: {newReport.CreatedBy}");
 
             // Add the report using ReportManager
             ReportManager.Instance.AddReport(newReport);
@@ -780,6 +800,97 @@ Media = new List<MediaItem>(MediaItems)
         protected virtual void OnPropertyChanged([CallerMemberName] string propertyName = null)
         {
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
+        }
+
+        // Add these properties after the existing private fields
+        private string _issueNameError;
+        private string _locationError;
+        private string _categoryError;
+        private string _descriptionError;
+        private bool _showIssueNameError;
+        private bool _showLocationError;
+        private bool _showCategoryError;
+        private bool _showDescriptionError;
+
+        // Add these public properties
+        public string IssueNameError
+        {
+            get => _issueNameError;
+            set
+            {
+                _issueNameError = value;
+                OnPropertyChanged();
+            }
+        }
+
+        public string LocationError
+        {
+            get => _locationError;
+            set
+            {
+                _locationError = value;
+                OnPropertyChanged();
+            }
+        }
+
+        public string CategoryError
+        {
+            get => _categoryError;
+            set
+            {
+                _categoryError = value;
+                OnPropertyChanged();
+            }
+        }
+
+        public string DescriptionError
+        {
+            get => _descriptionError;
+            set
+            {
+                _descriptionError = value;
+                OnPropertyChanged();
+            }
+        }
+
+        public bool ShowIssueNameError
+        {
+            get => _showIssueNameError;
+            set
+            {
+                _showIssueNameError = value;
+                OnPropertyChanged();
+            }
+        }
+
+        public bool ShowLocationError
+        {
+            get => _showLocationError;
+            set
+            {
+                _showLocationError = value;
+                OnPropertyChanged();
+            }
+        }
+
+        public bool ShowCategoryError
+        {
+            get => _showCategoryError;
+            set
+            {
+                _showCategoryError = value;
+                OnPropertyChanged();
+            }
+        }
+
+        public bool ShowDescriptionError
+        {
+            get => _showDescriptionError;
+            set
+            {
+                _showDescriptionError = value;
+                OnPropertyChanged();
+            }
         }
     }
 }

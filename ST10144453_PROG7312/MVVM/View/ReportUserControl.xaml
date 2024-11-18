@@ -18,8 +18,12 @@
         <ResourceDictionary>
             <!--  Merging external resource dictionaries  -->
             <ResourceDictionary.MergedDictionaries>
+
                 <ResourceDictionary Source="pack://application:,,,/ST10144453_PROG7312;component/ResourceDictionaries/ComboBoxStyles.xaml" />
             </ResourceDictionary.MergedDictionaries>
+
+            <converter:BoolToVisibilityConverter x:Key="BooleanToVisibilityConverter" />
+
 
             <Style TargetType="ProgressBar">
                 <Setter Property="Template">
@@ -162,6 +166,14 @@
                 TextChanged="OnIssueNameTextChanged"
                 ToolTip="Enter the name of the issue here." />
 
+            <!--  After IssueName TextBox  -->
+            <TextBlock
+                Margin="5,2,0,0"
+                FontSize="12"
+                Foreground="Red"
+                Text="{Binding IssueNameError}"
+                Visibility="{Binding ShowIssueNameError, Converter={StaticResource BooleanToVisibilityConverter}}" />
+
             <!--  Location Label and TextBox  -->
             <Label Content="Location:" />
             <TextBox
@@ -172,6 +184,14 @@
                 Text="{Binding Location, Mode=TwoWay}"
                 TextChanged="OnLocationTextChanged"
                 ToolTip="Specify the location related to the issue." />
+
+            <!--  After Location TextBox  -->
+            <TextBlock
+                Margin="5,2,0,0"
+                FontSize="12"
+                Foreground="Red"
+                Text="{Binding LocationError}"
+                Visibility="{Binding ShowLocationError, Converter={StaticResource BooleanToVisibilityConverter}}" />
 
             <!--  Category Label and ComboBox  -->
             <Label Content="Category:" />
@@ -185,6 +205,14 @@
                 SelectionChanged="OnCategorySelectionChanged"
                 ToolTip="Select the category that best describes the issue." />
 
+            <!--  After Category ComboBox  -->
+            <TextBlock
+                Margin="5,2,0,0"
+                FontSize="12"
+                Foreground="Red"
+                Text="{Binding CategoryError}"
+                Visibility="{Binding ShowCategoryError, Converter={StaticResource BooleanToVisibilityConverter}}" />
+
             <!--  Description Label and TextBox  -->
             <Label Content="Description:" />
             <TextBox
@@ -196,6 +224,14 @@
                 Text="{Binding Description, Mode=TwoWay}"
                 TextChanged="OnDescriptionTextChanged"
                 ToolTip="Provide a detailed description of the issue here." />
+
+            <!--  After Description TextBox  -->
+            <TextBlock
+                Margin="5,2,0,0"
+                FontSize="12"
+                Foreground="Red"
+                Text="{Binding DescriptionError}"
+                Visibility="{Binding ShowDescriptionError, Converter={StaticResource BooleanToVisibilityConverter}}" />
 
             <!--  Submit Button  -->
             <Button
