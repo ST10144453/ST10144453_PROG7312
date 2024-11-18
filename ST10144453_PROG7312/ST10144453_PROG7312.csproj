@@ -156,12 +156,15 @@
     <Compile Include="MVVM\Model\AnnouncementModel.cs" />
     <Compile Include="MVVM\Model\AnnouncementNode.cs" />
     <Compile Include="MVVM\Model\AnnouncementTree.cs" />
+    <Compile Include="MVVM\View\Visualizations\BaseVisualizationControl.cs" />
     <Compile Include="MVVM\Model\BasicServiceRequestTree.cs" />
     <Compile Include="MVVM\Model\BinarySearchServiceRequestTree.cs" />
     <Compile Include="MVVM\Model\EventAVLTree.cs" />
     <Compile Include="MVVM\Model\EventModel.cs" />
     <Compile Include="MVVM\Model\EventNode.cs" />
     <Compile Include="MVVM\Model\GuestUserModel.cs" />
+    <Compile Include="MVVM\Model\IServiceRequestHeap.cs" />
+    <Compile Include="MVVM\Model\IServiceRequestStructure.cs" />
     <Compile Include="MVVM\Model\IServiceRequestTree.cs" />
     <Compile Include="MVVM\Model\MediaItem.cs" />
     <Compile Include="MVVM\Model\MediaNode.cs" />
@@ -170,8 +173,13 @@
     <Compile Include="MVVM\Model\ReportManager.cs" />
     <Compile Include="MVVM\Model\ReportModel.cs" />
     <Compile Include="MVVM\Model\ServiceRequestAVLTree.cs" />
+    <Compile Include="MVVM\Model\ServiceRequestGraph.cs" />
+    <Compile Include="MVVM\Model\ServiceRequestMinHeap.cs" />
     <Compile Include="MVVM\Model\ServiceRequestModel.cs" />
+    <Compile Include="MVVM\Model\ServiceRequestMST.cs" />
     <Compile Include="MVVM\Model\ServiceRequestNode.cs" />
+    <Compile Include="MVVM\Model\ServiceRequestStructureType.cs" />
+    <Compile Include="MVVM\Model\ServiceRequestTraversal.cs" />
     <Compile Include="MVVM\Model\ServiceRequestTree.cs" />
     <Compile Include="MVVM\Model\ServiceRequestTreeFactory.cs" />
     <Compile Include="MVVM\Model\SortingStrategy.cs" />
@@ -193,6 +201,7 @@
     <Compile Include="MVVM\View-Model\ReportService.cs" />
     <Compile Include="MVVM\View-Model\ReportViewModel.cs" />
     <Compile Include="MVVM\View-Model\ServiceRequestDetailsViewModel.cs" />
+    <Compile Include="MVVM\View-Model\ServiceRequestStructureViewModel.cs" />
     <Compile Include="MVVM\View-Model\ServiceRequestViewModel.cs" />
     <Compile Include="MVVM\View-Model\StaffMenuViewModel.cs" />
     <Compile Include="MVVM\View-Model\TreeSelectionViewModel.cs" />
@@ -239,6 +248,9 @@
     </Compile>
     <Compile Include="MVVM\View\ServiceRequestDetailsPopup.xaml.cs">
       <DependentUpon>ServiceRequestDetailsPopup.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="MVVM\View\ServiceRequestStructureView.xaml.cs">
+      <DependentUpon>ServiceRequestStructureView.xaml</DependentUpon>
     </Compile>
     <Compile Include="MVVM\View\ServiceRequestSubmissionPopup.xaml.cs">
       <DependentUpon>ServiceRequestSubmissionPopup.xaml</DependentUpon>
@@ -333,6 +345,10 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
+    <Page Include="MVVM\View\ServiceRequestStructureView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="MVVM\View\ServiceRequestSubmissionPopup.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
@@ -381,14 +397,18 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="ResourceDictionaries\ComboBoxStyles.xaml">
+    <Page Include="MVVM\View\Visualizations\TreeVisualizationControl.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="ResourceDictionaries\GlobalStyles.xaml">
+    <Resource Include="ResourceDictionaries\ComboBoxStyles.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
-    </Page>
+    </Resource>
+    <Resource Include="ResourceDictionaries\GlobalStyles.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Resource>
   </ItemGroup>
   <ItemGroup>
     <Compile Include="MVVM\View-Model\HomeViewModel.cs" />
@@ -409,6 +429,10 @@
     </Compile>
     <Compile Include="MVVM\View\UserServiceRequestView.xaml.cs">
       <DependentUpon>UserServiceRequestView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="MVVM\View\Visualizations\TreeNode.cs" />
+    <Compile Include="MVVM\View\Visualizations\TreeVisualizationControl.xaml.cs">
+      <DependentUpon>TreeVisualizationControl.xaml</DependentUpon>
     </Compile>
     <Compile Include="Properties\AssemblyInfo.cs">
       <SubType>Code</SubType>
