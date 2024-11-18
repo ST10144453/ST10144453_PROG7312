@@ -9,6 +9,7 @@ using System;
 using System.Linq;
 using System.Windows;
 using System.IO;
+using System.Windows.Media.Imaging;
 
 namespace ST10144453_PROG7312.MVVM.View_Model
 {
@@ -327,6 +328,7 @@ namespace ST10144453_PROG7312.MVVM.View_Model
             if (Users.Any(u => u.userName.Equals(UserName, StringComparison.OrdinalIgnoreCase)))
             {
                 UsernameError = "Username already exists";
+                ShowUsernameError = true;
                 return;
             }
 
@@ -334,7 +336,39 @@ namespace ST10144453_PROG7312.MVVM.View_Model
             if (Users.Any(u => u.email.Equals(Email, StringComparison.OrdinalIgnoreCase)))
             {
                 EmailError = "Email already exists";
+                ShowEmailError = true;
                 return;
+            }
+
+            string profilePhotoBase64;
+            if (string.IsNullOrEmpty(ProfilePhoto))
+            {
+                try
+                {
+                    // Load the default profile photo from resources
+                    var resourceUri = new Uri("pack://application:,,,/Resources/Images/default_pfp.jpg");
+                    var bitmap = new BitmapImage(resourceUri);
+                    using (var memoryStream = new MemoryStream())
+                    {
+                        var encoder = new JpegBitmapEncoder();
+                        encoder.Frames.Add(BitmapFrame.Create(bitmap));
+                        encoder.Save(memoryStream);
+                        profilePhotoBase64 = Convert.ToBase64String(memoryStream.ToArray());
+                    }
+                }
+                catch (Exception ex)
+                {
+                    MessageBox.Show($"Error loading default profile photo: {ex.Message}", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+                    return;
+                }
+            }
+            else
+            {
+                profilePhotoBase64 = ConvertImageToBase64(ProfilePhoto);
+                if (profilePhotoBase64 == null)
+                {
+                    return; // ConvertImageToBase64 already shows error message
+                }
             }
 
             var newUser = new GuestUserModel
@@ -342,7 +376,7 @@ namespace ST10144453_PROG7312.MVVM.View_Model
                 userName = UserName,
                 email = Email,
                 password = Password,
-                profilePhoto = ConvertImageToBase64(ProfilePhoto),
+                profilePhoto = profilePhotoBase64,
                 isStaff = false
             };
 
