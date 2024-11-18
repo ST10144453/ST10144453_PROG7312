@@ -17,6 +17,7 @@
     </UserControl.DataContext>
 
     <UserControl.Resources>
+        <BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter" />
         <!--  Define unique styles for TextBox elements  -->
         <Style x:Key="RegisterTextBoxStyle" TargetType="TextBox">
             <Setter Property="Background" Value="White" />
@@ -363,6 +364,12 @@
                                 Content="Login"
                                 FontSize="22"
                                 Style="{StaticResource Button4Style}" />
+                            <TextBlock
+                                Margin="5,2,0,0"
+                                FontSize="12"
+                                Foreground="Red"
+                                Text="{Binding LoginError}"
+                                Visibility="{Binding ShowLoginError, Converter={StaticResource BooleanToVisibilityConverter}}" />
                         </StackPanel>
                     </Grid>
                 </Border>

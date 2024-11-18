@@ -21,6 +21,11 @@ namespace ST10144453_PROG7312.MVVM.View_Model
         private string _profilePhoto;
         private string _loginUserNameOrEmail;
         private string _loginPassword;
+        private string _usernameError;
+        private string _emailError;
+        private string _passwordError;
+        private string _confirmPasswordError;
+        private string _loginError;
 
         public string LoginUserNameOrEmail
         {
@@ -94,11 +99,122 @@ namespace ST10144453_PROG7312.MVVM.View_Model
             }
         }
 
+        public string UsernameError
+        {
+            get => _usernameError;
+            set
+            {
+                _usernameError = value;
+                OnPropertyChanged();
+            }
+        }
+
+        public string EmailError
+        {
+            get => _emailError;
+            set
+            {
+                _emailError = value;
+                OnPropertyChanged();
+            }
+        }
+
+        public string PasswordError
+        {
+            get => _passwordError;
+            set
+            {
+                _passwordError = value;
+                OnPropertyChanged();
+            }
+        }
+
+        public string ConfirmPasswordError
+        {
+            get => _confirmPasswordError;
+            set
+            {
+                _confirmPasswordError = value;
+                OnPropertyChanged();
+            }
+        }
+
+        public string LoginError
+        {
+            get => _loginError;
+            set
+            {
+                _loginError = value;
+                OnPropertyChanged();
+            }
+        }
+
         // Use a static collection to ensure it's shared across instances
         public static ObservableCollection<UserModel> Users { get; set; } = new ObservableCollection<UserModel>(UserModel.Users);
 
         public ICommand LoginCommand { get; }
         public ICommand RegisterCommand { get; }
+
+        // Add validation requirement properties
+        public string UsernameRequirements => "Username must be at least 3 characters long";
+        public string PasswordRequirements => "Password must be at least 8 characters long and contain at least one uppercase letter, one number, and one special character";
+        public string EmailRequirements => "Please enter a valid email address";
+        
+        private bool _showUsernameError;
+        private bool _showEmailError;
+        private bool _showPasswordError;
+        private bool _showConfirmPasswordError;
+        private bool _showLoginError;
+
+        public bool ShowUsernameError
+        {
+            get => _showUsernameError;
+            set
+            {
+                _showUsernameError = value;
+                OnPropertyChanged();
+            }
+        }
+
+        public bool ShowEmailError
+        {
+            get => _showEmailError;
+            set
+            {
+                _showEmailError = value;
+                OnPropertyChanged();
+            }
+        }
+
+        public bool ShowPasswordError
+        {
+            get => _showPasswordError;
+            set
+            {
+                _showPasswordError = value;
+                OnPropertyChanged();
+            }
+        }
+
+        public bool ShowConfirmPasswordError
+        {
+            get => _showConfirmPasswordError;
+            set
+            {
+                _showConfirmPasswordError = value;
+                OnPropertyChanged();
+            }
+        }
+
+        public bool ShowLoginError
+        {
+            get => _showLoginError;
+            set
+            {
+                _showLoginError = value;
+                OnPropertyChanged();
+            }
+        }
 
         public LoginRegisterViewModel()
         {
@@ -119,9 +235,107 @@ namespace ST10144453_PROG7312.MVVM.View_Model
             return !string.IsNullOrEmpty(LoginUserNameOrEmail) && !string.IsNullOrEmpty(LoginPassword);
         }
 
+        private bool ValidatePassword(string password)
+        {
+            return password.Length >= 8 &&
+                   password.Any(char.IsUpper) &&
+                   password.Any(char.IsDigit) &&
+                   password.Any(c => !char.IsLetterOrDigit(c));
+        }
+
+        private bool ValidateRegistration()
+        {
+            bool isValid = true;
+            
+            // Username validation
+            if (string.IsNullOrEmpty(UserName))
+            {
+                UsernameError = "Username is required";
+                ShowUsernameError = true;
+                isValid = false;
+            }
+            else if (UserName.Length < 3)
+            {
+                UsernameError = "Username must be at least 3 characters";
+                ShowUsernameError = true;
+                isValid = false;
+            }
+            else
+            {
+                ShowUsernameError = false;
+            }
+
+            // Email validation
+            if (string.IsNullOrEmpty(Email))
+            {
+                EmailError = "Email is required";
+                ShowEmailError = true;
+                isValid = false;
+            }
+            else if (!Email.Contains("@") || !Email.Contains("."))
+            {
+                EmailError = "Please enter a valid email address";
+                ShowEmailError = true;
+                isValid = false;
+            }
+            else
+            {
+                ShowEmailError = false;
+            }
+
+            // Password validation
+            if (string.IsNullOrEmpty(Password))
+            {
+                PasswordError = "Password is required";
+                ShowPasswordError = true;
+                isValid = false;
+            }
+            else if (!ValidatePassword(Password))
+            {
+                PasswordError = "Password does not meet requirements";
+                ShowPasswordError = true;
+                isValid = false;
+            }
+            else
+            {
+                ShowPasswordError = false;
+            }
+
+            // Confirm password validation
+            if (Password != ConfirmPassword)
+            {
+                ConfirmPasswordError = "Passwords do not match";
+                ShowConfirmPasswordError = true;
+                isValid = false;
+            }
+            else
+            {
+                ShowConfirmPasswordError = false;
+            }
+
+            return isValid;
+        }
+
         private void Register(Action onSuccess)
         {
-            Console.WriteLine("Register method called");
+            if (!ValidateRegistration())
+            {
+                return;
+            }
+
+            // Check if username already exists
+            if (Users.Any(u => u.userName.Equals(UserName, StringComparison.OrdinalIgnoreCase)))
+            {
+                UsernameError = "Username already exists";
+                return;
+            }
+
+            // Check if email already exists
+            if (Users.Any(u => u.email.Equals(Email, StringComparison.OrdinalIgnoreCase)))
+            {
+                EmailError = "Email already exists";
+                return;
+            }
 
             var newUser = new GuestUserModel
             {
@@ -133,59 +347,67 @@ namespace ST10144453_PROG7312.MVVM.View_Model
             };
 
             Users.Add(newUser);
-            Console.WriteLine("User registered");
-
-            foreach (var user in Users)
-            {
-                Console.WriteLine($"Username: {user.userName}");
-                Console.WriteLine($"Email: {user.email}");
-                Console.WriteLine($"Password: {user.password}");
-                Console.WriteLine($"Profile Photo: {user.profilePhoto}");
-                Console.WriteLine($"Is Staff: {user.isStaff}");
-            }
-
-            // Invoke the success callback
+            MessageBox.Show("Registration successful!", "Success", MessageBoxButton.OK, MessageBoxImage.Information);
             onSuccess?.Invoke();
         }
 
         private void Login()
         {
-            Console.WriteLine($"Attempting login with Username/Email: {LoginUserNameOrEmail}, Password: {LoginPassword}");
-
-            foreach (var registeredUser in Users)
+            ShowLoginError = false;
+            
+            // Validate empty fields
+            if (string.IsNullOrWhiteSpace(LoginUserNameOrEmail))
             {
-                Console.WriteLine($"Stored User - Username: {registeredUser.userName}, Email: {registeredUser.email}, Password: {registeredUser.password}, ID: {registeredUser.userID}");
+                LoginError = "Please enter your username or email";
+                ShowLoginError = true;
+                return;
             }
 
-            var user = Users.FirstOrDefault(u =>
-                (u.userName == LoginUserNameOrEmail || u.email == LoginUserNameOrEmail) &&
-                u.password == LoginPassword);
-
-            if (user != null)
+            if (string.IsNullOrWhiteSpace(LoginPassword))
             {
-                Console.WriteLine("Login successful!");
-                UserSession.CurrentUser = user; // Set the current user
+                LoginError = "Please enter your password";
+                ShowLoginError = true;
+                return;
+            }
 
-                var mainWindow = (MainWindow)Application.Current.MainWindow;
-                if (user.isStaff)
+            // Check if user exists
+            var userByUsername = Users.FirstOrDefault(u => u.userName.Equals(LoginUserNameOrEmail, StringComparison.OrdinalIgnoreCase));
+            var userByEmail = Users.FirstOrDefault(u => u.email.Equals(LoginUserNameOrEmail, StringComparison.OrdinalIgnoreCase));
+            
+            if (userByUsername == null && userByEmail == null)
+            {
+                LoginError = "Account not found. Please check your username/email or register a new account";
+                ShowLoginError = true;
+                return;
+            }
+
+            // Check password
+            var user = userByUsername ?? userByEmail;
+            if (user.password != LoginPassword)
+            {
+                LoginError = "Incorrect password";
+                ShowLoginError = true;
+                return;
+            }
+
+            // Successful login
+            LoginError = null;
+            ShowLoginError = false;
+            UserSession.CurrentUser = user;
+
+            var mainWindow = (MainWindow)Application.Current.MainWindow;
+            if (user.isStaff)
+            {
+                var staffMenu = new StaffMenu(user)
                 {
-                    var staffMenu = new StaffMenu(user)
-                    {
-                        DataContext = new StaffMenuViewModel(user)
-                    };
-                    mainWindow.Navigate(staffMenu);
-                    Console.WriteLine("Staff Login");
-                }
-                else
-                {
-                    var homeView = new HomeView(user);
-                    mainWindow.Navigate(homeView);
-                    Console.WriteLine("User Login");
-                }
+                    DataContext = new StaffMenuViewModel(user)
+                };
+                mainWindow.Navigate(staffMenu);
             }
             else
             {
-                Console.WriteLine("Invalid username/email or password.");
+                var homeView = new HomeView(user);
+                mainWindow.Navigate(homeView);
             }
         }
 

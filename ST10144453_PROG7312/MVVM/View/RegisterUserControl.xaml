@@ -213,6 +213,8 @@
                 </EventTrigger>
             </Style.Triggers>
         </Style>
+
+        <BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter" />
     </UserControl.Resources>
 
     <Grid>
@@ -331,6 +333,17 @@
                                     Foreground="#2e2e2e"
                                     Style="{StaticResource RegisterTextBoxStyle}"
                                     Text="{Binding UserName, UpdateSourceTrigger=PropertyChanged}" />
+                                <TextBlock
+                                    Margin="5,2,0,0"
+                                    FontSize="12"
+                                    Foreground="#666666"
+                                    Text="{Binding UsernameRequirements}" />
+                                <TextBlock
+                                    Margin="5,2,0,0"
+                                    FontSize="12"
+                                    Foreground="Red"
+                                    Text="{Binding UsernameError}"
+                                    Visibility="{Binding ShowUsernameError, Converter={StaticResource BooleanToVisibilityConverter}}" />
                             </StackPanel>
 
                             <StackPanel Margin="0,0,0,20">
@@ -346,7 +359,17 @@
                                     Foreground="#2e2e2e"
                                     Style="{StaticResource RegisterTextBoxStyle}"
                                     Text="{Binding Email, UpdateSourceTrigger=PropertyChanged}" />
-
+                                <TextBlock
+                                    Margin="5,2,0,0"
+                                    FontSize="12"
+                                    Foreground="#666666"
+                                    Text="{Binding EmailRequirements}" />
+                                <TextBlock
+                                    Margin="5,2,0,0"
+                                    FontSize="12"
+                                    Foreground="Red"
+                                    Text="{Binding EmailError}"
+                                    Visibility="{Binding ShowEmailError, Converter={StaticResource BooleanToVisibilityConverter}}" />
                             </StackPanel>
 
                             <StackPanel Margin="0,0,0,20">
@@ -406,6 +429,17 @@
                                         </ToggleButton.Style>
                                     </ToggleButton>
                                 </Grid>
+                                <TextBlock
+                                    Margin="5,2,0,0"
+                                    FontSize="12"
+                                    Foreground="#666666"
+                                    Text="{Binding PasswordRequirements}" />
+                                <TextBlock
+                                    Margin="5,2,0,0"
+                                    FontSize="12"
+                                    Foreground="Red"
+                                    Text="{Binding PasswordError}"
+                                    Visibility="{Binding ShowPasswordError, Converter={StaticResource BooleanToVisibilityConverter}}" />
                             </StackPanel>
 
                             <StackPanel Margin="0,0,0,40">
@@ -465,6 +499,17 @@
                                         </ToggleButton.Style>
                                     </ToggleButton>
                                 </Grid>
+                                <TextBlock
+                                    Margin="5,2,0,0"
+                                    FontSize="12"
+                                    Foreground="#666666"
+                                    Text="{Binding PasswordRequirements}" />
+                                <TextBlock
+                                    Margin="5,2,0,0"
+                                    FontSize="12"
+                                    Foreground="Red"
+                                    Text="{Binding ConfirmPasswordError}"
+                                    Visibility="{Binding ShowConfirmPasswordError, Converter={StaticResource BooleanToVisibilityConverter}}" />
                             </StackPanel>
 
 
