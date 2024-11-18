@@ -37,7 +37,7 @@ namespace ST10144453_PROG7312.MVVM.View
             var openFileDialog = new Microsoft.Win32.OpenFileDialog
             {
                 Multiselect = true,
-                Filter = "All Files|*.pdf;*.doc;*.docx;*.txt;*.jpg;*.jpeg;*.png|PDF Files|*.pdf|Word Documents|*.doc;*.docx|Text Files|*.txt|Image Files|*.jpg;*.jpeg;*.png"
+                Filter = "All Files|.pdf;.doc;.docx;.txt;.jpg;.jpeg;.png|PDF Files|.pdf|Word Documents|.doc;.docx|Text Files|.txt|Image Files|.jpg;.jpeg;.png"
             };
 
             if (openFileDialog.ShowDialog() == true)
@@ -80,18 +80,5 @@ namespace ST10144453_PROG7312.MVVM.View
                 }
             }
         }
-
-        private void OnTitleTextChanged(object sender, TextChangedEventArgs e)
-        {
-            var viewModel = DataContext as ServiceRequestViewModel;
-            if (viewModel != null)
-            {
-                viewModel.IsTitleFilled = !string.IsNullOrEmpty(viewModel.Title);
-            }
-        }
     }
 }
-
-
-    
-      

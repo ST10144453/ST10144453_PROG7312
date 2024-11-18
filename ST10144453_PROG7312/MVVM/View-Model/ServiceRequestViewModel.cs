@@ -380,12 +380,42 @@ namespace ST10144453_PROG7312.MVVM.View_Model
             CurrentUser = currentUser;
             RecentRequest = request;
             
-            // Initialize properties
+            // Initialize collections
+            Categories = new ObservableCollection<string>
+            {
+                "Water & Sanitation",
+                "Electricity",
+                "Roads & Transport",
+                "Parks & Recreation",
+                "Waste Management",
+                "Public Safety",
+                "Housing",
+                "Environmental Issues",
+                "Other"
+            };
+
+            FeedbackMethods = new ObservableCollection<string>
+            {
+                "Email",
+                "Phone",
+                "SMS",
+                "WhatsApp"
+            };
+
+            // Initialize commands
+            SubmitRequestCommand = new RelayCommand(ExecuteSubmitRequest, CanExecuteSubmitRequest);
+            NavigateToDashboardCommand = new RelayCommand(NavigateToDashboard);
+            
+            // Initialize properties from request
             Title = request.Title;
             FirstName = request.FirstName;
             Surname = request.Surname;
-            Email = CurrentUser.email;
-            // ... other initializations
+            Email = request.Email;
+            PhoneNumber = request.PhoneNumber;
+            Category = request.Category;
+            Description = request.Description;
+            AdditionalAddress = request.AdditionalAddress;
+            PreferredFeedbackMethod = request.PreferredFeedbackMethod;
         }
 
         private void InitializeData()
@@ -526,7 +556,14 @@ namespace ST10144453_PROG7312.MVVM.View_Model
         {
             IsFormValid = !string.IsNullOrWhiteSpace(Title) &&
                           !string.IsNullOrWhiteSpace(Category) &&
-                          !string.IsNullOrWhiteSpace(Description);
+                          !string.IsNullOrWhiteSpace(Description) &&
+                          !string.IsNullOrWhiteSpace(FirstName) &&
+                          !string.IsNullOrWhiteSpace(Surname) &&
+                          !string.IsNullOrWhiteSpace(Email) &&
+                          !string.IsNullOrWhiteSpace(PhoneNumber) &&
+                          !string.IsNullOrWhiteSpace(PreferredFeedbackMethod);
+            
+            OnPropertyChanged(nameof(IsFormValid));
         }
 
         private void ClearForm()
@@ -547,9 +584,17 @@ namespace ST10144453_PROG7312.MVVM.View_Model
             var mainWindow = Application.Current.MainWindow as MainWindow;
             if (mainWindow != null)
             {
-                _popupWindow?.Close();
-                var dashboardView = new UserDashboardUserControl(UserSession.CurrentUser);
+                var dashboardView = new UserDashboardUserControl(CurrentUser);
                 mainWindow.MainContentControl.Content = dashboardView;
+                
+                // Close all popup windows
+                foreach (Window window in Application.Current.Windows)
+                {
+                    if (window != mainWindow && window is ServiceRequestSubmissionPopup)
+                    {
+                        window.Close();
+                    }
+                }
             }
         }
 
@@ -691,6 +736,21 @@ namespace ST10144453_PROG7312.MVVM.View_Model
             Title = newTitle;
             IsTitleFilled = !string.IsNullOrWhiteSpace(newTitle);
             ValidateForm();
+        }
+
+        public void InitializeCategories()
+        {
+            Categories = new ObservableCollection<string>
+            {
+                "Water & Sanitation",
+                "Electricity",
+                "Roads & Transport",
+                "Parks",
+                "Waste Management",
+                "Public Safety",
+                "Housing",
+                "Other"
+            };
         }
     }
 }

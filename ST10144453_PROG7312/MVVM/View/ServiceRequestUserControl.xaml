@@ -234,46 +234,62 @@
                     <!--  Request Details Section  -->
                     <GroupBox Margin="0,0,0,20" Header="Request Details">
                         <Grid Margin="10">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="*" />
+                                <ColumnDefinition Width="*" />
+                            </Grid.ColumnDefinitions>
                             <Grid.RowDefinitions>
+                                <RowDefinition Height="Auto" />
                                 <RowDefinition Height="Auto" />
                                 <RowDefinition Height="Auto" />
                                 <RowDefinition Height="Auto" />
                             </Grid.RowDefinitions>
 
                             <!-- Title Field -->
-                            <StackPanel Grid.Row="0" Margin="0,0,0,10">
+                            <StackPanel Grid.Row="0" Grid.Column="0" Margin="0,0,10,10">
                                 <Label Content="Title:" />
-                                <TextBox
-                                    x:Name="TitleTextBox"
-                                    MinWidth="200"
-                                    MinHeight="30"
-                                    Margin="0,5,0,10"
-                                    Text="{Binding Title, Mode=TwoWay}"
-                                     Style="{StaticResource StandardTextBoxStyle}"
-                                    TextChanged="OnTitleTextChanged"
-                                    ToolTip="Enter a title for your service request" />
+                                <TextBox Text="{Binding Title, UpdateSourceTrigger=PropertyChanged}"
+                                         Style="{StaticResource StandardTextBoxStyle}"
+                                         Margin="0,0,0,10" />
                             </StackPanel>
 
                             <!-- Category Field -->
-                            <StackPanel Grid.Row="1" Margin="0,0,0,10">
-                                <TextBlock Text="Category" FontWeight="Bold" />
-                                <ComboBox ItemsSource="{Binding Categories}"
-                                         SelectedItem="{Binding Category}"
-                                         Margin="0,5,0,0"
-                                         Padding="5"
-                                          Height="40"/>
+                            <StackPanel Grid.Row="0" Grid.Column="1" Margin="0,0,0,10">
+                                <Label Content="Category:" />
+                                <ComboBox 
+                                    ItemsSource="{Binding Categories}"
+                                    SelectedItem="{Binding Category, UpdateSourceTrigger=PropertyChanged}"
+                                    Height="50"
+                                    Margin="0,0,0,10" />
                             </StackPanel>
 
-                            <!-- Description Field -->
-                            <StackPanel Grid.Row="2">
-                                <TextBlock Text="Description" FontWeight="Bold" />
+                            <!-- Additional Address Field -->
+                            <StackPanel Grid.Row="1" Grid.Column="0" Margin="0,0,10,10">
+                                <Label Content="Additional Address:" />
+                                <TextBox Text="{Binding AdditionalAddress, UpdateSourceTrigger=PropertyChanged}"
+                                         Style="{StaticResource StandardTextBoxStyle}"
+                                         TextWrapping="Wrap"
+                                         Height="50"
+                                         Margin="0,0,0,10" />
+                            </StackPanel>
+
+                            <!-- Preferred Communication Method -->
+                            <StackPanel Grid.Row="1" Grid.Column="1" Margin="0,0,0,10">
+                                <Label Content="Preferred Communication:" />
+                                <ComboBox ItemsSource="{Binding FeedbackMethods}"
+                                         SelectedItem="{Binding PreferredFeedbackMethod}"
+                                         Margin="0,0,0,10" 
+                                          Height="50"/>
+                            </StackPanel>
+
+                            <!-- Description Field - Spans both columns -->
+                            <StackPanel Grid.Row="2" Grid.ColumnSpan="2" Margin="0,0,0,10">
+                                <Label Content="Description:" />
                                 <TextBox Text="{Binding Description, UpdateSourceTrigger=PropertyChanged}"
                                          TextWrapping="Wrap"
                                          AcceptsReturn="True"
                                          Height="100"
-                                         Margin="0,5,0,0"
-                                         Padding="5"
-                                          Style="{StaticResource StandardTextBoxStyle}"/>
+                                         Margin="0,0,0,10" />
                             </StackPanel>
                         </Grid>
                     </GroupBox>
@@ -314,14 +330,33 @@
 
                     <!--  Submit Button  -->
                     <Button
-                        Content="Submit Request"
-                        Command="{Binding SubmitRequestCommand}"
-                        IsEnabled="{Binding IsFormValid}"
-                        Style="{StaticResource StandardButtonStyle}"
                         Width="200"
                         Height="40"
+                        Margin="0,20,0,0"
                         HorizontalAlignment="Center"
-                        Margin="0,20"/>
+                        Command="{Binding SubmitRequestCommand}"
+                        Content="Submit Request"
+                        IsEnabled="{Binding IsFormValid}">
+                        <Button.Style>
+                            <Style BasedOn="{StaticResource StandardButtonStyle}" TargetType="Button">
+                                <Setter Property="Background" Value="#007646" />
+                                <Setter Property="Foreground" Value="White" />
+                                <Style.Triggers>
+                                    <Trigger Property="IsEnabled" Value="False">
+                                        <Setter Property="Background" Value="#CCCCCC" />
+                                        <Setter Property="Foreground" Value="#666666" />
+                                        <Setter Property="Opacity" Value="0.7" />
+                                    </Trigger>
+                                    <Trigger Property="IsMouseOver" Value="True">
+                                        <Setter Property="Background" Value="#005b35" />
+                                    </Trigger>
+                                    <Trigger Property="IsPressed" Value="True">
+                                        <Setter Property="Background" Value="#004025" />
+                                    </Trigger>
+                                </Style.Triggers>
+                            </Style>
+                        </Button.Style>
+                    </Button>
                 </StackPanel>
             </Grid>
         </ScrollViewer>
