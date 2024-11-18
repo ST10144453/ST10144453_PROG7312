@@ -162,6 +162,7 @@
     <Compile Include="MVVM\Model\EventModel.cs" />
     <Compile Include="MVVM\Model\EventNode.cs" />
     <Compile Include="MVVM\Model\GuestUserModel.cs" />
+    <Compile Include="MVVM\Model\IServiceRequestHeap.cs" />
     <Compile Include="MVVM\Model\IServiceRequestTree.cs" />
     <Compile Include="MVVM\Model\MediaItem.cs" />
     <Compile Include="MVVM\Model\MediaNode.cs" />
@@ -173,6 +174,7 @@
     <Compile Include="MVVM\Model\ServiceRequestGraph.cs" />
     <Compile Include="MVVM\Model\ServiceRequestGraphHelper.cs" />
     <Compile Include="MVVM\Model\ServiceRequestGraphNode.cs" />
+    <Compile Include="MVVM\Model\ServiceRequestMiniHeap.cs" />
     <Compile Include="MVVM\Model\ServiceRequestModel.cs" />
     <Compile Include="MVVM\Model\ServiceRequestNode.cs" />
     <Compile Include="MVVM\Model\ServiceRequestTree.cs" />
@@ -196,6 +198,7 @@
     <Compile Include="MVVM\View-Model\ReportService.cs" />
     <Compile Include="MVVM\View-Model\ReportViewModel.cs" />
     <Compile Include="MVVM\View-Model\ServiceRequestDetailsViewModel.cs" />
+    <Compile Include="MVVM\View-Model\ServiceRequestOptimizationViewModel.cs" />
     <Compile Include="MVVM\View-Model\ServiceRequestViewModel.cs" />
     <Compile Include="MVVM\View-Model\StaffMenuViewModel.cs" />
     <Compile Include="MVVM\View-Model\TreeSelectionViewModel.cs" />
@@ -221,6 +224,9 @@
     </Compile>
     <Compile Include="MVVM\View\LoginUserControl.xaml.cs">
       <DependentUpon>LoginUserControl.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="MVVM\View\OptimizationStatusControl.xaml.cs">
+      <DependentUpon>OptimizationStatusControl.xaml</DependentUpon>
     </Compile>
     <Compile Include="MVVM\View\ReccomendedEventsUserControl.xaml.cs">
       <DependentUpon>ReccomendedEventsUserControl.xaml</DependentUpon>
@@ -308,6 +314,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="MVVM\View\LoginUserControl.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="MVVM\View\OptimizationStatusControl.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

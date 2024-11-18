@@ -85,11 +85,6 @@ namespace ST10144453_PROG7312.MVVM.View
                 mainWindow.MainContentControl.Content = loginRegisterMenu;
             }
         }
-
-        private void ShowDataStructures_Click(object sender, RoutedEventArgs e)
-{
-    ContentArea.Content = new ServiceRequestStructureView();
-}
     }
 
 }
