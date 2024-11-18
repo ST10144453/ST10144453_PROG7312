@@ -146,18 +146,11 @@ namespace ST10144453_PROG7312.MVVM.View_Model
 
         private void LoadServiceRequests()
         {
-            var allRequests = ServiceRequestManager.Instance.ServiceRequests;
+            var allRequests = IsStaff 
+                ? ServiceRequestManager.Instance.GetPrioritizedRequests()
+                : ServiceRequestManager.Instance.ServiceRequests.Where(r => r.CreatedBy == _currentUser.userName);
             
-            // If staff, show all requests, otherwise filter for current user
-            var filteredRequests = IsStaff 
-                ? allRequests 
-                : allRequests.Where(r => r.CreatedBy == _currentUser.userName);
-            
-            UserServiceRequests.Clear();
-            foreach (var request in filteredRequests)
-            {
-                UserServiceRequests.Add(request);
-            }
+            UserServiceRequests = new ObservableCollection<ServiceRequestModel>(allRequests);
         }
 
         private void CreateNewRequest()

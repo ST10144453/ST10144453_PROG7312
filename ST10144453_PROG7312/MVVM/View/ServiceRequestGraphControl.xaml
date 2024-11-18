@@ -1,0 +1,40 @@
+﻿<UserControl
+    x:Class="ST10144453_PROG7312.MVVM.View.ServiceRequestGraphControl"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:local="clr-namespace:ST10144453_PROG7312.MVVM.View"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    mc:Ignorable="d">
+    <Grid Margin="40">
+        <Canvas
+            x:Name="GraphCanvas"
+            Background="White"
+            ClipToBounds="False"
+            SizeChanged="GraphCanvas_SizeChanged">
+            <!--  Graph will be rendered here  -->
+        </Canvas>
+
+        <Border
+            x:Name="TooltipBorder"
+            MaxWidth="300"
+            Padding="8"
+            Panel.ZIndex="100"
+            Background="White"
+            BorderBrush="#CCCCCC"
+            BorderThickness="1"
+            CornerRadius="4"
+            Visibility="Collapsed">
+            <StackPanel>
+                <TextBlock
+                    x:Name="TooltipTitle"
+                    FontWeight="Bold"
+                    TextWrapping="Wrap" />
+                <TextBlock
+                    x:Name="TooltipDetails"
+                    Margin="0,4,0,0"
+                    TextWrapping="Wrap" />
+            </StackPanel>
+        </Border>
+    </Grid>
+</UserControl>

@@ -8,6 +8,8 @@ using System.Runtime.CompilerServices;
 using System.Text;
 using System.Threading.Tasks;
 using ST10144453_PROG7312.Core;
+using System.Windows;
+using ST10144453_PROG7312.MVVM.View;
 
 namespace ST10144453_PROG7312.MVVM.View_Model
 {
@@ -175,6 +177,15 @@ namespace ST10144453_PROG7312.MVVM.View_Model
         {
             UpdateTreeImplementation();
             RefreshDisplayedRequests();
+            UpdateGraphView();
+        }
+
+        private void UpdateGraphView()
+        {
+            if (Application.Current.MainWindow.FindName("GraphControl") is ServiceRequestGraphControl graphControl)
+            {
+                graphControl.Requests = DisplayedRequests;
+            }
         }
 
         public event PropertyChangedEventHandler PropertyChanged;

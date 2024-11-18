@@ -45,6 +45,14 @@ namespace ST10144453_PROG7312.MVVM.View_Model
         private readonly Window _popupWindow;
         public UserModel CurrentUser { get; private set; }
         private string _title;
+        private ServiceRequestModel selectedRequest;
+        private ObservableCollection<ServiceRequestModel> relatedRequests;
+        private readonly IServiceRequestTraversal requestTraversal;
+        private ICommand viewRelatedRequestCommand;
+        private bool _isTitleFilled;
+        private bool _isLocationFilled;
+        private bool _isCategorySelected;
+        private bool _isDescriptionFilled;
 
         public ObservableCollection<TreeType> AvailableTreeTypes { get; }
         public ObservableCollection<SortingStrategy> AvailableSortStrategies { get; }
@@ -282,60 +290,132 @@ namespace ST10144453_PROG7312.MVVM.View_Model
             {
                 _title = value;
                 OnPropertyChanged(nameof(Title));
+                ValidateForm();
             }
         }
 
-        public ServiceRequestViewModel(ServiceRequestModel request, Window popupWindow, UserModel user)
+        public ServiceRequestModel SelectedRequest
         {
-            RecentRequest = request ?? new ServiceRequestModel();
-            _popupWindow = popupWindow;
-            _currentTree = new ServiceRequestTree();
-            CurrentUser = user;
+            get => selectedRequest;
+            set
+            {
+                selectedRequest = value;
+                if (value != null)
+                {
+                    UpdateRelatedRequests(value);
+                }
+                OnPropertyChanged(nameof(SelectedRequest));
+            }
+        }
 
-            // Initialize categories
+        public ObservableCollection<ServiceRequestModel> RelatedRequests
+        {
+            get => relatedRequests;
+            set
+            {
+                relatedRequests = value;
+                OnPropertyChanged(nameof(RelatedRequests));
+            }
+        }
+
+        public ICommand ViewRelatedRequestCommand
+        {
+            get
+            {
+                if (viewRelatedRequestCommand == null)
+                {
+                    viewRelatedRequestCommand = new RelayCommand<ServiceRequestModel>(ShowRequestDetails);
+                }
+                return viewRelatedRequestCommand;
+            }
+        }
+
+        public bool IsTitleFilled
+        {
+            get => _isTitleFilled;
+            set
+            {
+                _isTitleFilled = value;
+                OnPropertyChanged(nameof(IsTitleFilled));
+                OnPropertyChanged(nameof(IsFormValid));
+            }
+        }
+
+        public bool IsLocationFilled
+        {
+            get => _isLocationFilled;
+            set
+            {
+                _isLocationFilled = value;
+                OnPropertyChanged(nameof(IsLocationFilled));
+                ValidateForm();
+            }
+        }
+
+        public bool IsCategorySelected
+        {
+            get => _isCategorySelected;
+            set
+            {
+                _isCategorySelected = value;
+                OnPropertyChanged(nameof(IsCategorySelected));
+                ValidateForm();
+            }
+        }
+
+        public bool IsDescriptionFilled
+        {
+            get => _isDescriptionFilled;
+            set
+            {
+                _isDescriptionFilled = value;
+                OnPropertyChanged(nameof(IsDescriptionFilled));
+                ValidateForm();
+            }
+        }
+
+        public ServiceRequestViewModel(ServiceRequestModel request, Window popupWindow, UserModel currentUser)
+        {
+            _popupWindow = popupWindow;
+            CurrentUser = currentUser;
+            RecentRequest = request;
+            
+            // Initialize collections
             Categories = new ObservableCollection<string>
             {
-                "Roads and Traffic",
-                "Public Utilities",
+                "Water & Sanitation",
+                "Electricity",
+                "Roads & Transport",
+                "Parks & Recreation",
                 "Waste Management",
-                "Parks and Recreation",
                 "Public Safety",
-                "Housing and Buildings",
-                "Environmental Concerns",
-                "Public Transportation",
-                "Health and Sanitation",
-                "Community Services",
-                "Economic Development",
-                "Education and Youth Services"
+                "Housing",
+                "Environmental Issues",
+                "Other"
+            };
+
+            FeedbackMethods = new ObservableCollection<string>
+            {
+                "Email",
+                "Phone",
+                "SMS",
+                "WhatsApp"
             };
 
             // Initialize commands
-            AddMediaCommand = new RelayCommand(ExecuteAddMedia);
-            SelectReportsCommand = new RelayCommand(ExecuteSelectReports);
             SubmitRequestCommand = new RelayCommand(ExecuteSubmitRequest, CanExecuteSubmitRequest);
             NavigateToDashboardCommand = new RelayCommand(NavigateToDashboard);
-            SupportingEvidence = new ObservableCollection<MediaItem>();
-
-            // Initialize collections
-            AvailableTreeTypes = new ObservableCollection<TreeType>
-            {
-                TreeType.Basic,
-                TreeType.BinarySearch,
-                TreeType.AVL,
-                TreeType.RedBlack
-            };
-
-            AvailableSortStrategies = new ObservableCollection<SortingStrategy>
-            {
-                SortingStrategy.ByDate,
-                SortingStrategy.ByPriority,
-                SortingStrategy.ByCategory,
-                SortingStrategy.ByStatus
-            };
-
-            // Set defaults
-            SelectedTreeType = TreeType.AVL;
-            SelectedSortStrategy = SortingStrategy.ByDate;
+            
+            // Initialize properties from request
+            Title = request.Title;
+            FirstName = request.FirstName;
+            Surname = request.Surname;
+            Email = request.Email;
+            PhoneNumber = request.PhoneNumber;
+            Category = request.Category;
+            Description = request.Description;
+            AdditionalAddress = request.AdditionalAddress;
+            PreferredFeedbackMethod = request.PreferredFeedbackMethod;
         }
 
         private void InitializeData()
@@ -384,16 +464,54 @@ namespace ST10144453_PROG7312.MVVM.View_Model
 
         private void ExecuteAddMedia()
         {
-            // Implement media addition logic
+            var dialog = new Microsoft.Win32.OpenFileDialog
+            {
+                Multiselect = true,
+                Filter = "All Files (*.*)|*.*|Images (*.jpg, *.png)|*.jpg;*.png|Documents (*.pdf, *.doc)|*.pdf;*.doc"
+            };
+
+            if (dialog.ShowDialog() == true)
+            {
+                foreach (string filename in dialog.FileNames)
+                {
+                    try
+                    {
+                        var mediaItem = new MediaItem
+                        {
+                            FilePath = filename,
+                            FileName = System.IO.Path.GetFileName(filename)
+                        };
+                        SupportingEvidence.Add(mediaItem);
+                    }
+                    catch (Exception ex)
+                    {
+                        MessageBox.Show($"Error adding media: {ex.Message}", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+                    }
+                }
+            }
         }
 
         private void ExecuteSelectReports()
         {
-            // Implement report selection logic
+            var reportSelector = new SelectReportsDialog(CurrentUser);
+            if (reportSelector.ShowDialog() == true)
+            {
+                var selectedReports = reportSelector.SelectedReports;
+                foreach (var report in selectedReports)
+                {
+                    LinkReport(report);
+                }
+            }
         }
 
         private void ExecuteSubmitRequest()
         {
+            if (string.IsNullOrWhiteSpace(Title))
+            {
+                MessageBox.Show("Please enter a title for the service request.", "Missing Title", MessageBoxButton.OK, MessageBoxImage.Warning);
+                return;
+            }
+
             var request = new ServiceRequestModel
             {
                 Title = Title,
@@ -402,19 +520,23 @@ namespace ST10144453_PROG7312.MVVM.View_Model
                 RequestDate = DateTime.Now,
                 Status = "Pending",
                 CreatedBy = UserSession.CurrentUser?.userName,
-                AttachedFiles = RecentRequest.AttachedFiles ?? new List<AttachedFile>(),
-                LinkedReports = RecentRequest.LinkedReports ?? new List<ReportModel>()
+                FirstName = FirstName,
+                Surname = Surname,
+                Email = Email,
+                PhoneNumber = PhoneNumber,
+                AdditionalAddress = AdditionalAddress,
+                PreferredFeedbackMethod = PreferredFeedbackMethod,
+                AttachedFiles = RecentRequest?.AttachedFiles ?? new List<AttachedFile>(),
+                LinkedReports = RecentRequest?.LinkedReports ?? new List<ReportModel>()
             };
 
             // Save the request
             ServiceRequestManager.Instance.AddRequest(request);
-            _currentTree.Insert(request);
-            ApplyFilters();
-
+            
             // Update RecentRequest
             RecentRequest = request;
             OnPropertyChanged(nameof(RecentRequest));
-
+            
             // Show submission popup
             var submissionPopup = new ServiceRequestSubmissionPopup(request, CurrentUser);
             submissionPopup.Owner = _popupWindow;
@@ -432,12 +554,16 @@ namespace ST10144453_PROG7312.MVVM.View_Model
 
         private void ValidateForm()
         {
-            IsFormValid = !string.IsNullOrWhiteSpace(FirstName) &&
-                         !string.IsNullOrWhiteSpace(Surname) &&
-                         !string.IsNullOrWhiteSpace(Email) &&
-                         !string.IsNullOrWhiteSpace(PhoneNumber) &&
-                         !string.IsNullOrWhiteSpace(Category) &&
-                         !string.IsNullOrWhiteSpace(Description);
+            IsFormValid = !string.IsNullOrWhiteSpace(Title) &&
+                          !string.IsNullOrWhiteSpace(Category) &&
+                          !string.IsNullOrWhiteSpace(Description) &&
+                          !string.IsNullOrWhiteSpace(FirstName) &&
+                          !string.IsNullOrWhiteSpace(Surname) &&
+                          !string.IsNullOrWhiteSpace(Email) &&
+                          !string.IsNullOrWhiteSpace(PhoneNumber) &&
+                          !string.IsNullOrWhiteSpace(PreferredFeedbackMethod);
+            
+            OnPropertyChanged(nameof(IsFormValid));
         }
 
         private void ClearForm()
@@ -458,9 +584,17 @@ namespace ST10144453_PROG7312.MVVM.View_Model
             var mainWindow = Application.Current.MainWindow as MainWindow;
             if (mainWindow != null)
             {
-                _popupWindow?.Close();
-                var dashboardView = new UserDashboardUserControl(UserSession.CurrentUser);
+                var dashboardView = new UserDashboardUserControl(CurrentUser);
                 mainWindow.MainContentControl.Content = dashboardView;
+                
+                // Close all popup windows
+                foreach (Window window in Application.Current.Windows)
+                {
+                    if (window != mainWindow && window is ServiceRequestSubmissionPopup)
+                    {
+                        window.Close();
+                    }
+                }
             }
         }
 
@@ -532,11 +666,91 @@ namespace ST10144453_PROG7312.MVVM.View_Model
             FilteredRequests = new ObservableCollection<ServiceRequestModel>(_currentTree.GetAllRequests());
         }
 
+        private void UpdateRelatedRequests(ServiceRequestModel request)
+        {
+            var related = requestTraversal.GetRelatedRequests(
+                request,
+                UserSession.CurrentUser?.isStaff ?? false);
+                
+            RelatedRequests = new ObservableCollection<ServiceRequestModel>(
+                related.Where(r => r.RequestID != request.RequestID));
+        }
+
+        private void FindRelatedRequests(ServiceRequestModel request)
+        {
+            if (request == null) return;
+
+            var related = FilteredRequests
+                .Where(r => r.RequestID != request.RequestID)
+                .Where(r => 
+                    r.Category == request.Category || // Same category
+                    r.CreatedBy == request.CreatedBy || // Same user
+                    Math.Abs((r.RequestDate - request.RequestDate).TotalDays) <= 2 || // Within 2 days
+                    r.Status == request.Status) // Same status
+                .OrderByDescending(r => CalculateRelevanceScore(r, request))
+                .Take(5); // Show top 5 most relevant
+
+            RelatedRequests = new ObservableCollection<ServiceRequestModel>(related);
+        }
+
+        private double CalculateRelevanceScore(ServiceRequestModel candidate, ServiceRequestModel reference)
+        {
+            double score = 0;
+
+            // Category match (highest weight)
+            if (candidate.Category == reference.Category)
+                score += 4;
+
+            // Status match
+            if (candidate.Status == reference.Status)
+                score += 2;
+
+            // Created by same user
+            if (candidate.CreatedBy == reference.CreatedBy)
+                score += 3;
+
+            // Time proximity (0-2 points based on how close the dates are)
+            var daysDifference = Math.Abs((candidate.RequestDate - reference.RequestDate).TotalDays);
+            if (daysDifference <= 2)
+                score += 2 * (1 - daysDifference/2);
+
+            return score;
+        }
+
+        public void ShowRequestDetails(ServiceRequestModel request)
+        {
+            if (request == null) return;
+            RecentRequest = request;
+            FindRelatedRequests(request);
+        }
+
         // INotifyPropertyChanged implementation
         public event PropertyChangedEventHandler PropertyChanged;
         protected virtual void OnPropertyChanged([CallerMemberName] string propertyName = null)
         {
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
+        }
+
+        public void OnTitleTextChanged(string newTitle)
+        {
+            Title = newTitle;
+            IsTitleFilled = !string.IsNullOrWhiteSpace(newTitle);
+            ValidateForm();
+        }
+
+        public void InitializeCategories()
+        {
+            Categories = new ObservableCollection<string>
+            {
+                "Water & Sanitation",
+                "Electricity",
+                "Roads & Transport",
+                "Parks",
+                "Waste Management",
+                "Public Safety",
+                "Housing",
+                "Other"
+            };
         }
     }
 }

@@ -24,22 +24,39 @@ namespace ST10144453_PROG7312.Core
             remove { CommandManager.RequerySuggested -= value; }
         }
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="RelayCommand"/> class.
+        /// </summary>
+        /// <param name="execute">The action to execute.</param>
+        /// <param name="canExecute">The function that determines if the command can execute.</param>
         public RelayCommand(Action execute, Func<bool> canExecute = null)
         {
             _execute = execute ?? throw new ArgumentNullException(nameof(execute));
             _canExecute = canExecute;
         }
 
+        /// <summary>
+        /// Determines whether the command can execute in its current state.
+        /// </summary>
+        /// <param name="parameter">The command parameter.</param>
+        /// <returns><c>true</c> if this command can be executed; otherwise, <c>false</c>.</returns>
         public bool CanExecute(object parameter)
         {
             return _canExecute == null || _canExecute();
         }
 
+        /// <summary>
+        /// Executes the command.
+        /// </summary>
+        /// <param name="parameter">The command parameter.</param>
         public void Execute(object parameter)
         {
             _execute();
         }
 
+        /// <summary>
+        /// Notifies that the ability of the command to execute has changed.
+        /// </summary>
         public void NotifyCanExecuteChanged()
         {
             CommandManager.InvalidateRequerySuggested();

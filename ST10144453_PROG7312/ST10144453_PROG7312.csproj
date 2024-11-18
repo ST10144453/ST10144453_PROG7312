@@ -135,7 +135,6 @@
     <Compile Include="Core\RelayCommandT.cs" />
     <Compile Include="Core\ServiceRequestManager.cs" />
     <Compile Include="Core\TimeSpanToNullableConverter.cs" />
-    <Compile Include="Core\WebScraperService.cs" />
     <Compile Include="FrontendLogic\AnyTrueInCollectionConverter.cs" />
     <Compile Include="FrontendLogic\Base64ToImageSourceConverter.cs" />
     <Compile Include="FrontendLogic\Base64ToPdfStreamConverter.cs" />
@@ -162,6 +161,8 @@
     <Compile Include="MVVM\Model\EventModel.cs" />
     <Compile Include="MVVM\Model\EventNode.cs" />
     <Compile Include="MVVM\Model\GuestUserModel.cs" />
+    <Compile Include="MVVM\Model\IServiceRequestHeap.cs" />
+    <Compile Include="MVVM\Model\IServiceRequestTraversal.cs" />
     <Compile Include="MVVM\Model\IServiceRequestTree.cs" />
     <Compile Include="MVVM\Model\MediaItem.cs" />
     <Compile Include="MVVM\Model\MediaNode.cs" />
@@ -170,6 +171,11 @@
     <Compile Include="MVVM\Model\ReportManager.cs" />
     <Compile Include="MVVM\Model\ReportModel.cs" />
     <Compile Include="MVVM\Model\ServiceRequestAVLTree.cs" />
+    <Compile Include="MVVM\Model\ServiceRequestGraph.cs" />
+    <Compile Include="MVVM\Model\ServiceRequestGraphHelper.cs" />
+    <Compile Include="MVVM\Model\ServiceRequestGraphNode.cs" />
+    <Compile Include="MVVM\Model\ServiceRequestGraphTraversal1.cs" />
+    <Compile Include="MVVM\Model\ServiceRequestMiniHeap.cs" />
     <Compile Include="MVVM\Model\ServiceRequestModel.cs" />
     <Compile Include="MVVM\Model\ServiceRequestNode.cs" />
     <Compile Include="MVVM\Model\ServiceRequestTree.cs" />
@@ -183,6 +189,7 @@
     <Compile Include="MVVM\Model\TreePerformanceMetrics.cs" />
     <Compile Include="MVVM\Model\TreeType.cs" />
     <Compile Include="MVVM\Model\TreeVisualizationHelper.cs" />
+    <Compile Include="MVVM\Model\UserManager.cs" />
     <Compile Include="MVVM\Model\UserModel.cs" />
     <Compile Include="MVVM\Model\UserSession.cs" />
     <Compile Include="MVVM\View-Model\CreateEventViewModel.cs" />
@@ -193,6 +200,7 @@
     <Compile Include="MVVM\View-Model\ReportService.cs" />
     <Compile Include="MVVM\View-Model\ReportViewModel.cs" />
     <Compile Include="MVVM\View-Model\ServiceRequestDetailsViewModel.cs" />
+    <Compile Include="MVVM\View-Model\ServiceRequestOptimizationViewModel.cs" />
     <Compile Include="MVVM\View-Model\ServiceRequestViewModel.cs" />
     <Compile Include="MVVM\View-Model\StaffMenuViewModel.cs" />
     <Compile Include="MVVM\View-Model\TreeSelectionViewModel.cs" />
@@ -219,6 +227,9 @@
     <Compile Include="MVVM\View\LoginUserControl.xaml.cs">
       <DependentUpon>LoginUserControl.xaml</DependentUpon>
     </Compile>
+    <Compile Include="MVVM\View\OptimizationStatusControl.xaml.cs">
+      <DependentUpon>OptimizationStatusControl.xaml</DependentUpon>
+    </Compile>
     <Compile Include="MVVM\View\ReccomendedEventsUserControl.xaml.cs">
       <DependentUpon>ReccomendedEventsUserControl.xaml</DependentUpon>
     </Compile>
@@ -239,6 +250,9 @@
     </Compile>
     <Compile Include="MVVM\View\ServiceRequestDetailsPopup.xaml.cs">
       <DependentUpon>ServiceRequestDetailsPopup.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="MVVM\View\ServiceRequestGraphControl.xaml.cs">
+      <DependentUpon>ServiceRequestGraphControl.xaml</DependentUpon>
     </Compile>
     <Compile Include="MVVM\View\ServiceRequestSubmissionPopup.xaml.cs">
       <DependentUpon>ServiceRequestSubmissionPopup.xaml</DependentUpon>
@@ -305,6 +319,10 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
+    <Page Include="MVVM\View\OptimizationStatusControl.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="MVVM\View\ReccomendedEventsUserControl.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
@@ -330,6 +348,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="MVVM\View\ServiceRequestDetailsPopup.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="MVVM\View\ServiceRequestGraphControl.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

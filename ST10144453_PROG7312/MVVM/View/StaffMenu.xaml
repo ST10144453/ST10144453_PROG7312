@@ -216,10 +216,16 @@
                             </DataTemplate>
                         </Button.ContentTemplate>
                     </Button>
+                   
                     <Button
                         Padding="10,5"
                         Content="Log Out"
                         Style="{StaticResource Button4Style}" Click="Button_Click" />
+
+                        <!-- Add this just above the Logout button in the left navigation StackPanel -->
+<local:OptimizationStatusControl Height="Auto" 
+                                Margin="5,0,5,10" 
+                                VerticalAlignment="Bottom"/>
                 </StackPanel>
 
                 <!--  Content Area (Another UserControl)  -->

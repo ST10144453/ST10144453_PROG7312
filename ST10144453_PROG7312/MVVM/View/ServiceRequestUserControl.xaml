@@ -234,38 +234,62 @@
                     <!--  Request Details Section  -->
                     <GroupBox Margin="0,0,0,20" Header="Request Details">
                         <Grid Margin="10">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="*" />
+                                <ColumnDefinition Width="*" />
+                            </Grid.ColumnDefinitions>
                             <Grid.RowDefinitions>
+                                <RowDefinition Height="Auto" />
                                 <RowDefinition Height="Auto" />
                                 <RowDefinition Height="Auto" />
                                 <RowDefinition Height="Auto" />
                             </Grid.RowDefinitions>
 
                             <!-- Title Field -->
-                            <StackPanel Grid.Row="0" Margin="0,0,0,10">
-                                <TextBlock Text="Title" FontWeight="Bold" />
+                            <StackPanel Grid.Row="0" Grid.Column="0" Margin="0,0,10,10">
+                                <Label Content="Title:" />
                                 <TextBox Text="{Binding Title, UpdateSourceTrigger=PropertyChanged}"
-                                         Margin="0,5,0,0"
-                                         Padding="5"/>
+                                         Style="{StaticResource StandardTextBoxStyle}"
+                                         Margin="0,0,0,10" />
                             </StackPanel>
 
                             <!-- Category Field -->
-                            <StackPanel Grid.Row="1" Margin="0,0,0,10">
-                                <TextBlock Text="Category" FontWeight="Bold" />
-                                <ComboBox ItemsSource="{Binding Categories}"
-                                         SelectedItem="{Binding Category}"
-                                         Margin="0,5,0,0"
-                                         Padding="5"/>
+                            <StackPanel Grid.Row="0" Grid.Column="1" Margin="0,0,0,10">
+                                <Label Content="Category:" />
+                                <ComboBox 
+                                    ItemsSource="{Binding Categories}"
+                                    SelectedItem="{Binding Category, UpdateSourceTrigger=PropertyChanged}"
+                                    Height="50"
+                                    Margin="0,0,0,10" />
                             </StackPanel>
 
-                            <!-- Description Field -->
-                            <StackPanel Grid.Row="2">
-                                <TextBlock Text="Description" FontWeight="Bold" />
+                            <!-- Additional Address Field -->
+                            <StackPanel Grid.Row="1" Grid.Column="0" Margin="0,0,10,10">
+                                <Label Content="Additional Address:" />
+                                <TextBox Text="{Binding AdditionalAddress, UpdateSourceTrigger=PropertyChanged}"
+                                         Style="{StaticResource StandardTextBoxStyle}"
+                                         TextWrapping="Wrap"
+                                         Height="50"
+                                         Margin="0,0,0,10" />
+                            </StackPanel>
+
+                            <!-- Preferred Communication Method -->
+                            <StackPanel Grid.Row="1" Grid.Column="1" Margin="0,0,0,10">
+                                <Label Content="Preferred Communication:" />
+                                <ComboBox ItemsSource="{Binding FeedbackMethods}"
+                                         SelectedItem="{Binding PreferredFeedbackMethod}"
+                                         Margin="0,0,0,10" 
+                                          Height="50"/>
+                            </StackPanel>
+
+                            <!-- Description Field - Spans both columns -->
+                            <StackPanel Grid.Row="2" Grid.ColumnSpan="2" Margin="0,0,0,10">
+                                <Label Content="Description:" />
                                 <TextBox Text="{Binding Description, UpdateSourceTrigger=PropertyChanged}"
                                          TextWrapping="Wrap"
                                          AcceptsReturn="True"
                                          Height="100"
-                                         Margin="0,5,0,0"
-                                         Padding="5"/>
+                                         Margin="0,0,0,10" />
                             </StackPanel>
                         </Grid>
                     </GroupBox>

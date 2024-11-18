@@ -10,6 +10,7 @@ namespace ST10144453_PROG7312.MVVM.Model
 {
     public class ServiceRequestModel : INotifyPropertyChanged
     {
+        private string _title;
         private string _status;
         private string _firstName;
         private string _surname;
@@ -20,6 +21,16 @@ namespace ST10144453_PROG7312.MVVM.Model
 
         private List<AttachedFile> _attachedFiles = new List<AttachedFile>();
         private List<ReportModel> _linkedReports = new List<ReportModel>();
+
+        public string Title
+        {
+            get => _title;
+            set
+            {
+                _title = value;
+                OnPropertyChanged();
+            }
+        }
 
         public string Status
         {
@@ -96,7 +107,6 @@ namespace ST10144453_PROG7312.MVVM.Model
         public string CreatedBy { get; set; }
         public DateTime RequestDate { get; set; }
         public Guid RequestID { get; set; }
-    public string Title { get; set; }
 
         public List<AttachedFile> AttachedFiles
         {
