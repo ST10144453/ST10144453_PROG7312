@@ -126,16 +126,16 @@ namespace ST10144453_PROG7312.MVVM.View_Model
         {
             var dummyRequests = new List<ServiceRequestModel>
             {
-                new ServiceRequestModel { Category = "Water & Sanitation", Description = "Major water leak on Main Road", Status = "Pending", RequestDate = DateTime.Now.AddDays(-1), CreatedBy = "john.doe" },
-                new ServiceRequestModel { Category = "Electricity", Description = "Power outage in Central District", Status = "In Progress", RequestDate = DateTime.Now.AddDays(-5), CreatedBy = "jane.smith" },
-                new ServiceRequestModel { Category = "Roads", Description = "Pothole on Oak Avenue", Status = "Completed", RequestDate = DateTime.Now.AddDays(-10), CreatedBy = "bob.wilson" },
-                new ServiceRequestModel { Category = "Water & Sanitation", Description = "Blocked drain on Pine Street", Status = "Pending", RequestDate = DateTime.Now.AddDays(-2), CreatedBy = "sarah.jones" },
-                new ServiceRequestModel { Category = "Electricity", Description = "Street light malfunction", Status = "In Progress", RequestDate = DateTime.Now.AddDays(-3), CreatedBy = "mike.brown" },
-                new ServiceRequestModel { Category = "Parks", Description = "Overgrown vegetation in Community Park", Status = "Pending", RequestDate = DateTime.Now.AddDays(-7), CreatedBy = "lisa.green" },
-                new ServiceRequestModel { Category = "Roads", Description = "Traffic light not working", Status = "In Progress", RequestDate = DateTime.Now.AddDays(-4), CreatedBy = "tom.white" },
-                new ServiceRequestModel { Category = "Water & Sanitation", Description = "Sewage overflow", Status = "Completed", RequestDate = DateTime.Now.AddDays(-15), CreatedBy = "emma.black" },
-                new ServiceRequestModel { Category = "Electricity", Description = "Exposed electrical wires", Status = "Pending", RequestDate = DateTime.Now.AddDays(-6), CreatedBy = "david.gray" },
-                new ServiceRequestModel { Category = "Parks", Description = "Broken playground equipment", Status = "In Progress", RequestDate = DateTime.Now.AddDays(-8), CreatedBy = "amy.taylor" }
+                new ServiceRequestModel { Title="Main Road Water Leak",Category = "Water & Sanitation", Description = "Major water leak on Main Road", Status = "Pending", RequestDate = DateTime.Now.AddDays(-1), CreatedBy = "john.doe" },
+                new ServiceRequestModel { Title="Power Outage!!!", Category = "Electricity", Description = "Power outage in Central District", Status = "In Progress", RequestDate = DateTime.Now.AddDays(-5), CreatedBy = "jane.smith" },
+                new ServiceRequestModel { Title="I almost slid off the road!",Category = "Roads", Description = "Pothole on Oak Avenue", Status = "Completed", RequestDate = DateTime.Now.AddDays(-10), CreatedBy = "bob.wilson" },
+                new ServiceRequestModel { Title="Pine street is flooding.",Category = "Water & Sanitation", Description = "Blocked drain on Pine Street", Status = "Pending", RequestDate = DateTime.Now.AddDays(-2), CreatedBy = "sarah.jones" },
+                new ServiceRequestModel { Title="I can't take my nigth walks.",Category = "Electricity", Description = "Street light malfunction", Status = "In Progress", RequestDate = DateTime.Now.AddDays(-3), CreatedBy = "mike.brown" },
+                new ServiceRequestModel { Title="The park is turning into a jungle!",Category = "Parks", Description = "Overgrown vegetation in Community Park", Status = "Pending", RequestDate = DateTime.Now.AddDays(-7), CreatedBy = "lisa.green" },
+                new ServiceRequestModel { Title="I waited 40 min to go!",Category = "Roads", Description = "Traffic light not working", Status = "In Progress", RequestDate = DateTime.Now.AddDays(-4), CreatedBy = "tom.white" },
+                new ServiceRequestModel { Title="It's starting to get ral smelly...",Category = "Water & Sanitation", Description = "Sewage overflow", Status = "Completed", RequestDate = DateTime.Now.AddDays(-15), CreatedBy = "emma.black" },
+                new ServiceRequestModel { Title="MY CHILD ALMOST DIED!!!!", Category = "Electricity", Description = "Exposed electrical wires", Status = "Pending", RequestDate = DateTime.Now.AddDays(-6), CreatedBy = "david.gray" },
+                new ServiceRequestModel { Title="Timmy broke his arm.",Category = "Parks", Description = "Broken playground equipment", Status = "In Progress", RequestDate = DateTime.Now.AddDays(-8), CreatedBy = "amy.taylor" }
             };
 
             foreach (var request in dummyRequests)

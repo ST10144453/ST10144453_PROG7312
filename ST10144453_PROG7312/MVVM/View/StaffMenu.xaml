@@ -181,25 +181,6 @@
                     <Button
                         Margin="0,0,0,10"
                         Padding="10,5"
-                        Content="Manage Events"
-                        Click="ManageEvents_Click"
-                        Style="{StaticResource ImageButtonStyle}">
-                        <Button.ContentTemplate>
-                            <DataTemplate>
-                                <StackPanel Orientation="Horizontal">
-                                    <Image
-                                        Width="20"
-                                        Height="20"
-                                        Margin="5,0,10,0"
-                                        Source="pack://application:,,,/Resources/Icons/event_icon.png" />
-                                    <TextBlock Text="{Binding}" />
-                                </StackPanel>
-                            </DataTemplate>
-                        </Button.ContentTemplate>
-                    </Button>
-                    <Button
-                        Margin="0,0,0,10"
-                        Padding="10,5"
                         Content="Service Requests"
                         Click="ShowServiceRequests_Click"
                         Style="{StaticResource ImageButtonStyle}">

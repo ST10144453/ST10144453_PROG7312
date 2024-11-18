@@ -5,11 +5,18 @@
     xmlns:converters="clr-namespace:ST10144453_PROG7312.FrontendLogic"
     xmlns:local="clr-namespace:ST10144453_PROG7312.MVVM.View"
     x:Name="UserServiceRequestsDisplayControl">
-
+       
     <UserControl.Resources>
         <converters:StatusToColorConverter x:Key="StatusToColorConverter" />
         <converters:BoolToVisibilityConverter x:Key="BoolToVisibilityConverter" />
         <converters:BoolToHeaderConverter x:Key="BoolToHeaderConverter" />
+
+        <ResourceDictionary x:Key="styles">
+            <ResourceDictionary.MergedDictionaries>
+                <ResourceDictionary Source="/ResourceDictionaries/GlobalStyles.xaml" />
+                <ResourceDictionary x:Name="combo" Source="/ResourceDictionaries/ComboBoxStyles.xaml" />
+            </ResourceDictionary.MergedDictionaries>
+        </ResourceDictionary>
     </UserControl.Resources>
 
     <Grid Margin="20">
